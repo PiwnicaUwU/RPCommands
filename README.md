@@ -60,6 +60,13 @@ n_o_h_s_m_try_format: '<size=25><align=left><b><color=green>[Try]</color> <color
 4. Restart the server and enjoy the plugin.
 ```
 
+## 🐾 HintServiceMeow (HSM) Integration
+This plugin utilizes **HSM (HintServiceMeow)** for displaying hints. While HSM is **not required** to use the plugin, it is **highly recommended** for enhancing the overall experience and quality of the plugin.
+
+HSM allows for more polished hint display and improved functionality, providing a smoother experience for players on the server.
+
+For optimal performance, it’s advised to install **HSM** alongside this plugin.
+
 ## 📝 Requirements
 ```plaintext
 - 🔹 **EXILED**
@@ -68,6 +75,7 @@ n_o_h_s_m_try_format: '<size=25><align=left><b><color=green>[Try]</color> <color
 ## 🔗 Links
 ```plaintext
 - 📖 [EXILED](https://github.com/ExMod-Team/EXILED)
+- 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
 ```
 
 ## 👥 Author
