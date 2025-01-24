@@ -1,8 +1,8 @@
-# 🎭 NarrativeCommands - Plugin for SCP: Secret Laboratory
+# 🎭 NarrativeCommands
 
 ![EXILED](https://img.shields.io/badge/EXILED-Supported-green?style=for-the-badge)
-![Version](https://img.shields.io/github/v/release/YourNick/NarrativeCommands?style=for-the-badge)
-![License](https://img.shields.io/github/license/YourNick/NarrativeCommands?style=for-the-badge)
+![Version](https://img.shields.io/github/v/release/PiwnicaUwU/RPCommands?style=for-the-badge)
+![License](https://img.shields.io/github/license/PiwnicaUwU/RPCommands?style=for-the-badge)
 
 ## 📜 Description
 **NarrativeCommands** is a plugin for **EXILED** that adds narrative text commands, enabling players to enhance their roleplaying experience on SCP: Secret Laboratory servers.
