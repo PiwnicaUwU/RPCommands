@@ -67,11 +67,6 @@ HSM allows for more polished hint display and improved functionality, providing 
 
 For optimal performance, it’s advised to install **HSM** alongside this plugin.
 
-## 📝 Requirements
-```plaintext
-- 🔹 **EXILED**
-```
-
 ## 🔗 Links
 - 📖 [EXILED](https://github.com/ExMod-Team/EXILED)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
