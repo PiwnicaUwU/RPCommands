@@ -73,10 +73,9 @@ For optimal performance, it’s advised to install **HSM** alongside this plugin
 ```
 
 ## 🔗 Links
-```plaintext
 - 📖 [EXILED](https://github.com/ExMod-Team/EXILED)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
-```
+
 
 ## 👥 Author
 ```plaintext
