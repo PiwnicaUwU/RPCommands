@@ -67,12 +67,12 @@ n_o_h_s_m_try_format: '<size=25><align=left><b><color=green>[Try]</color> <color
 
 ## 🔗 Links
 ```plaintext
-- 📖 [EXILED](https://github.com/ExMod/EXILED)
+- 📖 [EXILED](https://github.com/ExMod-Team/EXILED)
 ```
 
 ## 👥 Author
 ```plaintext
-👤 **.Piwnica**  
+👤 .Piwnica  
 📧 Contact: Discord - .piwnica2137
 ```
 
