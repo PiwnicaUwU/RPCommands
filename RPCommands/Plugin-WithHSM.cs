@@ -150,7 +150,7 @@ namespace RPCommands
         [Description("true = Plugin enabled, false = plugin disabled")]
         public bool IsEnabled { get; set; } = true;
 
-        [Description("Enable debug logs")]
+        [Description("Enable debug logs - don't work")]
         public bool Debug { get; set; } = false;
 
         [Description("Command settings, do not remove {0}, {1}, or {2}")]
