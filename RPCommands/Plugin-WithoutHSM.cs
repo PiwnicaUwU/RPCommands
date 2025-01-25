@@ -16,7 +16,7 @@ namespace RPCommands_WithoutHSM
 
         public override string Name => "RPCommands-NOHSM";
         public override string Author => ".Piwnica";
-        public override Version Version => new(2,1,3,7,6,9);
+        public override Version Version => new(2, 1, 3, 7);
 
         public override void OnEnabled()
         {
