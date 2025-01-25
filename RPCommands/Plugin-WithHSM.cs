@@ -85,6 +85,12 @@ namespace RPCommands
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!Round.IsStarted)
+            {
+                response = "You cannot use this command because the round has not started yet.";
+                return false;
+            }
+
             if (arguments.Count < 1)
             {
                 response = $"Usage: .{Command} <message>";
