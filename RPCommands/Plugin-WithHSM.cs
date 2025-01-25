@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CommandSystem;
 using Exiled.API.Features;
 using System.Linq;
@@ -126,25 +126,18 @@ namespace RPCommands
 
         private void SendHint(Player player, string message, float duration)
         {
-            if (Plugin.Instance.Config.UseHSM)
+            DynamicHint hint = new()
             {
-                DynamicHint hint = new DynamicHint
-                {
-                    Text = message,
-                    TargetY = 800,
-                    TargetX = -950,
-                    FontSize = 25,
-                };
+                Text = message,
+                TargetY = 800,
+                TargetX = -950,
+                FontSize = 25,
+            };
 
-                PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
-                playerDisplay?.AddHint(hint);
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+            playerDisplay?.AddHint(hint);
 
-                Timing.CallDelayed(duration, () => playerDisplay?.RemoveHint(hint));
-            }
-            else
-            {
-                player.ShowHint(message, Mathf.RoundToInt(duration));
-            }
+            Timing.CallDelayed(duration, () => playerDisplay?.RemoveHint(hint));
         }
     }
 
@@ -155,9 +148,6 @@ namespace RPCommands
 
         [Description("Nothing important, additional logs (might not work)")]
         public bool Debug { get; set; } = false;
-
-        [Description("Enable or disable the usage of HintServiceMeow (REQUIRES HSM TO BE LOCATED IN THE PLUGINS FOLDER). True = Use HSM, False = Use regular hint.")]
-        public bool UseHSM { get; set; } = true;
 
         [Description("The range of narrative commands (in meters). Players within this radius will receive messages related to the given command.")]
         public float MeRange { get; set; } = 15f;
@@ -180,20 +170,13 @@ namespace RPCommands
         public string OocFormat { get; set; } = "<b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
         public string TryFormat { get; set; } = "<b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>";
 
-        [Description("Use this config only if you disabled HSM option.")]
-        public string NOHSMMeFormat { get; set; } = "<size=25><align=left><b><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string NOHSMDoFormat { get; set; } = "<size=25><align=left><b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string NOHSMLookFormat { get; set; } = "<size=25><align=left><b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string NOHSMOocFormat { get; set; } = "<size=25><align=left><b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string NOHSMTryFormat { get; set; } = "<size=25><align=left><b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>";
-
         public string GetFormat(string command) => command switch
         {
-            "me" => UseHSM ? MeFormat : NOHSMMeFormat,
-            "do" => UseHSM ? DoFormat : NOHSMDoFormat,
-            "look" => UseHSM ? LookFormat : NOHSMLookFormat,
-            "ooc" => UseHSM ? OocFormat : NOHSMOocFormat,
-            "try" => UseHSM ? TryFormat : NOHSMTryFormat,
+            "me" => MeFormat,
+            "do" => DoFormat,
+            "look" => LookFormat,
+            "ooc" => OocFormat,
+            "try" => TryFormat,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
 
