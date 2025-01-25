@@ -16,7 +16,7 @@ namespace RPCommands_WithoutHSM
 
         public override string Name => "RPCommands-NOHSM";
         public override string Author => ".Piwnica";
-        public override Version Version => new(2, 1, 3, 7);
+        public override Version Version => new(0, 6, 9);
 
         public override void OnEnabled()
         {
@@ -136,11 +136,11 @@ namespace RPCommands_WithoutHSM
         public bool Debug { get; set; } = false;
 
         [Description("Command settings, do not remove {0}, {1} or {2}")]
-        public CommandSettings Me { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Do { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Look { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Ooc { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Try { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
+        public CommandSettings Me { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</size></align>");
+        public CommandSettings Do { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</size></align>");
+        public CommandSettings Look { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</size></align>");
+        public CommandSettings Ooc { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</size></align>");
+        public CommandSettings Try { get; set; } = new CommandSettings(15f, 5f, "<size=25><align=left><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</size></align>");
 
         public float GetRange(string command) => GetSettings(command).Range;
         public float GetDuration(string command) => GetSettings(command).Duration;
