@@ -9,6 +9,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **NarrativeCommands** is a plugin for **EXILED** that adds narrative text commands, enabling players to enhance their roleplaying experience on SCP: Secret Laboratory servers.
 
 With this plugin, you can create immersive descriptions of actions, thoughts, and surroundings that will be visible to nearby players.
+
 This plugin includes two versions - one without HSM (HintServiceMeow) and one with it. It is recommended to use the version with HSM, but it is not required.
 
 ## 🛠️ Features
