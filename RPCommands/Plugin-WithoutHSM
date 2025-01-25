@@ -6,13 +6,13 @@ using System.Linq;
 using UnityEngine;
 using System.ComponentModel;
 using System;
-namespace RPCommands
+namespace RPCommands_WithoutHSM
 {
     public class Plugin : Plugin<Config>
     {
         public static Plugin Instance { get; private set; }
 
-        public override string Name => "RPCommands";
+        public override string Name => "RPCommands-NOHSM";
         public override string Author => ".Piwnica";
         public override Version Version => new Version(1, 0, 0);
 
@@ -145,11 +145,11 @@ namespace RPCommands
         public float TryDuration { get; set; } = 5f;
 
         [Description("You can edit hint formatting and colors. Do not edit '{1}' - message or '{0}' - player, otherwise the plugin will break!")]
-        public string MeFormat { get; set; } = "<b><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string DoFormat { get; set; } = "<b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string LookFormat { get; set; } = "<b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string OocFormat { get; set; } = "<b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string TryFormat { get; set; } = "<b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>";
+        public string MeFormat { get; set; } = "<size=25><align=left><b><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
+        public string DoFormat { get; set; } = "<size=25><align=left><b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
+        public string LookFormat { get; set; } = "<size=25><align=left><b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
+        public string OocFormat { get; set; } = "<size=25><align=left><b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
+        public string TryFormat { get; set; } = "<size=25><align=left><b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>";
 
         public string GetFormat(string command) => command switch
         {
