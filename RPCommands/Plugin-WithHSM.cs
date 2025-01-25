@@ -1,14 +1,15 @@
-using System;
 using CommandSystem;
 using Exiled.API.Features;
-using System.Linq;
-using UnityEngine;
 using Exiled.API.Interfaces;
 using RemoteAdmin;
+using System.Linq;
+using UnityEngine;
+using System.ComponentModel;
+using System;
+using MEC;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
-using System.ComponentModel;
-using MEC;
+
 namespace RPCommands
 {
     public class Plugin : Plugin<Config>
@@ -17,7 +18,7 @@ namespace RPCommands
 
         public override string Name => "RPCommands";
         public override string Author => ".Piwnica";
-        public override Version Version => new Version(1, 0, 0);
+        public override Version Version => new(0, 6, 9);
 
         public override void OnEnabled()
         {
@@ -31,7 +32,6 @@ namespace RPCommands
             Instance = null;
             base.OnDisabled();
         }
-
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -72,15 +72,14 @@ namespace RPCommands
         {
             bool isSuccess = UnityEngine.Random.Range(0, 2) == 0;
             string result = isSuccess ? "successfully" : "unsuccessfully";
-            string format = Plugin.Instance.Config.GetFormat("try");
-            return string.Format(format, player.Nickname, message, result);
+            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message, result);
         }
     }
 
     public abstract class NarrativeCommand : ICommand
     {
         public abstract string Command { get; }
-        public virtual string[] Aliases => new string[0];
+        public virtual string[] Aliases => Array.Empty<string>();
         public abstract string Description { get; }
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
@@ -97,7 +96,7 @@ namespace RPCommands
                 return false;
             }
 
-            if (!(sender is PlayerCommandSender playerSender))
+            if (sender is not PlayerCommandSender playerSender)
             {
                 response = "Only players can use this command.";
                 return false;
@@ -116,8 +115,7 @@ namespace RPCommands
 
         protected virtual string FormatMessage(Player player, string message)
         {
-            string format = Plugin.Instance.Config.GetFormat(Command);
-            return string.Format(format, player.Nickname, message);
+            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message);
         }
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
@@ -152,58 +150,42 @@ namespace RPCommands
         [Description("true = Plugin enabled, false = plugin disabled")]
         public bool IsEnabled { get; set; } = true;
 
-        [Description("Nothing important, additional logs (might not work)")]
+        [Description("Enable debug logs")]
         public bool Debug { get; set; } = false;
 
-        [Description("The range of narrative commands (in meters). Players within this radius will receive messages related to the given command.")]
-        public float MeRange { get; set; } = 15f;
-        public float DoRange { get; set; } = 15f;
-        public float LookRange { get; set; } = 15f;
-        public float OocRange { get; set; } = 15f;
-        public float TryRange { get; set; } = 15f;
+        [Description("Command settings, do not remove {0}, {1}, or {2}")]
+        public CommandSettings Me { get; set; } = new(15f, 5f, "<color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Do { get; set; } = new(15f, 5f, "<color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Look { get; set; } = new(15f, 5f, "<color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Ooc { get; set; } = new(15f, 5f, "<color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Try { get; set; } = new(15f, 5f, "<color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
 
-        [Description("Duration of hints for narrative commands (in seconds).")]
-        public float MeDuration { get; set; } = 5f;
-        public float DoDuration { get; set; } = 5f;
-        public float LookDuration { get; set; } = 5f;
-        public float OocDuration { get; set; } = 5f;
-        public float TryDuration { get; set; } = 5f;
+        public float GetRange(string command) => GetSettings(command).Range;
+        public float GetDuration(string command) => GetSettings(command).Duration;
+        public string FormatMessage(string command, params object[] args) => string.Format(GetSettings(command).Format, args);
 
-        [Description("You can edit hint formatting and colors. Do not edit '{1}' - message or '{0}' - player, otherwise the plugin will break!")]
-        public string MeFormat { get; set; } = "<b><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string DoFormat { get; set; } = "<b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string LookFormat { get; set; } = "<b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string OocFormat { get; set; } = "<b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>";
-        public string TryFormat { get; set; } = "<b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>";
-
-        public string GetFormat(string command) => command switch
+        private CommandSettings GetSettings(string command) => command switch
         {
-            "me" => MeFormat,
-            "do" => DoFormat,
-            "look" => LookFormat,
-            "ooc" => OocFormat,
-            "try" => TryFormat,
+            "me" => Me,
+            "do" => Do,
+            "look" => Look,
+            "ooc" => Ooc,
+            "try" => Try,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
+    }
 
-        public float GetDuration(string command) => command switch
-        {
-            "me" => MeDuration,
-            "do" => DoDuration,
-            "look" => LookDuration,
-            "ooc" => OocDuration,
-            "try" => TryDuration,
-            _ => throw new ArgumentException("Invalid command", nameof(command))
-        };
+    public class CommandSettings
+    {
+        public float Range { get; }
+        public float Duration { get; }
+        public string Format { get; }
 
-        public float GetRange(string command) => command switch
+        public CommandSettings(float range, float duration, string format)
         {
-            "me" => MeRange,
-            "do" => DoRange,
-            "look" => LookRange,
-            "ooc" => OocRange,
-            "try" => TryRange,
-            _ => throw new ArgumentException("Invalid command", nameof(command))
-        };
+            Range = range;
+            Duration = duration;
+            Format = format;
+        }
     }
 }
