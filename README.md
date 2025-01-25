@@ -25,26 +25,29 @@ The `config.yml` file allows you to customize the plugin, such as the message vi
 ```yaml
 # true = Plugin enabled, false = plugin disabled
 is_enabled: true
-# Nothing important, additional logs (might not work)
+# Enable debug logs
 debug: false
-# The range of narrative commands (in meters). Players within this radius will receive messages related to the given command.
-me_range: 15
-do_range: 15
-look_range: 15
-ooc_range: 15
-try_range: 15
-# Duration of hints for narrative commands (in seconds).
-me_duration: 5
-do_duration: 5
-look_duration: 5
-ooc_duration: 5
-try_duration: 5
-# You can edit hint formatting and colors. Do not edit '{1}' - message or '{0}' - player, otherwise the plugin will break!
-me_format: '<b><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-do_format: '<b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-look_format: '<b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-ooc_format: '<b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-try_format: '<b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>'
+# Command settings, do not remove {0}, {1}, or {2}
+me:
+  range: 15
+  duration: 5
+  format: '<color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}'
+do:
+  range: 15
+  duration: 5
+  format: '<color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}'
+look:
+  range: 15
+  duration: 5
+  format: '<color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}'
+ooc:
+  range: 15
+  duration: 5
+  format: '<color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}'
+try:
+  range: 15
+  duration: 5
+  format: '<color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!'
 ```
 
 ## 📦 Installation
