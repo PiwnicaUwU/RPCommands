@@ -9,6 +9,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **NarrativeCommands** is a plugin for **EXILED** that adds narrative text commands, enabling players to enhance their roleplaying experience on SCP: Secret Laboratory servers.
 
 With this plugin, you can create immersive descriptions of actions, thoughts, and surroundings that will be visible to nearby players.
+This plugin includes two versions - one without HSM (HintServiceMeow) and one with it. It is recommended to use the version with HSM, but it is not required.
 
 ## 🛠️ Features
 ✅ **.me**
@@ -25,8 +26,6 @@ The `config.yml` file allows you to customize the plugin, such as the message vi
 is_enabled: true
 # Nothing important, additional logs (might not work)
 debug: false
-# Enable or disable the usage of HintServiceMeow (REQUIRES HSM TO BE LOCATED IN THE PLUGINS FOLDER). True = Use HSM, False = Use regular hint.
-use_h_s_m: true
 # The range of narrative commands (in meters). Players within this radius will receive messages related to the given command.
 me_range: 15
 do_range: 15
@@ -45,12 +44,6 @@ do_format: '<b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></s
 look_format: '<b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
 ooc_format: '<b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
 try_format: '<b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>'
-# Use this config only if you disabled HSM option.
-n_o_h_s_m_me_format: '<size=25><align=left><b><color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-n_o_h_s_m_do_format: '<size=25><align=left><b><color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-n_o_h_s_m_look_format: '<size=25><align=left><b><color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-n_o_h_s_m_ooc_format: '<size=25><align=left><b><color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}</b></size></align>'
-n_o_h_s_m_try_format: '<size=25><align=left><b><color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</b></size></align>'
 ```
 
 ## 📦 Installation
