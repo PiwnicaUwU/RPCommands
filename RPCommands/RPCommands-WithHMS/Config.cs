@@ -1,7 +1,8 @@
 using Exiled.API.Interfaces;
+using System;
 using System.ComponentModel;
 
-namespace RPCommands.Config
+namespace RPCommands
 {
     public class Config : IConfig
     {
