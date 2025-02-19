@@ -83,7 +83,7 @@ try_result:
 
 ## 📦 Installation
 ```plaintext
-1. Download the `.dll` file and place it in the `Plugins` folder.
+1. Download the `.dll` file from releases and place it in the `Plugins` folder.
 2. Start the server to generate the configuration file.
 3. Customize the `config` according to your preferences.
 4. Restart the server and enjoy the plugin.
