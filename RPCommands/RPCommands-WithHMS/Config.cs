@@ -13,11 +13,11 @@ namespace RPCommands
         public bool Debug { get; set; } = false;
 
         [Description("Command settings, do not remove {0}, {1}, or {2}")]
-        public CommandSettings Me { get; set; } = new(15f, 5f, "<color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Do { get; set; } = new(15f, 5f, "<color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Look { get; set; } = new(15f, 5f, "<color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Ooc { get; set; } = new(15f, 5f, "<color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Try { get; set; } = new(15f, 5f, "<color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
+        public CommandSettings Me { get; set; } = new(15f, 5f, "<color=green>「Me」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Do { get; set; } = new(15f, 5f, "<color=green>「Do」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Look { get; set; } = new(15f, 5f, "<color=green>「Look」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Ooc { get; set; } = new(15f, 5f, "<color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Try { get; set; } = new(15f, 5f, "<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
 
         public float GetRange(string command) => GetSettings(command).Range;
         public float GetDuration(string command) => GetSettings(command).Duration;
