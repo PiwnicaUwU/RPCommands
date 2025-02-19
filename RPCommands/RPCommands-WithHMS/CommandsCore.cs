@@ -49,7 +49,7 @@ namespace RPCommands
 
         protected virtual string FormatMessage(Player player, string message)
         {
-            return string.Format(Plugin.Instance.Translation.FormatMessage, player.Nickname, message);
+            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message);
         }
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
@@ -77,6 +77,7 @@ namespace RPCommands
             Timing.CallDelayed(duration, () => playerDisplay?.RemoveHint(hint));
         }
     }
+
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class MeCommand : NarrativeCommand
@@ -117,7 +118,8 @@ namespace RPCommands
             bool isSuccess = UnityEngine.Random.Range(0, 2) == 0;
             string resultKey = isSuccess ? "success" : "fail";
             string result = Plugin.Instance.Translation.TryResult[resultKey];
-            return string.Format(Plugin.Instance.Translation.FormatTryMessage, player.Nickname, message, result);
+
+            return Plugin.Instance.Config.FormatMessage("try", player.Nickname, message, result);
         }
     }
 }
