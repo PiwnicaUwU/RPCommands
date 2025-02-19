@@ -25,29 +25,60 @@ The `config.yml` file allows you to customize the plugin, such as the message vi
 ```yaml
 # true = Plugin enabled, false = plugin disabled
 is_enabled: true
-# Enable debug logs
+# Enable debug logs - don't work
 debug: false
 # Command settings, do not remove {0}, {1}, or {2}
 me:
   range: 15
   duration: 5
-  format: '<color=green>[Me]</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Me」</color> <color=#FFFF00>{0}</color> : {1}'
 do:
   range: 15
   duration: 5
-  format: '<color=green>[Do]</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Do」</color> <color=#FFFF00>{0}</color> : {1}'
 look:
   range: 15
   duration: 5
-  format: '<color=green>[Look]</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Look」</color> <color=#FFFF00>{0}</color> : {1}'
 ooc:
   range: 15
   duration: 5
-  format: '<color=green>[Ooc]</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Ooc」</color> <color=#FFFF00>{0}</color> : {1}'
 try:
   range: 15
   duration: 5
-  format: '<color=green>[Try]</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!'
+  format: '<color=green>「Try」</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!'
+```
+## 🌐 Translation
+The `translations.yml` file allows you to translate the plugin.
+
+```yaml
+# Message shown when the round has not started.
+round_not_started: 'You cannot use this command because the round has not started yet.'
+# Usage message for commands.
+usage: 'Usage: .{0} <message>'
+# Message shown when a non-player tries to use a command.
+only_players: 'Only players can use this command.'
+# Message shown when a command is successfully sent.
+message_sent: 'Message has been sent.'
+# Dictionary of command names used in the system.
+command_names:
+  me: me
+  do: do
+  look: look
+  ooc: ooc
+  try: try
+# Dictionary of command descriptions.
+commands:
+  me: Narrative command 'Me'.
+  do: Narrative command 'Do'.
+  look: Narrative command 'Look'.
+  ooc: Narrative command 'Ooc'.
+  try: Narrative command 'Try'.
+# Dictionary of results for try command.
+try_result:
+  success: successfully
+  fail: unsuccessfully
 ```
 
 ## 📦 Installation
