@@ -8,7 +8,7 @@ using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using RemoteAdmin;
 
-namespace RPCommands.Core.Commands
+namespace RPCommands
 {
     public abstract class NarrativeCommand : ICommand
     {
@@ -38,8 +38,8 @@ namespace RPCommands.Core.Commands
 
             Player player = Player.Get(playerSender.ReferenceHub);
             string message = string.Join(" ", arguments);
-            float range = Plugin.Instance.Config.Me.Range;
-            float duration = Plugin.Instance.Config.Me.Duration;
+            float range = Plugin.Instance.Config.GetRange(Command);
+            float duration = Plugin.Instance.Config.GetDuration(Command);
             string formattedMessage = FormatMessage(player, message);
 
             HintToNearbyPlayers(player, formattedMessage, range, duration);
@@ -81,35 +81,35 @@ namespace RPCommands.Core.Commands
     [CommandHandler(typeof(ClientCommandHandler))]
     public class MeCommand : NarrativeCommand
     {
-        public override string Command => "me";
+        public override string Command => Plugin.Instance.Translation.CommandNames["me"];
         public override string Description => Plugin.Instance.Translation.Commands["me"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class DoCommand : NarrativeCommand
     {
-        public override string Command => "do";
+        public override string Command => Plugin.Instance.Translation.CommandNames["do"];
         public override string Description => Plugin.Instance.Translation.Commands["do"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class LookCommand : NarrativeCommand
     {
-        public override string Command => "look";
+        public override string Command => Plugin.Instance.Translation.CommandNames["look"];
         public override string Description => Plugin.Instance.Translation.Commands["look"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class OocCommand : NarrativeCommand
     {
-        public override string Command => "ooc";
+        public override string Command => Plugin.Instance.Translation.CommandNames["ooc"];
         public override string Description => Plugin.Instance.Translation.Commands["ooc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class TryCommand : NarrativeCommand
     {
-        public override string Command => "try";
+        public override string Command => Plugin.Instance.Translation.CommandNames["try"];
         public override string Description => Plugin.Instance.Translation.Commands["try"];
 
         protected override string FormatMessage(Player player, string message)
