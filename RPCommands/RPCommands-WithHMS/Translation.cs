@@ -18,12 +18,6 @@ namespace RPCommands
         [Description("Message shown when a command is successfully sent.")]
         public string MessageSent { get; set; } = "Message has been sent.";
 
-        [Description("Format for general messages.")]
-        public string FormatMessage { get; set; } = "{0}: {1}";
-
-        [Description("Format for try command messages.")]
-        public string FormatTryMessage { get; set; } = "{0}: {1} ({2})";
-
         [Description("Dictionary of command names used in the system.")]
         public Dictionary<string, string> CommandNames { get; set; } = new()
         {
