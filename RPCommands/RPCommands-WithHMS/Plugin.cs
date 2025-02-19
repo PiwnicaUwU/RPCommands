@@ -3,7 +3,7 @@ using System;
 
 namespace RPCommands
 {
-    public class Plugin : Plugin<Config>
+    public class Plugin : Plugin<Config, Translation>
     {
         public static Plugin Instance { get; private set; }
 
