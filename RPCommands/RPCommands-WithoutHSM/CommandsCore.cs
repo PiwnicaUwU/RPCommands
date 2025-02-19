@@ -6,7 +6,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace RPCommands.Core.Commands
+namespace RPCommands_WithoutHSM
 {
     public abstract class NarrativeCommand : ICommand
     {
@@ -18,19 +18,19 @@ namespace RPCommands.Core.Commands
         {
             if (!Round.IsStarted)
             {
-                response = "You cannot use this command because the round has not started yet.";
+                response = Plugin.Instance.Translation.RoundNotStarted;
                 return false;
             }
 
             if (arguments.Count < 1)
             {
-                response = $"Usage: .{Command} <message>";
+                response = string.Format(Plugin.Instance.Translation.Usage, Command);
                 return false;
             }
 
             if (sender is not PlayerCommandSender playerSender)
             {
-                response = "Only players can use this command.";
+                response = Plugin.Instance.Translation.OnlyPlayers;
                 return false;
             }
 
@@ -41,13 +41,13 @@ namespace RPCommands.Core.Commands
             string formattedMessage = FormatMessage(player, message);
 
             HintToNearbyPlayers(player, formattedMessage, range, duration);
-            response = "Message has been sent.";
+            response = Plugin.Instance.Translation.MessageSent;
             return true;
         }
 
         protected virtual string FormatMessage(Player player, string message)
         {
-            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message);
+            return string.Format(Plugin.Instance.Translation.FormatMessage, player.Nickname, message);
         }
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
@@ -63,42 +63,43 @@ namespace RPCommands.Core.Commands
     [CommandHandler(typeof(ClientCommandHandler))]
     public class MeCommand : NarrativeCommand
     {
-        public override string Command => "me";
-        public override string Description => "Narrative command 'Me'.";
+        public override string Command => Plugin.Instance.Translation.CommandNames["me"];
+        public override string Description => Plugin.Instance.Translation.Commands["me"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class DoCommand : NarrativeCommand
     {
-        public override string Command => "do";
-        public override string Description => "Narrative command 'Do'.";
+        public override string Command => Plugin.Instance.Translation.CommandNames["do"];
+        public override string Description => Plugin.Instance.Translation.Commands["do"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class LookCommand : NarrativeCommand
     {
-        public override string Command => "look";
-        public override string Description => "Narrative command 'Look'.";
+        public override string Command => Plugin.Instance.Translation.CommandNames["look"];
+        public override string Description => Plugin.Instance.Translation.Commands["look"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class OocCommand : NarrativeCommand
     {
-        public override string Command => "ooc";
-        public override string Description => "Narrative command 'Ooc'.";
+        public override string Command => Plugin.Instance.Translation.CommandNames["ooc"];
+        public override string Description => Plugin.Instance.Translation.Commands["ooc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class TryCommand : NarrativeCommand
     {
-        public override string Command => "try";
-        public override string Description => "Narrative command 'Try'.";
+        public override string Command => Plugin.Instance.Translation.CommandNames["try"];
+        public override string Description => Plugin.Instance.Translation.Commands["try"];
 
         protected override string FormatMessage(Player player, string message)
         {
             bool isSuccess = UnityEngine.Random.Range(0, 2) == 0;
-            string result = isSuccess ? "successfully" : "unsuccessfully";
-            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message, result);
+            string resultKey = isSuccess ? "success" : "fail";
+            string result = Plugin.Instance.Translation.TryResult[resultKey];
+            return string.Format(Plugin.Instance.Translation.FormatTryMessage, player.Nickname, message, result);
         }
     }
 }
