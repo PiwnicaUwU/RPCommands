@@ -18,6 +18,12 @@ namespace RPCommands
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            {
+                response = Plugin.Instance.Translation.CommandDisabled;
+                return false;
+            }
+
             if (!Round.IsStarted)
             {
                 response = Plugin.Instance.Translation.RoundNotStarted;
@@ -105,6 +111,49 @@ namespace RPCommands
     {
         public override string Command => Plugin.Instance.Translation.CommandNames["ooc"];
         public override string Description => Plugin.Instance.Translation.Commands["ooc"];
+    }
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class DescCommand : NarrativeCommand
+    {
+        public override string Command => Plugin.Instance.Translation.CommandNames["desc"];
+        public override string Description => Plugin.Instance.Translation.Commands["desc"];
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class CustomInfoCommand : ICommand
+    {
+        public string Command => Plugin.Instance.Translation.CommandNames["custom-info"];
+        public string[] Aliases => new string[] { };
+        public string Description => Plugin.Instance.Translation.Commands["custom-info"];
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            {
+                response = Plugin.Instance.Translation.CommandDisabled;
+                return false;
+            }
+
+            if (sender is not PlayerCommandSender playerSender)
+            {
+                response = Plugin.Instance.Translation.OnlyPlayers;
+                return false;
+            }
+
+            Player player = Player.Get(playerSender.ReferenceHub);
+
+            if (arguments.Count < 1)
+            {
+                response = string.Format(Plugin.Instance.Translation.Usage, Command);
+                return false;
+            }
+
+            string customInfo = string.Join(" ", arguments);
+            player.CustomInfo = customInfo;
+
+            response = Plugin.Instance.Translation.CustomInfoSet;
+            return true;
+        }
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
