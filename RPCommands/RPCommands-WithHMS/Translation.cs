@@ -18,6 +18,12 @@ namespace RPCommands
         [Description("Message shown when a command is successfully sent.")]
         public string MessageSent { get; set; } = "Message has been sent.";
 
+        [Description("Message shown when custom info is set.")]
+        public string CustomInfoSet { get; set; } = "Your custom info has been set!";
+
+        [Description("Message shown when a command is disabled.")]
+        public string CommandDisabled { get; set; } = "This command is disabled.";
+
         [Description("Dictionary of command names used in the system.")]
         public Dictionary<string, string> CommandNames { get; set; } = new()
         {
@@ -25,7 +31,9 @@ namespace RPCommands
             { "do", "do" },
             { "look", "look" },
             { "ooc", "ooc" },
-            { "try", "try" }
+            { "try", "try" },
+            { "desc", "desc" },
+            { "custom-info", "custom-info" }
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -35,7 +43,9 @@ namespace RPCommands
             { "do", "Narrative command 'Do'." },
             { "look", "Narrative command 'Look'." },
             { "ooc", "Narrative command 'Ooc'." },
-            { "try", "Narrative command 'Try'." }
+            { "try", "Narrative command 'Try'." },
+            { "desc", "Narrative command 'Desc'." },
+            { "custom-info", "Sets your custom info." }
         };
 
         [Description("Dictionary of results for try command.")]
