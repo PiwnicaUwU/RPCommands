@@ -1,7 +1,6 @@
 using CommandSystem;
 using Exiled.API.Features;
 using RemoteAdmin;
-using RPCommands_WithoutHSM;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -16,6 +15,11 @@ namespace RPCommands_WithoutHSM
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            {
+                response = Plugin.Instance.Translation.CommandDisabled;
+                return false;
+            }
             if (!Round.IsStarted)
             {
                 response = Plugin.Instance.Translation.RoundNotStarted;
@@ -47,7 +51,7 @@ namespace RPCommands_WithoutHSM
 
         protected virtual string FormatMessage(Player player, string message)
         {
-            return string.Format(Plugin.Instance.Translation.FormatMessage, player.Nickname, message);
+            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message);
         }
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
@@ -89,6 +93,50 @@ namespace RPCommands_WithoutHSM
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
+    public class DescCommand : NarrativeCommand
+    {
+        public override string Command => Plugin.Instance.Translation.CommandNames["desc"];
+        public override string Description => Plugin.Instance.Translation.Commands["desc"];
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class CustomInfoCommand : ICommand
+    {
+        public string Command => Plugin.Instance.Translation.CommandNames["custom-info"];
+        public string[] Aliases => new string[] { };
+        public string Description => Plugin.Instance.Translation.Commands["custom-info"];
+
+        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        {
+            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            {
+                response = Plugin.Instance.Translation.CommandDisabled;
+                return false;
+            }
+
+            if (sender is not PlayerCommandSender playerSender)
+            {
+                response = Plugin.Instance.Translation.OnlyPlayers;
+                return false;
+            }
+
+            Player player = Player.Get(playerSender.ReferenceHub);
+
+            if (arguments.Count < 1)
+            {
+                response = string.Format(Plugin.Instance.Translation.Usage, Command);
+                return false;
+            }
+
+            string customInfo = string.Join(" ", arguments);
+            player.CustomInfo = customInfo;
+
+            response = Plugin.Instance.Translation.CustomInfoSet;
+            return true;
+        }
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
     public class TryCommand : NarrativeCommand
     {
         public override string Command => Plugin.Instance.Translation.CommandNames["try"];
@@ -99,7 +147,7 @@ namespace RPCommands_WithoutHSM
             bool isSuccess = UnityEngine.Random.Range(0, 2) == 0;
             string resultKey = isSuccess ? "success" : "fail";
             string result = Plugin.Instance.Translation.TryResult[resultKey];
-            return string.Format(Plugin.Instance.Translation.FormatTryMessage, player.Nickname, message, result);
+            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message, result);
         }
     }
 }
