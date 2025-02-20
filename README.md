@@ -31,23 +31,36 @@ debug: false
 me:
   range: 15
   duration: 5
-  format: '<color=green>「Me」</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Me」</color><color=#FFFF00>{0}</color> : {1}'
 do:
   range: 15
   duration: 5
-  format: '<color=green>「Do」</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Do」</color><color=#FFFF00>{0}</color> : {1}'
 look:
   range: 15
   duration: 5
-  format: '<color=green>「Look」</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Look」</color><color=#FFFF00>{0}</color> : {1}'
 ooc:
   range: 15
   duration: 5
-  format: '<color=green>「Ooc」</color> <color=#FFFF00>{0}</color> : {1}'
+  format: '<color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}'
 try:
   range: 15
   duration: 5
-  format: '<color=green>「Try」</color> <color=#FFFF00>{0}</color> : tried to {1} and {2} did it!'
+  format: '<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!'
+desc:
+  range: 15
+  duration: 5
+  format: '<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}'
+# Enable or disable specific commands
+enabled_commands:
+  me: true
+  do: true
+  look: true
+  ooc: true
+  try: true
+  desc: true
+  custom-info: true
 ```
 ## 🌐 Translation
 The `translations.yml` file allows you to translate the plugin.
@@ -61,6 +74,10 @@ usage: 'Usage: .{0} <message>'
 only_players: 'Only players can use this command.'
 # Message shown when a command is successfully sent.
 message_sent: 'Message has been sent.'
+# Message shown when custom info is set.
+custom_info_set: 'Your custom info has been set!'
+# Message shown when a command is disabled.
+command_disabled: 'This command is disabled.'
 # Dictionary of command names used in the system.
 command_names:
   me: me
@@ -68,6 +85,8 @@ command_names:
   look: look
   ooc: ooc
   try: try
+  desc: desc
+  custom-info: custom-info
 # Dictionary of command descriptions.
 commands:
   me: Narrative command 'Me'.
@@ -75,6 +94,8 @@ commands:
   look: Narrative command 'Look'.
   ooc: Narrative command 'Ooc'.
   try: Narrative command 'Try'.
+  desc: Narrative command 'Desc'.
+  custom-info: Sets your custom info.
 # Dictionary of results for try command.
 try_result:
   success: successfully
