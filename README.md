@@ -18,6 +18,8 @@ This plugin includes two versions - one without HSM (HintServiceMeow) and one wi
 ✅ **.look**
 ✅ **.ooc** 
 ✅ **.try**
+✅ **.desc**
+✅ **.custom-info**
 
 ## ⚙️ Configuration
 The `config.yml` file allows you to customize the plugin, such as the message visibility range and text formatting.
