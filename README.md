@@ -54,6 +54,8 @@ desc:
   range: 15
   duration: 5
   format: '<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}'
+# Maximum length of custom info
+max_custom_info_length: 250
 # Enable or disable specific commands
 enabled_commands:
   me: true
@@ -78,6 +80,8 @@ only_players: 'Only players can use this command.'
 message_sent: 'Message has been sent.'
 # Message shown when custom info is set.
 custom_info_set: 'Your custom info has been set!'
+# Message shown when the set custom info is too long.
+custom_info_too_long: 'Custom info is too long!'
 # Message shown when a command is disabled.
 command_disabled: 'This command is disabled.'
 # Dictionary of command names used in the system.
