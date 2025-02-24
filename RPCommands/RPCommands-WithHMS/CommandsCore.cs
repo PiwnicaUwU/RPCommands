@@ -149,8 +149,15 @@ namespace RPCommands
             }
 
             string customInfo = string.Join(" ", arguments);
-            player.CustomInfo = customInfo;
+            int maxLength = Plugin.Instance.Config.MaxCustomInfoLength;
 
+            if (customInfo.Length > maxLength)
+            {
+                response = $"Custom info jest za długie! Maksymalna długość to {maxLength} znaków.";
+                return false;
+            }
+
+            player.CustomInfo = customInfo;
             response = Plugin.Instance.Translation.CustomInfoSet;
             return true;
         }
