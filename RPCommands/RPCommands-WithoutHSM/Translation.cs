@@ -21,6 +21,9 @@ namespace RPCommands_WithoutHSM
         [Description("Message shown when custom info is set.")]
         public string CustomInfoSet { get; set; } = "Your custom info has been set!";
 
+        [Description("Message shown when the set custom info is too long.")]
+        public string CustomInfoTooLong { get; set; } = $"Custom info is too long! The maximum length is {Plugin.Instance.Config.MaxCustomInfoLength} characters.";
+
         [Description("Message shown when a command is disabled.")]
         public string CommandDisabled { get; set; } = "This command is disabled.";
 
