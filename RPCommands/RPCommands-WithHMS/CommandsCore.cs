@@ -153,7 +153,7 @@ namespace RPCommands
 
             if (customInfo.Length > maxLength)
             {
-                response = $"Custom info jest za długie! Maksymalna długość to {maxLength} znaków.";
+                response = Plugin.Instance.Translation.CustomInfoTooLong;
                 return false;
             }
 
