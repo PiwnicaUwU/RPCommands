@@ -21,6 +21,9 @@ namespace RPCommands_WithoutHSM
         public CommandSettings Try { get; set; } = new(15f, 5f, "<size=25><align=left><color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</align></size>");
         public CommandSettings Desc { get; set; } = new(15f, 5f, "<size=25><align=left><color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}</align></size>");
 
+        [Description("Maximum length of custom info")]
+        public int MaxCustomInfoLength { get; set; } = 250;
+
         [Description("Enable or disable specific commands")]
         public Dictionary<string, bool> EnabledCommands { get; set; } = new()
         {
