@@ -21,7 +21,7 @@ namespace RPCommands
         public CommandSettings Try { get; set; } = new(15f, 5f, "<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
         public CommandSettings Desc { get; set; } = new(15f, 5f, "<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}");
 
-        [Description("Maksymalna długość custom info")]
+        [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
 
         [Description("Enable or disable specific commands")]
