@@ -27,7 +27,12 @@ namespace RPCommands_WithoutHSM
         [Description("Message shown when a command is disabled.")]
         public string CommandDisabled { get; set; } = "This command is disabled.";
 
+        [Description("Message shown when a assist request is sent.")]
+        public string HelpRequestSent { get; set; } = "Your assist request has been sent to the staff.";
+
+
         [Description("Dictionary of command names used in the system.")]
+
         public Dictionary<string, string> CommandNames { get; set; } = new()
         {
             { "me", "me" },
@@ -36,7 +41,8 @@ namespace RPCommands_WithoutHSM
             { "ooc", "ooc" },
             { "try", "try" },
             { "desc", "desc" },
-            { "custom-info", "custom-info" }
+            { "custom-info", "custom-info" },
+            { "assist", "assist" },
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -48,7 +54,8 @@ namespace RPCommands_WithoutHSM
             { "ooc", "Narrative command 'Ooc'." },
             { "try", "Narrative command 'Try'." },
             { "desc", "Narrative command 'Desc'." },
-            { "custom-info", "Sets your custom info." }
+            { "custom-info", "Sets your custom info." },
+            { "assist", "Sends a assist request to the staff chat." },
         };
 
         [Description("Dictionary of results for try command.")]
