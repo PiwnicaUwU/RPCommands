@@ -20,6 +20,7 @@ namespace RPCommands_WithoutHSM
         public CommandSettings Ooc { get; set; } = new(15f, 5f, "<size=25><align=left><color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}</align></size>");
         public CommandSettings Try { get; set; } = new(15f, 5f, "<size=25><align=left><color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!</align></size>");
         public CommandSettings Desc { get; set; } = new(15f, 5f, "<size=25><align=left><color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}</align></size>");
+        public CommandSettings Assist { get; set; } = new(0f, 0f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
@@ -33,7 +34,8 @@ namespace RPCommands_WithoutHSM
             { "ooc", true },
             { "try", true },
             { "desc", true },
-            { "custom-info", true }
+            { "custom-info", true },
+            { "assist", true }
         };
 
         public bool IsCommandEnabled(string command) => EnabledCommands.ContainsKey(command) && EnabledCommands[command];
@@ -50,6 +52,7 @@ namespace RPCommands_WithoutHSM
             "ooc" => Ooc,
             "try" => Try,
             "desc" => Desc,
+            "assist" => Assist,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }
