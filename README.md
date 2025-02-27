@@ -20,6 +20,7 @@ This plugin includes two versions - one without HSM (HintServiceMeow) and one wi
 ✅ **.try**
 ✅ **.desc**
 ✅ **.custom-info**
+✅ **.assist**
 
 ## ⚙️ Configuration
 The `config.yml` file allows you to customize the plugin, such as the message visibility range and text formatting.
@@ -54,6 +55,10 @@ desc:
   range: 15
   duration: 5
   format: '<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}'
+assist:
+  range: 0
+  duration: 0
+  format: '<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}'
 # Maximum length of custom info
 max_custom_info_length: 250
 # Enable or disable specific commands
@@ -65,6 +70,7 @@ enabled_commands:
   try: true
   desc: true
   custom-info: true
+  assist: true
 ```
 ## 🌐 Translation
 The `translations.yml` file allows you to translate the plugin.
@@ -84,6 +90,8 @@ custom_info_set: 'Your custom info has been set!'
 custom_info_too_long: 'Custom info is too long!'
 # Message shown when a command is disabled.
 command_disabled: 'This command is disabled.'
+# Message shown when a help request is sent.
+help_request_sent: 'Your help request has been sent to the staff.'
 # Dictionary of command names used in the system.
 command_names:
   me: me
@@ -93,6 +101,7 @@ command_names:
   try: try
   desc: desc
   custom-info: custom-info
+  assist: assist
 # Dictionary of command descriptions.
 commands:
   me: Narrative command 'Me'.
@@ -102,6 +111,7 @@ commands:
   try: Narrative command 'Try'.
   desc: Narrative command 'Desc'.
   custom-info: Sets your custom info.
+  assist: Sends a help request to the staff chat.
 # Dictionary of results for try command.
 try_result:
   success: successfully
