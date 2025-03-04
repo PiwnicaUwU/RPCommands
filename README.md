@@ -12,6 +12,16 @@ With this plugin, you can create immersive descriptions of actions, thoughts, an
 
 This plugin includes two versions - one without HSM (HintServiceMeow) and one with it. It is recommended to use the version with HSM, but it is not required.
 
+## ⚠️ Warning: Common Issue with Incorrect Version Usage  
+
+Some users download the **HSM** (HintServiceMeow) version but do not install or use it correctly on their server. If you downloaded the **HSM version** but do not have **HintServiceMeow** installed, the plugin may not work properly.  
+
+To avoid issues:  
+✅ If you want to use the **HSM version**, make sure you have **HintServiceMeow installed in Your plugins folder**.  
+✅ If you do not want to install HSM, download the **WithoutHSM version** instead.  
+
+If you encounter any problems, check your server logs or console and ensure the plugin is configured correctly.
+
 ## 🛠️ Features
 ✅ **.me**
 ✅ **.do**
