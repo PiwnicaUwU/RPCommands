@@ -1,6 +1,7 @@
 using Exiled.API.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace RPCommands_WithoutHSM
 {
@@ -64,5 +65,11 @@ namespace RPCommands_WithoutHSM
             { "success", "successfully" },
             { "fail", "unsuccessfully" }
         };
+
+        public string GetOriginalCommandName(string translatedName)
+        {
+            return Plugin.Instance.Translation.CommandNames
+                .FirstOrDefault(x => x.Value == translatedName).Key ?? translatedName;
+        }
     }
 }
