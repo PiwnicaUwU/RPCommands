@@ -12,13 +12,15 @@ namespace RPCommands
 {
     public abstract class NarrativeCommand : ICommand
     {
-        public abstract string Command { get; }
+        public abstract string OriginalCommand { get; }
         public virtual string[] Aliases => Array.Empty<string>();
         public abstract string Description { get; }
 
+        public string Command => Plugin.Instance.Translation.CommandNames.TryGetValue(OriginalCommand, out string translatedName) ? translatedName : OriginalCommand;
+
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            if (!Plugin.Instance.Config.IsCommandEnabled(OriginalCommand))
             {
                 response = Plugin.Instance.Translation.CommandDisabled;
                 return false;
@@ -44,8 +46,8 @@ namespace RPCommands
 
             Player player = Player.Get(playerSender.ReferenceHub);
             string message = string.Join(" ", arguments);
-            float range = Plugin.Instance.Config.GetRange(Command);
-            float duration = Plugin.Instance.Config.GetDuration(Command);
+            float range = Plugin.Instance.Config.GetRange(OriginalCommand);
+            float duration = Plugin.Instance.Config.GetDuration(OriginalCommand);
             string formattedMessage = FormatMessage(player, message);
 
             HintToNearbyPlayers(player, formattedMessage, range, duration);
@@ -55,7 +57,7 @@ namespace RPCommands
 
         protected virtual string FormatMessage(Player player, string message)
         {
-            return Plugin.Instance.Config.FormatMessage(Command, player.Nickname, message);
+            return Plugin.Instance.Config.FormatMessage(OriginalCommand, player.Nickname, message);
         }
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
@@ -84,51 +86,51 @@ namespace RPCommands
         }
     }
 
-
     [CommandHandler(typeof(ClientCommandHandler))]
     public class MeCommand : NarrativeCommand
     {
-        public override string Command => Plugin.Instance.Translation.CommandNames["me"];
+        public override string OriginalCommand => "me";
         public override string Description => Plugin.Instance.Translation.Commands["me"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class DoCommand : NarrativeCommand
     {
-        public override string Command => Plugin.Instance.Translation.CommandNames["do"];
+        public override string OriginalCommand => "do";
         public override string Description => Plugin.Instance.Translation.Commands["do"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class LookCommand : NarrativeCommand
     {
-        public override string Command => Plugin.Instance.Translation.CommandNames["look"];
+        public override string OriginalCommand => "look";
         public override string Description => Plugin.Instance.Translation.Commands["look"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class OocCommand : NarrativeCommand
     {
-        public override string Command => Plugin.Instance.Translation.CommandNames["ooc"];
+        public override string OriginalCommand => "ooc";
         public override string Description => Plugin.Instance.Translation.Commands["ooc"];
     }
+
     [CommandHandler(typeof(ClientCommandHandler))]
     public class DescCommand : NarrativeCommand
     {
-        public override string Command => Plugin.Instance.Translation.CommandNames["desc"];
+        public override string OriginalCommand => "desc";
         public override string Description => Plugin.Instance.Translation.Commands["desc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class CustomInfoCommand : ICommand
     {
-        public string Command => Plugin.Instance.Translation.CommandNames["custom-info"];
-        public string[] Aliases => new string[] { };
+        public string Command => Plugin.Instance.Translation.CommandNames.TryGetValue("custom-info", out string translatedName) ? translatedName : "custom-info";
+        public string[] Aliases => Array.Empty<string>();
         public string Description => Plugin.Instance.Translation.Commands["custom-info"];
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            if (!Plugin.Instance.Config.IsCommandEnabled("custom-info"))
             {
                 response = Plugin.Instance.Translation.CommandDisabled;
                 return false;
@@ -166,13 +168,13 @@ namespace RPCommands
     [CommandHandler(typeof(ClientCommandHandler))]
     public class HelpCommand : ICommand
     {
-        public string Command => Plugin.Instance.Translation.CommandNames["assist"];
-        public string[] Aliases => new string[] { };
+        public string Command => Plugin.Instance.Translation.CommandNames.TryGetValue("assist", out string translatedName) ? translatedName : "assist";
+        public string[] Aliases => Array.Empty<string>();
         public string Description => Plugin.Instance.Translation.Commands["assist"];
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
-            if (!Plugin.Instance.Config.IsCommandEnabled(Command))
+            if (!Plugin.Instance.Config.IsCommandEnabled("assist"))
             {
                 response = Plugin.Instance.Translation.CommandDisabled;
                 return false;
@@ -207,7 +209,7 @@ namespace RPCommands
     [CommandHandler(typeof(ClientCommandHandler))]
     public class TryCommand : NarrativeCommand
     {
-        public override string Command => Plugin.Instance.Translation.CommandNames["try"];
+        public override string OriginalCommand => "try";
         public override string Description => Plugin.Instance.Translation.Commands["try"];
 
         protected override string FormatMessage(Player player, string message)
