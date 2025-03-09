@@ -2,6 +2,7 @@
 
 ![EXILED](https://img.shields.io/badge/EXILED-Supported-green?style=for-the-badge)
 [![Version](https://img.shields.io/github/v/release/PiwnicaUwU/RPCommands?style=for-the-badge)](https://github.com/PiwnicaUwU/RPCommands/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/PiwnicaUwU/RPCommands/total?style=for-the-badge)](https://github.com/PiwnicaUwU/RPCommands/releases)
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
