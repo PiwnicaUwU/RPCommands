@@ -16,6 +16,12 @@ namespace RPCommands_WithoutHSM
         [Description("Message shown when a non-player tries to use a command.")]
         public string OnlyPlayers { get; set; } = "Only players can use this command.";
 
+        [Description("Message shown when a non-human tries to use a command.")]
+        public string OnlyHumans { get; set; } = "Only humans can use this command.";
+
+        [Description("Message shown when Command Sender is not alive.")]
+        public string OnlyAlive { get; set; } = "You must be alive to use this command.";
+
         [Description("Message shown when a command is successfully sent.")]
         public string MessageSent { get; set; } = "Message has been sent.";
 
