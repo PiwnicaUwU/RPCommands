@@ -20,6 +20,13 @@ namespace RPCommands
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            if (sender is not PlayerCommandSender playerSender)
+            {
+                response = Plugin.Instance.Translation.OnlyPlayers;
+                return false;
+            }
+            Player player = Player.Get(playerSender.ReferenceHub);
+
             if (!Plugin.Instance.Config.IsCommandEnabled(OriginalCommand))
             {
                 response = Plugin.Instance.Translation.CommandDisabled;
@@ -32,19 +39,23 @@ namespace RPCommands
                 return false;
             }
 
+            if (player.IsScp)
+            {
+                response = Plugin.Instance.Translation.OnlyHumans;
+                return false;
+            }
+
+            if (!player.IsAlive)
+            {
+                response = Plugin.Instance.Translation.OnlyAlive;
+                return false;
+            }
+
             if (arguments.Count < 1)
             {
                 response = string.Format(Plugin.Instance.Translation.Usage, Command);
                 return false;
             }
-
-            if (sender is not PlayerCommandSender playerSender)
-            {
-                response = Plugin.Instance.Translation.OnlyPlayers;
-                return false;
-            }
-
-            Player player = Player.Get(playerSender.ReferenceHub);
             string message = string.Join(" ", arguments);
             float range = Plugin.Instance.Config.GetRange(OriginalCommand);
             float duration = Plugin.Instance.Config.GetDuration(OriginalCommand);
