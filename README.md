@@ -93,6 +93,10 @@ round_not_started: 'You cannot use this command because the round has not starte
 usage: 'Usage: .{0} <message>'
 # Message shown when a non-player tries to use a command.
 only_players: 'Only players can use this command.'
+# Message shown when a non-human tries to use a command.
+only_humans: 'Only humans can use this command.'
+# Message shown when Command Sender is not alive.
+only_alive: 'You must be alive to use this command.'
 # Message shown when a command is successfully sent.
 message_sent: 'Message has been sent.'
 # Message shown when custom info is set.
@@ -101,8 +105,8 @@ custom_info_set: 'Your custom info has been set!'
 custom_info_too_long: 'Custom info is too long!'
 # Message shown when a command is disabled.
 command_disabled: 'This command is disabled.'
-# Message shown when a help request is sent.
-help_request_sent: 'Your help request has been sent to the staff.'
+# Message shown when a assist request is sent.
+help_request_sent: 'Your assist request has been sent to the staff.'
 # Dictionary of command names used in the system.
 command_names:
   me: me
@@ -122,7 +126,7 @@ commands:
   try: Narrative command 'Try'.
   desc: Narrative command 'Desc'.
   custom-info: Sets your custom info.
-  assist: Sends a help request to the staff chat.
+  assist: Sends a assist request to the staff chat.
 # Dictionary of results for try command.
 try_result:
   success: successfully
