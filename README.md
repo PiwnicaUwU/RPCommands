@@ -20,6 +20,7 @@ Some users download the **HSM** (HintServiceMeow) version but do not install or 
 To avoid issues:  
 ✅ If you want to use the **HSM version**, make sure you have **HintServiceMeow installed in Your plugins folder**.  
 ✅ If you do not want to install HSM, download the **WithoutHSM version** instead.  
+WITHOUTHSM VERSION IS NOT SUPPORTED ANYMORE!
 
 If you encounter any problems, check your server logs or console and ensure the plugin is configured correctly.
 
