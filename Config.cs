@@ -13,6 +13,9 @@ namespace RPCommands
         [Description("Enable debug logs - don't work")]
         public bool Debug { get; set; } = false;
 
+        [Description("If false, SCPs will not be able to use narrative commands.")]
+        public bool AllowScpToUseCommands { get; set; } = false;
+
         [Description("Command settings, do not remove {0}, {1}, or {2}")]
         public CommandSettings Me { get; set; } = new(15f, 5f, "<color=green>「Me」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Do { get; set; } = new(15f, 5f, "<color=green>「Do」</color><color=#FFFF00>{0}</color> : {1}");

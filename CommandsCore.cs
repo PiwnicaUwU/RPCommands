@@ -40,7 +40,7 @@ namespace RPCommands
                 return false;
             }
 
-            if (player.IsScp)
+            if (player.IsScp && !Plugin.Instance.Config.AllowScpToUseCommands)
             {
                 response = Plugin.Instance.Translation.OnlyHumans;
                 return false;
