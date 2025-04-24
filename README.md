@@ -11,16 +11,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 With this plugin, you can create immersive descriptions of actions, thoughts, and surroundings that will be visible to nearby players.
 
-This plugin includes two versions - one without HSM (HintServiceMeow) and one with it. It is recommended to use the version with HSM, but it is not required.
-
 ## ⚠️ Warning: Common Issue with Incorrect Version Usage  
 
-Some users download the **HSM** (HintServiceMeow) version but do not install or use it correctly on their server. If you downloaded the **HSM version** but do not have **HintServiceMeow** installed, the plugin may not work properly.  
+Some users download the Plugin but do not install or use it correctly on their server. If you downloaded the **Plugin** but do not have **HintServiceMeow** installed, the plugin WILL NOT work properly.  
 
 To avoid issues:  
-✅ If you want to use the **HSM version**, make sure you have **HintServiceMeow installed in Your plugins folder**.  
-✅ If you do not want to install HSM, download the **WithoutHSM version** instead.  
-WITHOUTHSM VERSION IS NOT SUPPORTED ANYMORE!
+✅ If you want to use the **Plugin**, make sure you have **HintServiceMeow installed in Your plugins folder**.  
 
 If you encounter any problems, check your server logs or console and ensure the plugin is configured correctly.
 
@@ -143,11 +139,9 @@ try_result:
 ```
 
 ## 🐾 HintServiceMeow (HSM) Integration
-This plugin utilizes **HSM (HintServiceMeow)** for displaying hints. While HSM is **not required** to use the plugin, it is **highly recommended** for enhancing the overall experience and quality of the plugin.
+This plugin utilizes **HSM (HintServiceMeow)** for displaying hints.
 
 HSM allows for more polished hint display and improved functionality, providing a smoother experience for players on the server.
-
-For optimal performance, it’s advised to install **HSM** alongside this plugin.
 
 ## 🔗 Links
 - 📖 [EXILED](https://github.com/ExMod-Team/EXILED)
@@ -157,7 +151,7 @@ For optimal performance, it’s advised to install **HSM** alongside this plugin
 ## 👥 Author
 ```plaintext
 👤 .Piwnica  
-📧 Contact: Discord - .piwnica2137
+📧 Contact: Discord -> .piwnica2137
 ```
 
 ---
