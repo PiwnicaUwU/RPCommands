@@ -11,7 +11,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 With this plugin, you can create immersive descriptions of actions, thoughts, and surroundings that will be visible to nearby players.
 
-## ⚠️ Warning: Common Issue with Incorrect Version Usage  
+## ⚠️ Warning: Common Issue with Incorrect Usage  
 
 Some users download the Plugin but do not install or use it correctly on their server. If you downloaded the **Plugin** but do not have **HintServiceMeow** installed, the plugin WILL NOT work properly.  
 
