@@ -22,6 +22,9 @@ namespace RPCommands
         [Description("Message shown when Command Sender is not alive.")]
         public string OnlyAlive { get; set; } = "You must be alive to use this command.";
 
+        [Description("Cooldown message when a player tries to use a command too quickly.")]
+        public string CommandCooldown { get; set; } = "You must wait {0} seconds before using the command again.";
+
         [Description("Message shown when a command is successfully sent.")]
         public string MessageSent { get; set; } = "Message has been sent.";
 
@@ -36,7 +39,6 @@ namespace RPCommands
 
         [Description("Message shown when a assist request is sent.")]
         public string HelpRequestSent { get; set; } = "Your assist request has been sent to the staff.";
-
 
         [Description("Dictionary of command names used in the system.")]
 

@@ -8,6 +8,7 @@ using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using RemoteAdmin;
 using RPCommands.API;
+using System.Collections.Generic;
 
 namespace RPCommands
 {
@@ -18,6 +19,8 @@ namespace RPCommands
         public abstract string Description { get; }
 
         public string Command => Plugin.Instance.Translation.CommandNames.TryGetValue(OriginalCommand, out string translatedName) ? translatedName : OriginalCommand;
+
+        private static readonly Dictionary<Player, Dictionary<string, float>> PlayerCooldowns = new();
 
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
@@ -57,20 +60,62 @@ namespace RPCommands
                 response = string.Format(Plugin.Instance.Translation.Usage, Command);
                 return false;
             }
+
+            if (HasCooldown(player, out float remainingTime))
+            {
+                if (Plugin.Instance.Translation.CommandCooldown.Contains("{0}"))
+                    response = string.Format(Plugin.Instance.Translation.CommandCooldown, Math.Ceiling(remainingTime));
+                else
+                    response = Plugin.Instance.Translation.CommandCooldown;
+
+                return false;
+            }
+
             string message = string.Join(" ", arguments);
+
+            if (!ExecuteAction(player, message, out response))
+                return false;
+
+            SetCooldown(player);
+            Request.SetLastMessage(player, OriginalCommand, message);
+            return true;
+        }
+
+        protected virtual bool ExecuteAction(Player player, string message, out string response)
+        {
             float range = Plugin.Instance.Config.GetRange(OriginalCommand);
             float duration = Plugin.Instance.Config.GetDuration(OriginalCommand);
             string formattedMessage = FormatMessage(player, message);
 
             HintToNearbyPlayers(player, formattedMessage, range, duration);
             response = Plugin.Instance.Translation.MessageSent;
-            Request.SetLastMessage(player, OriginalCommand, string.Join(" ", arguments));
             return true;
         }
 
         protected virtual string FormatMessage(Player player, string message)
         {
             return Plugin.Instance.Config.FormatMessage(OriginalCommand, player.Nickname, message);
+        }
+
+        private bool HasCooldown(Player player, out float remainingTime)
+        {
+            if (PlayerCooldowns.TryGetValue(player, out var cooldowns) && cooldowns.TryGetValue(OriginalCommand, out var cooldownEndTime))
+            {
+                remainingTime = cooldownEndTime - Time.time;
+                return remainingTime > 0;
+            }
+
+            remainingTime = 0;
+            return false;
+        }
+
+        private void SetCooldown(Player player)
+        {
+            if (!PlayerCooldowns.ContainsKey(player))
+                PlayerCooldowns[player] = new Dictionary<string, float>();
+
+            float cooldownDuration = Plugin.Instance.Config.GetCooldown(OriginalCommand);
+            PlayerCooldowns[player][OriginalCommand] = Time.time + cooldownDuration;
         }
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
@@ -135,83 +180,38 @@ namespace RPCommands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class CustomInfoCommand : ICommand
+    public class CustomInfoCommand : NarrativeCommand
     {
-        public string Command => Plugin.Instance.Translation.CommandNames.TryGetValue("custom-info", out string translatedName) ? translatedName : "custom-info";
-        public string[] Aliases => Array.Empty<string>();
-        public string Description => Plugin.Instance.Translation.Commands["custom-info"];
+        public override string OriginalCommand => "custom-info";
+        public override string Description => Plugin.Instance.Translation.Commands["custom-info"];
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        protected override bool ExecuteAction(Player player, string message, out string response)
         {
-            if (!Plugin.Instance.Config.IsCommandEnabled("custom-info"))
-            {
-                response = Plugin.Instance.Translation.CommandDisabled;
-                return false;
-            }
-
-            if (sender is not PlayerCommandSender playerSender)
-            {
-                response = Plugin.Instance.Translation.OnlyPlayers;
-                return false;
-            }
-
-            Player player = Player.Get(playerSender.ReferenceHub);
-
-            if (arguments.Count < 1)
-            {
-                response = string.Format(Plugin.Instance.Translation.Usage, Command);
-                return false;
-            }
-
-            string customInfo = string.Join(" ", arguments);
             int maxLength = Plugin.Instance.Config.MaxCustomInfoLength;
 
-            if (customInfo.Length > maxLength)
+            if (message.Length > maxLength)
             {
                 response = Plugin.Instance.Translation.CustomInfoTooLong;
                 return false;
             }
 
-            player.CustomInfo = customInfo;
+            player.CustomInfo = message;
             response = Plugin.Instance.Translation.CustomInfoSet;
             return true;
         }
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class HelpCommand : ICommand
+    public class HelpCommand : NarrativeCommand
     {
-        public string Command => Plugin.Instance.Translation.CommandNames.TryGetValue("assist", out string translatedName) ? translatedName : "assist";
-        public string[] Aliases => Array.Empty<string>();
-        public string Description => Plugin.Instance.Translation.Commands["assist"];
+        public override string OriginalCommand => "assist";
+        public override string Description => Plugin.Instance.Translation.Commands["assist"];
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        protected override bool ExecuteAction(Player player, string message, out string response)
         {
-            if (!Plugin.Instance.Config.IsCommandEnabled("assist"))
-            {
-                response = Plugin.Instance.Translation.CommandDisabled;
-                return false;
-            }
-
-            if (sender is not PlayerCommandSender playerSender)
-            {
-                response = Plugin.Instance.Translation.OnlyPlayers;
-                return false;
-            }
-
-            if (arguments.Count < 1)
-            {
-                response = string.Format(Plugin.Instance.Translation.Usage, Command);
-                return false;
-            }
-
-            Player player = Player.Get(playerSender.ReferenceHub);
-            string message = string.Join(" ", arguments);
-            string formattedMessage = Plugin.Instance.Config.FormatMessage("assist", player.Nickname, message);
-
             foreach (Player staff in Player.List.Where(p => p.ReferenceHub.serverRoles.RemoteAdmin))
             {
-                staff.SendStaffMessage(formattedMessage);
+                staff.SendStaffMessage(FormatMessage(player, message));
             }
 
             response = Plugin.Instance.Translation.HelpRequestSent;

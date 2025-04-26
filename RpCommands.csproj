@@ -103,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\CommandCooldown.cs" />
     <Compile Include="API\Events.cs" />
     <Compile Include="API\Request.cs" />
     <Compile Include="CommandsCore.cs" />

@@ -9,6 +9,7 @@ namespace RPCommands
 
         public override string Name => "RPCommands";
         public override string Author => ".Piwnica";
+        public override string Prefix => "RPCommands";
         public override Version Version => new(0, 6, 9);
 
         public override void OnEnabled()
