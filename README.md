@@ -38,34 +38,43 @@ The `config.yml` file allows you to customize the plugin, such as the message vi
 is_enabled: true
 # Enable debug logs - don't work
 debug: false
+# If false, SCPs will not be able to use narrative commands.
+allow_scp_to_use_commands: false
 # Command settings, do not remove {0}, {1}, or {2}
 me:
   range: 15
   duration: 5
+  cooldown: 3
   format: '<color=green>「Me」</color><color=#FFFF00>{0}</color> : {1}'
 do:
   range: 15
   duration: 5
+  cooldown: 3
   format: '<color=green>「Do」</color><color=#FFFF00>{0}</color> : {1}'
 look:
   range: 15
   duration: 5
+  cooldown: 3
   format: '<color=green>「Look」</color><color=#FFFF00>{0}</color> : {1}'
 ooc:
   range: 15
   duration: 5
+  cooldown: 3
   format: '<color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}'
 try:
   range: 15
   duration: 5
+  cooldown: 3
   format: '<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!'
 desc:
   range: 15
   duration: 5
+  cooldown: 3
   format: '<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}'
 assist:
   range: 0
   duration: 0
+  cooldown: 3
   format: '<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}'
 # Maximum length of custom info
 max_custom_info_length: 250
@@ -94,6 +103,8 @@ only_players: 'Only players can use this command.'
 only_humans: 'Only humans can use this command.'
 # Message shown when Command Sender is not alive.
 only_alive: 'You must be alive to use this command.'
+# Cooldown message when a player tries to use a command too quickly.
+command_cooldown: 'You must wait {0} seconds before using the command again.'
 # Message shown when a command is successfully sent.
 message_sent: 'Message has been sent.'
 # Message shown when custom info is set.
