@@ -155,7 +155,7 @@ This plugin utilizes **HSM (HintServiceMeow)** for displaying hints.
 HSM allows for more polished hint display and improved functionality, providing a smoother experience for players on the server.
 
 ## 🔗 Links
-- 📖 [EXILED](https://github.com/ExMod-Team/EXILED)
+- 📖 [EXILED](https://github.com/ExSLMod-Team/EXILED)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
 
 
