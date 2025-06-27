@@ -1,10 +1,13 @@
-﻿using Exiled.API.Interfaces;
+﻿#if EXILED
+using Exiled.API.Interfaces;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+#endif
 
 namespace RPCommands
 {
+#if EXILED
     public class Translation : ITranslation
     {
         [Description("Message shown when the round has not started.")]
@@ -37,6 +40,9 @@ namespace RPCommands
         [Description("Message shown when a command is disabled.")]
         public string CommandDisabled { get; set; } = "This command is disabled.";
 
+        [Description("Message shown when a player tries to use radio command without holding a radio.")]
+        public string RadioRequired { get; set; } = "You must be holding a radio to use this command.";
+
         [Description("Message shown when a assist request is sent.")]
         public string HelpRequestSent { get; set; } = "Your assist request has been sent to the staff.";
 
@@ -52,6 +58,7 @@ namespace RPCommands
             { "desc", "desc" },
             { "custom-info", "custom-info" },
             { "assist", "assist" },
+            { "radio", "radio" }
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -65,6 +72,7 @@ namespace RPCommands
             { "desc", "Narrative command 'Desc'." },
             { "custom-info", "Sets your custom info." },
             { "assist", "Sends a assist request to the staff chat." },
+            { "radio", "Sends a radio message to other players holding radios." }
         };
 
         [Description("Dictionary of results for try command.")]
@@ -76,9 +84,10 @@ namespace RPCommands
 
         public string GetOriginalCommandName(string translatedName)
         {
-            return Plugin.Instance.Translation.CommandNames
+            return EXILEDMain.Instance.Translation.CommandNames
                 .FirstOrDefault(x => x.Value == translatedName).Key ?? translatedName;
         }
 
     }
+#endif
 }
