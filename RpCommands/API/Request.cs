@@ -119,7 +119,7 @@ namespace RPCommands.API
         }
 
         /// <summary>
-        /// Clears all messages associated with a specific player (e.g., on disconnect or death).
+        /// Clears all messages associated with a specific player.
         /// </summary>
         /// <param name="player">The player whose messages should be cleared.</param>
         public static void ClearMessages(Player player)
@@ -128,7 +128,7 @@ namespace RPCommands.API
         }
 
         /// <summary>
-        /// Clears all stored messages (e.g., at the end of the round).
+        /// Clears all stored messages.
         /// </summary>
         public static void ClearAllMessages()
         {

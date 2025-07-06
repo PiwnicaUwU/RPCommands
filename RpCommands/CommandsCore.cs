@@ -23,18 +23,13 @@ namespace RPCommands
         {
             get
             {
-#if EXILED
-        return Array.Empty<string>();
-#else
                 if (LabAPIMain.Instance?.Config?.CommandNames is { } names &&
                     names.TryGetValue(OriginalCommand, out string translated) &&
                     !string.Equals(translated, OriginalCommand, StringComparison.OrdinalIgnoreCase))
                 {
-                    return new[] { translated };
+                    return new[] { translated, OriginalCommand };
                 }
-
-                return Array.Empty<string>();
-#endif
+                return new[] { OriginalCommand };
             }
         }
 
@@ -505,8 +500,7 @@ namespace RPCommands
         public override string OriginalCommand => "me";
 
         private string _description;
-        public override string Description => _description ??= LabAPIMain.Instance?.Config?.Commands["me"] ?? "Missing description";
-        public override string[] Aliases => new[] { "me" };
+        public override string Description => _description ??= LabAPIMain.Instance?.Config?.Commands["me"] ?? "Narrative command 'Me'";
 
     }
 
@@ -515,7 +509,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "do";
         public override string Description => LabAPIMain.Instance.Config.Commands["do"];
-        public override string[] Aliases => new[] { "do" };
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -523,7 +516,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "look";
         public override string Description => LabAPIMain.Instance.Config.Commands["look"];
-        public override string[] Aliases => new[] { "look" };
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -531,7 +523,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "ooc";
         public override string Description => LabAPIMain.Instance.Config.Commands["ooc"];
-        public override string[] Aliases => new[] { "ooc" };
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -539,7 +530,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "desc";
         public override string Description => LabAPIMain.Instance.Config.Commands["desc"];
-        public override string[] Aliases => new[] { "desc" };
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -547,7 +537,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "custom-info";
         public override string Description => LabAPIMain.Instance.Config.Commands["custom-info"];
-        public override string[] Aliases => new[] { "custom-info" };
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
@@ -570,7 +559,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "assist";
         public override string Description => LabAPIMain.Instance.Config.Commands["assist"];
-        public override string[] Aliases => new[] { "assist" };
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
@@ -589,7 +577,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "try";
         public override string Description => LabAPIMain.Instance.Config.Commands["try"];
-        public override string[] Aliases => new[] { "try" };
 
         protected override string FormatMessage(Player player, string message)
         {
@@ -606,7 +593,6 @@ namespace RPCommands
     {
         public override string OriginalCommand => "radio";
         public override string Description => LabAPIMain.Instance.Config.Commands["radio"];
-        public override string[] Aliases => new[] { "radio" };
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {

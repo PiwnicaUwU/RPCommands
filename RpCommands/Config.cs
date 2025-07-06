@@ -145,7 +145,6 @@ namespace RPCommands
         };
 
         public bool IsCommandEnabled(string command) => EnabledCommands.ContainsKey(command) && EnabledCommands[command];
-
         public float GetRange(string command) => GetSettings(command).Range;
         public float GetDuration(string command) => GetSettings(command).Duration;
         public float GetCooldown(string command) => GetSettings(command).Cooldown;
