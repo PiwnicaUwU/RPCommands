@@ -5,7 +5,7 @@ VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RpCommands-LabAPI", "RpCommands-LabAPI.csproj", "{DDB7C18D-8E4D-4C0D-A736-9632C7699C29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPCommands-EXILED", "..\RPCommands-EXILED\RPCommands-EXILED.csproj", "{48C515EB-BCCA-45F7-B10D-5A8DBCCEB70E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPCommands-EXILED", "RPCommands-EXILED\RPCommands-EXILED.csproj", "{48C515EB-BCCA-45F7-B10D-5A8DBCCEB70E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
