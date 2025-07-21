@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
-using RpCommands.RpCommands;
+using RpCommands;
 using System;
 
 namespace RPCommands
@@ -16,12 +16,15 @@ namespace RPCommands
         public override PluginPriority Priority => PluginPriority.Last;
 
         private EventHandlers _eventHandlers;
+        private CreditTag creditTag;
 
         public override void OnEnabled()
         {
             Instance = this;
             _eventHandlers = new EventHandlers();
             _eventHandlers.LoadEvents();
+            creditTag = new CreditTag();
+            creditTag.Load();
             base.OnEnabled();
         }
 

@@ -12,6 +12,8 @@ namespace RPCommands
 
         [Description("Enable debug logs - don't work")]
         public bool Debug { get; set; } = false;
+        [Description("Enables or disables the in-game credit tag for the plugin's author.")]
+        public bool IsCreditTagEnabled { get; set; } = true;
 
         [Description("If false, SCPs will not be able to use narrative commands.")]
         public bool AllowScpToUseCommands { get; set; } = false;

@@ -108,6 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreditTag.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RpCommands-EXILED\API\CommandCooldown.cs" />
     <Compile Include="RpCommands-EXILED\API\Events.cs" />
@@ -121,6 +122,9 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="RpCommands-EXILED\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RpCommands-EXILED\.gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
