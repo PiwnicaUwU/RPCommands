@@ -157,6 +157,7 @@ HSM allows for more polished hint display and improved functionality, providing 
 
 ## 🔗 Links
 - 📖 [EXILED](https://github.com/ExSLMod-Team/EXILED)
+- 💰 [LABAPI](https://github.com/northwood-studios/LabAPI)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
 
 
