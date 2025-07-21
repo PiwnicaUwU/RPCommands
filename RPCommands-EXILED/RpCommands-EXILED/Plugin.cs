@@ -33,6 +33,7 @@ namespace RPCommands
             Instance = null;
             _eventHandlers.UnloadEvents();
             _eventHandlers = null;
+            creditTag = null;
             base.OnDisabled();
         }
     }

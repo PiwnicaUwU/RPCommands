@@ -14,18 +14,22 @@ namespace RPCommands
         public override string ConfigFileName { get; set; } = "RPCommands-Config.yml";
         public static Main Instance { get; private set; }
         public override Version RequiredApiVersion { get; } = new(LabApiProperties.CompiledVersion);
+        private CreditTag creditTag;
         private EventHandlers _eventHandlers;
         public override void Enable()
         {
             Instance = this;
             _eventHandlers = new EventHandlers();
             _eventHandlers.LoadEvents();
+            creditTag = new CreditTag();
+            creditTag.Load();
         }
 
         public override void Disable()
         {
             Instance = null;
             _eventHandlers.UnloadEvents();
+            creditTag = null;
             _eventHandlers = null;
         }
     }

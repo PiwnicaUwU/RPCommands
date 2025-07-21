@@ -5,7 +5,6 @@ namespace RPCommands
 {
     public class CreditTag
     {
-        private readonly Config _config;
         public void Load()
         {
             if (Main.Instance.Config.IsCreditTagEnabled)
