@@ -126,32 +126,21 @@ namespace RPCommands
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
         {
-            bool sentToOthers = false;
-            HashSet<Player> hintedPlayers = new();
-
+            bool showInConsole = Main.Instance.Config.ShowCommandInSenderConsole;
             foreach (Player player in Player.List.Where(p => p != sender && Vector3.Distance(p.Position, sender.Position) <= range))
             {
                 SendHint(player, message, duration);
-                hintedPlayers.Add(player);
-                sentToOthers = true;
-            }
-
-            if (Main.Instance.Config.ShowHintsToSpectatorsOfSender)
-            {
-                foreach (Player spectator in sender.CurrentSpectatingPlayers)
+                if (showInConsole)
                 {
-                    if (spectator != null && spectator.IsConnected && hintedPlayers.Add(spectator))
-                    {
-                        SendHint(spectator, message, duration);
-                    }
+                    player.SendConsoleMessage($"{message}", "yellow");
                 }
             }
 
             SendHint(sender, message, duration);
 
-            if (sentToOthers && Main.Instance.Config.ShowCommandInSenderConsole)
+            if (showInConsole)
             {
-                sender.SendConsoleMessage($"{sender.Nickname}: {message}", "yellow");
+                sender.SendConsoleMessage($"{message}", "yellow");
             }
         }
 
@@ -169,7 +158,6 @@ namespace RPCommands
             playerDisplay?.AddHint(hint);
 
             Timing.CallDelayed(duration, () => playerDisplay?.RemoveHint(hint));
-
 
             if (Main.Instance.Config.ShowHintsToSpectatorsOfReceivers)
             {
@@ -314,9 +302,8 @@ namespace RPCommands
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
-
-            float duration = Main.Instance.Config.GetDuration(OriginalCommand);
-            string formattedMessage = FormatMessage(player, message);
+            _ = Main.Instance.Config.GetDuration(OriginalCommand);
+            _ = FormatMessage(player, message);
 
 
             response = Main.Instance.Translation.MessageSent;

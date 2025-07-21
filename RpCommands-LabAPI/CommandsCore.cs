@@ -143,32 +143,21 @@ namespace RPCommands
 
         private void HintToNearbyPlayers(Player sender, string message, float range, float duration)
         {
-            bool sentToOthers = false;
-            HashSet<Player> hintedPlayers = new();
-
+            bool showInConsole = Main.Instance.Config.ShowCommandInSenderConsole;
             foreach (Player player in Player.List.Where(p => p != sender && Vector3.Distance(p.Position, sender.Position) <= range))
             {
                 SendHint(player, message, duration);
-                hintedPlayers.Add(player);
-                sentToOthers = true;
-            }
-
-            if (Main.Instance.Config.ShowHintsToSpectatorsOfSender)
-            {
-                foreach (Player spectator in sender.CurrentSpectators)
+                if (showInConsole)
                 {
-                    if (spectator != null && spectator.IsOnline && hintedPlayers.Add(spectator))
-                    {
-                        SendHint(spectator, message, duration);
-                    }
+                    player.SendConsoleMessage($"{message}", "yellow");
                 }
             }
 
             SendHint(sender, message, duration);
 
-            if (sentToOthers && Main.Instance.Config.ShowCommandInSenderConsole)
+            if (showInConsole)
             {
-                sender.SendConsoleMessage($"{sender.Nickname}: {message}", "yellow");
+                sender.SendConsoleMessage($"{message}", "yellow");
             }
         }
 

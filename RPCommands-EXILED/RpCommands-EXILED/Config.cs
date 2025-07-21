@@ -21,9 +21,6 @@ namespace RPCommands
         [Description("If true, sender will see a console message with the command they used if it's shown to others.")]
         public bool ShowCommandInSenderConsole { get; set; } = true;
 
-        [Description("If true, spectators of the player who used the command will also see the hint.")]
-        public bool ShowHintsToSpectatorsOfSender { get; set; } = true;
-
         [Description("If true, spectators of players who are within range of the command will also see the hint.")]
         public bool ShowHintsToSpectatorsOfReceivers { get; set; } = true;
 
