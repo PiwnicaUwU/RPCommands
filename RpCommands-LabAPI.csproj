@@ -106,12 +106,16 @@
     <Compile Include="RpCommands-LabAPI\API\Request.cs" />
     <Compile Include="RpCommands-LabAPI\CommandsCore.cs" />
     <Compile Include="RpCommands-LabAPI\Config.cs" />
+    <Compile Include="RpCommands-LabAPI\CreditTag.cs" />
     <Compile Include="RpCommands-LabAPI\EventHandlers.cs" />
     <Compile Include="RpCommands-LabAPI\Plugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RpCommands-LabAPI\.gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
