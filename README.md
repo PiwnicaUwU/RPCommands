@@ -165,6 +165,8 @@ HSM allows for more polished hint display and improved functionality, providing 
 ```plaintext
 👤 .Piwnica  
 📧 Contact: Discord -> .piwnica2137
+👤 .Adamczyli
+📧 Contact: Discord -> .czyliadi_
 ```
 
 ---
