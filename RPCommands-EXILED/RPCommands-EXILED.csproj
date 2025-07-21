@@ -105,6 +105,7 @@
     <Compile Include="RpCommands-EXILED\API\Request.cs" />
     <Compile Include="RpCommands-EXILED\CommandsCore.cs" />
     <Compile Include="RpCommands-EXILED\Config.cs" />
+    <Compile Include="RpCommands-EXILED\CreditTag.cs" />
     <Compile Include="RpCommands-EXILED\EventHandlers.cs" />
     <Compile Include="RpCommands-EXILED\Plugin.cs" />
     <Compile Include="RpCommands-EXILED\Translation.cs" />
@@ -112,6 +113,9 @@
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="RpCommands-EXILED\packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="RpCommands-EXILED\.gitignore" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
