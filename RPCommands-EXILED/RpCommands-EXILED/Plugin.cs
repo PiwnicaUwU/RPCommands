@@ -10,7 +10,7 @@ namespace RPCommands
         public static Main Instance { get; private set; }
 
         public override string Name => "RPCommands";
-        public override string Author => ".piwnica2137";
+        public override string Author => ".piwnica2137 & .Adamczyli";
         public override string Prefix => "RPCommands";
         public override Version Version => new(0, 6, 9);
         public override PluginPriority Priority => PluginPriority.Last;

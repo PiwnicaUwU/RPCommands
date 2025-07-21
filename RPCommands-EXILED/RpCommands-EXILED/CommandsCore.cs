@@ -220,7 +220,6 @@ namespace RPCommands
         public override string Description => Main.Instance.Translation.Commands["desc"];
     }
 
-    [CommandHandler(typeof(ClientCommandHandler))]
     public class CustomInfoCommand : NarrativeCommand
     {
         public override string OriginalCommand => "custom-info";
@@ -300,6 +299,25 @@ namespace RPCommands
 
                 SendHint(receiver, formattedMessage, duration);
             }
+
+            response = Main.Instance.Translation.MessageSent;
+            return true;
+        }
+    }
+
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class WearCommand : NarrativeCommand
+    {
+        public override string OriginalCommand => "wear";
+        public override string Description => Main.Instance.Translation.Commands["wear"];
+
+        protected override bool ExecuteAction(Player player, string message, out string response)
+        {
+
+            float duration = Main.Instance.Config.GetDuration(OriginalCommand);
+            string formattedMessage = FormatMessage(player, message);
+
 
             response = Main.Instance.Translation.MessageSent;
             return true;

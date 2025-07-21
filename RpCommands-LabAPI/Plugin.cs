@@ -9,7 +9,7 @@ namespace RPCommands
     {
         public override string Name { get; } = "RPCommands";
         public override string Description { get; } = "RPCommands is a plugin that adds narrative text commands, allowing players to enhance their roleplay experience.";
-        public override string Author { get; } = ".piwnica2137";
+        public override string Author { get; } = ".piwnica2137 & .Adamczyli";
         public override Version Version { get; } = new Version(0, 6, 9);
         public override string ConfigFileName { get; set; } = "RPCommands-Config.yml";
         public static LabAPIMain Instance { get; private set; }
