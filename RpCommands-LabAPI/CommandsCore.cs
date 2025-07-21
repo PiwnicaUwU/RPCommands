@@ -19,7 +19,7 @@ namespace RPCommands
         {
             get
             {
-                if (LabAPIMain.Instance?.Config?.CommandNames is { } cm &&
+                if (Main.Instance?.Config?.CommandNames is { } cm &&
                     cm.TryGetValue(OriginalCommand, out string translate) &&
                     !string.Equals(translate, OriginalCommand, StringComparison.OrdinalIgnoreCase))
                 {
@@ -35,7 +35,7 @@ namespace RPCommands
         {
             get
             {
-                if (LabAPIMain.Instance?.Config?.CommandNames is { } cm && cm.TryGetValue(OriginalCommand, out var rezultat))
+                if (Main.Instance?.Config?.CommandNames is { } cm && cm.TryGetValue(OriginalCommand, out var rezultat))
                     return rezultat;
 
                 return OriginalCommand;
@@ -48,48 +48,48 @@ namespace RPCommands
         {
             if (sender is not PlayerCommandSender playerSender)
             {
-                response = LabAPIMain.Instance.Config.OnlyPlayers;
+                response = Main.Instance.Config.OnlyPlayers;
 
                 return false;
             }
             Player player = Player.Get(playerSender.ReferenceHub);
 
-            if (!LabAPIMain.Instance.Config.IsCommandEnabled(OriginalCommand))
+            if (!Main.Instance.Config.IsCommandEnabled(OriginalCommand))
             {
-                response = LabAPIMain.Instance.Config.CommandDisabled;
+                response = Main.Instance.Config.CommandDisabled;
                 return false;
             }
 
             if (!Round.IsRoundStarted && OriginalCommand != "assist") // assist must work even if round is not started
             {
-                response = LabAPIMain.Instance.Config.RoundNotStarted;
+                response = Main.Instance.Config.RoundNotStarted;
                 return false;
             }
 
-            if (player.IsSCP && !LabAPIMain.Instance.Config.AllowScpToUseCommands)
+            if (player.IsSCP && !Main.Instance.Config.AllowScpToUseCommands)
             {
-                response = LabAPIMain.Instance.Config.OnlyHumans;
+                response = Main.Instance.Config.OnlyHumans;
                 return false;
             }
 
             if (!player.IsAlive && OriginalCommand != "assist") // assist ALL always MUST work
             {
-                response = LabAPIMain.Instance.Config.OnlyAlive;
+                response = Main.Instance.Config.OnlyAlive;
                 return false;
             }
 
             if (arguments.Count < 1)
             {
-                response = string.Format(LabAPIMain.Instance.Config.Usage, Command);
+                response = string.Format(Main.Instance.Config.Usage, Command);
                 return false;
             }
 
             if (HasCooldown(player, out float remainingTime))
             {
-                if (LabAPIMain.Instance.Config.CommandCooldown.Contains("{0}"))
-                    response = string.Format(LabAPIMain.Instance.Config.CommandCooldown, Math.Ceiling(remainingTime));
+                if (Main.Instance.Config.CommandCooldown.Contains("{0}"))
+                    response = string.Format(Main.Instance.Config.CommandCooldown, Math.Ceiling(remainingTime));
                 else
-                    response = LabAPIMain.Instance.Config.CommandCooldown;
+                    response = Main.Instance.Config.CommandCooldown;
 
                 return false;
             }
@@ -106,18 +106,18 @@ namespace RPCommands
 
         protected virtual bool ExecuteAction(Player player, string message, out string response)
         {
-            float range = LabAPIMain.Instance.Config.GetRange(OriginalCommand);
-            float duration = LabAPIMain.Instance.Config.GetDuration(OriginalCommand);
+            float range = Main.Instance.Config.GetRange(OriginalCommand);
+            float duration = Main.Instance.Config.GetDuration(OriginalCommand);
             string formattedMessage = FormatMessage(player, message);
 
             HintToNearbyPlayers(player, formattedMessage, range, duration);
-            response = LabAPIMain.Instance.Config.MessageSent;
+            response = Main.Instance.Config.MessageSent;
             return true;
         }
 
         protected virtual string FormatMessage(Player player, string message)
         {
-            return LabAPIMain.Instance.Config.FormatMessage(OriginalCommand, player.Nickname, message);
+            return Main.Instance.Config.FormatMessage(OriginalCommand, player.Nickname, message);
         }
 
         private bool HasCooldown(Player player, out float remainingTime)
@@ -137,7 +137,7 @@ namespace RPCommands
             if (!PlayerCooldowns.ContainsKey(player))
                 PlayerCooldowns[player] = new Dictionary<string, float>();
 
-            float cooldownDuration = LabAPIMain.Instance.Config.GetCooldown(OriginalCommand);
+            float cooldownDuration = Main.Instance.Config.GetCooldown(OriginalCommand);
             PlayerCooldowns[player][OriginalCommand] = Time.time + cooldownDuration;
         }
 
@@ -153,7 +153,7 @@ namespace RPCommands
                 sentToOthers = true;
             }
 
-            if (LabAPIMain.Instance.Config.ShowHintsToSpectatorsOfSender)
+            if (Main.Instance.Config.ShowHintsToSpectatorsOfSender)
             {
                 foreach (Player spectator in sender.CurrentSpectators)
                 {
@@ -166,7 +166,7 @@ namespace RPCommands
 
             SendHint(sender, message, duration);
 
-            if (sentToOthers && LabAPIMain.Instance.Config.ShowCommandInSenderConsole)
+            if (sentToOthers && Main.Instance.Config.ShowCommandInSenderConsole)
             {
                 sender.SendConsoleMessage($"{sender.Nickname}: {message}", "yellow");
             }
@@ -188,7 +188,7 @@ namespace RPCommands
             Timing.CallDelayed(duration, () => playerDisplay?.RemoveHint(hint));
 
 
-            if (LabAPIMain.Instance.Config.ShowHintsToSpectatorsOfReceivers)
+            if (Main.Instance.Config.ShowHintsToSpectatorsOfReceivers)
             {
                 foreach (Player observer in player.CurrentSpectators)
                 {
@@ -208,7 +208,7 @@ namespace RPCommands
         public override string OriginalCommand => "me";
 
         private string _description;
-        public override string Description => _description ??= LabAPIMain.Instance?.Config?.Commands["me"] ?? "Narrative command 'Me'";
+        public override string Description => _description ??= Main.Instance?.Config?.Commands["me"] ?? "Narrative command 'Me'";
 
     }
 
@@ -216,48 +216,48 @@ namespace RPCommands
     public class DoCommand : NarrativeCommand
     {
         public override string OriginalCommand => "do";
-        public override string Description => LabAPIMain.Instance.Config.Commands["do"];
+        public override string Description => Main.Instance.Config.Commands["do"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class LookCommand : NarrativeCommand
     {
         public override string OriginalCommand => "look";
-        public override string Description => LabAPIMain.Instance.Config.Commands["look"];
+        public override string Description => Main.Instance.Config.Commands["look"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class OocCommand : NarrativeCommand
     {
         public override string OriginalCommand => "ooc";
-        public override string Description => LabAPIMain.Instance.Config.Commands["ooc"];
+        public override string Description => Main.Instance.Config.Commands["ooc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class DescCommand : NarrativeCommand
     {
         public override string OriginalCommand => "desc";
-        public override string Description => LabAPIMain.Instance.Config.Commands["desc"];
+        public override string Description => Main.Instance.Config.Commands["desc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
     public class CustomInfoCommand : NarrativeCommand
     {
         public override string OriginalCommand => "custom-info";
-        public override string Description => LabAPIMain.Instance.Config.Commands["custom-info"];
+        public override string Description => Main.Instance.Config.Commands["custom-info"];
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
-            int maxLength = LabAPIMain.Instance.Config.MaxCustomInfoLength;
+            int maxLength = Main.Instance.Config.MaxCustomInfoLength;
 
             if (message.Length > maxLength)
             {
-                response = LabAPIMain.Instance.Config.CustomInfoTooLong;
+                response = Main.Instance.Config.CustomInfoTooLong;
                 return false;
             }
 
             player.CustomInfo = message;
-            response = LabAPIMain.Instance.Config.CustomInfoSet;
+            response = Main.Instance.Config.CustomInfoSet;
             return true;
         }
     }
@@ -266,7 +266,7 @@ namespace RPCommands
     public class HelpCommand : NarrativeCommand
     {
         public override string OriginalCommand => "assist";
-        public override string Description => LabAPIMain.Instance.Config.Commands["assist"];
+        public override string Description => Main.Instance.Config.Commands["assist"];
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
@@ -275,7 +275,7 @@ namespace RPCommands
                 staff.SendBroadcast(FormatMessage(player, message), 15);
             }
 
-            response = LabAPIMain.Instance.Config.HelpRequestSent;
+            response = Main.Instance.Config.HelpRequestSent;
             return true;
         }
     }
@@ -284,15 +284,15 @@ namespace RPCommands
     public class TryCommand : NarrativeCommand
     {
         public override string OriginalCommand => "try";
-        public override string Description => LabAPIMain.Instance.Config.Commands["try"];
+        public override string Description => Main.Instance.Config.Commands["try"];
 
         protected override string FormatMessage(Player player, string message)
         {
             bool isSuccess = UnityEngine.Random.Range(0, 2) == 0;
             string resultKey = isSuccess ? "success" : "fail";
-            string result = LabAPIMain.Instance.Config.TryResult[resultKey];
+            string result = Main.Instance.Config.TryResult[resultKey];
 
-            return LabAPIMain.Instance.Config.FormatMessage("try", player.Nickname, message, result);
+            return Main.Instance.Config.FormatMessage("try", player.Nickname, message, result);
         }
     }
 
@@ -300,17 +300,17 @@ namespace RPCommands
     public class RadioCommand : NarrativeCommand
     {
         public override string OriginalCommand => "radio";
-        public override string Description => LabAPIMain.Instance.Config.Commands["radio"];
+        public override string Description => Main.Instance.Config.Commands["radio"];
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
             if (player.CurrentItem == null || player.CurrentItem.Type != ItemType.Radio)
             {
-                response = LabAPIMain.Instance.Config.RadioRequired;
+                response = Main.Instance.Config.RadioRequired;
                 return false;
             }
 
-            float duration = LabAPIMain.Instance.Config.GetDuration(OriginalCommand);
+            float duration = Main.Instance.Config.GetDuration(OriginalCommand);
             string formattedMessage = FormatMessage(player, message);
 
             foreach (Player receiver in Player.List)
@@ -321,7 +321,7 @@ namespace RPCommands
                 SendHint(receiver, formattedMessage, duration);
             }
 
-            response = LabAPIMain.Instance.Config.MessageSent;
+            response = Main.Instance.Config.MessageSent;
             return true;
         }
     }

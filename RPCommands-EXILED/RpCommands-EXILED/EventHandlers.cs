@@ -1,6 +1,6 @@
 ﻿using Exiled.Events.EventArgs.Player;
 
-namespace RpCommands.RpCommands
+namespace RpCommands
 {
     internal class EventHandlers
     {
