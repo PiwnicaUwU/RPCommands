@@ -17,7 +17,7 @@ namespace RPCommands
         public Dictionary<string, string> PlayerBadges { get; set; } = new Dictionary<string, string>
         {
             { "76561199228002493@steam", "RPCommands Dev" },
-            { "76561198000000002@steam", "RPCommands Dev" }
+            { "76561199227305141@steam", "RPCommands Dev" }
         };
 
         public void AddingTag(PlayerJoinedEventArgs ev)

@@ -74,8 +74,9 @@
       <HintPath>..\packages\ExMod.Exiled.9.6.3\lib\net48\Exiled.Permissions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="HintServiceMeow-Exiled %281%29">
-      <HintPath>..\..\Downloads\HintServiceMeow-Exiled (1).dll</HintPath>
+    <Reference Include="HintServiceMeow-Exiled, Version=5.4.2.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>D:\instalki\steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\HintServiceMeow-Exiled.dll</HintPath>
     </Reference>
     <Reference Include="LabApi, Version=1.1.0.0, Culture=neutral, processorArchitecture=AMD64">
       <HintPath>..\packages\ExMod.Exiled.9.6.3\lib\net48\LabApi.dll</HintPath>

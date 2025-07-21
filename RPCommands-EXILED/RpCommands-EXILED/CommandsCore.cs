@@ -19,7 +19,7 @@ namespace RPCommands
         {
             get
             {
-                return Array.Empty<string>();
+                return [];
             }
         }
 
