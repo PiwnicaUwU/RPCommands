@@ -298,22 +298,4 @@ namespace RPCommands
             return true;
         }
     }
-
-
-    [CommandHandler(typeof(ClientCommandHandler))]
-    public class WearCommand : NarrativeCommand
-    {
-        public override string OriginalCommand => "wear";
-        public override string Description => Main.Instance.Translation.Commands["wear"];
-
-        protected override bool ExecuteAction(Player player, string message, out string response)
-        {
-            _ = Main.Instance.Config.GetDuration(OriginalCommand);
-            _ = FormatMessage(player, message);
-
-
-            response = Main.Instance.Translation.MessageSent;
-            return true;
-        }
-    }
 }

@@ -16,7 +16,7 @@ namespace RPCommands
         [Description("Enables or disables the in-game credit tag for the plugin's author.")]
         public bool IsCreditTagEnabled { get; set; } = true;
 
-        [Description("List of banned words. Messages containing any of these words will be blocked.")]
+        [Description("List of banned words. Messages containing any of these words will be blocked. It is recommended to not delete 'size'")]
         public List<string> BannedWords { get; set; } =
         [
             "size",
