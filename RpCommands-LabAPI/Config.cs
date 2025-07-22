@@ -9,6 +9,14 @@ namespace RPCommands
     {
         [Description("Enables or disables the in-game credit tag for the plugin's author.")]
         public bool IsCreditTagEnabled { get; set; } = true;
+
+        [Description("List of banned words. Messages containing any of these words will be blocked.")]
+        public List<string> BannedWords { get; set; } = new()
+        {
+            "size",
+            "<size>"
+        };
+
         [Description("If false, SCPs will not be able to use narrative commands.")]
         public bool AllowScpToUseCommands { get; set; } = false;
 
@@ -76,6 +84,9 @@ namespace RPCommands
 
         [Description("Usage message for commands.")]
         public string Usage { get; set; } = "Usage: .{0} <message>";
+
+        [Description("Message shown when banned word is detected.")]
+        public string BannedWordDetected { get; set; } = "Your message contains a banned word and has been blocked.";
 
         [Description("Message shown when a non-player tries to use a command.")]
         public string OnlyPlayers { get; set; } = "Only players can use this command.";

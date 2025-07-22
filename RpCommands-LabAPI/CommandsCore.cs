@@ -96,6 +96,12 @@ namespace RPCommands
 
             string message = string.Join(" ", arguments);
 
+            if (Main.Instance.Config.BannedWords.Any(bannedWord => message.ToLower().Contains(bannedWord.ToLower())))
+            {
+                response = Main.Instance.Config.BannedWordDetected;
+                return false;
+            }
+
             if (!ExecuteAction(player, message, out response))
                 return false;
 

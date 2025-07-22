@@ -13,6 +13,9 @@ namespace RPCommands
         [Description("Usage message for commands.")]
         public string Usage { get; set; } = "Usage: .{0} <message>";
 
+        [Description("Message shown when banned word is detected.")]
+        public string BannedWordDetected { get; set; } = "Your message contains a banned word and has been blocked.";
+
         [Description("Message shown when a non-player tries to use a command.")]
         public string OnlyPlayers { get; set; } = "Only players can use this command.";
 
