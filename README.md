@@ -28,6 +28,7 @@ If you encounter any problems, check your server logs or console and ensure the 
 ✅ **.desc**
 ✅ **.custom-info**
 ✅ **.assist**
+✅ **.radio**
 
 ## ⚙️ Configuration
 The `config.yml` file allows you to customize the plugin, such as the message visibility range and text formatting.
@@ -39,6 +40,12 @@ is_enabled: true
 debug: false
 # If false, SCPs will not be able to use narrative commands.
 allow_scp_to_use_commands: false
+# If true, sender will see a console message with the command they used if it's shown to others.
+show_command_in_sender_console: true
+# If true, spectators of the player who used the command will also see the hint.
+show_hints_to_spectators_of_sender: true
+# If true, spectators of players who are within range of the command will also see the hint.
+show_hints_to_spectators_of_receivers: true
 # Command settings, do not remove {0}, {1}, or {2}
 me:
   range: 15
@@ -75,6 +82,16 @@ assist:
   duration: 0
   cooldown: 3
   format: '<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}'
+custom_info:
+  range: 0
+  duration: 0
+  cooldown: 0
+  format: ''
+radio:
+  range: 0
+  duration: 5
+  cooldown: 3
+  format: '<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}'
 # Maximum length of custom info
 max_custom_info_length: 250
 # Enable or disable specific commands
@@ -87,6 +104,7 @@ enabled_commands:
   desc: true
   custom-info: true
   assist: true
+  radio: true
 ```
 ## 🌐 Translation
 The `translations.yml` file allows you to translate the plugin.
@@ -112,6 +130,8 @@ custom_info_set: 'Your custom info has been set!'
 custom_info_too_long: 'Custom info is too long!'
 # Message shown when a command is disabled.
 command_disabled: 'This command is disabled.'
+# Message shown when a player tries to use radio command without holding a radio.
+radio_required: 'You must be holding a radio to use this command.'
 # Message shown when a assist request is sent.
 help_request_sent: 'Your assist request has been sent to the staff.'
 # Dictionary of command names used in the system.
@@ -124,6 +144,7 @@ command_names:
   desc: desc
   custom-info: custom-info
   assist: assist
+  radio: radio
 # Dictionary of command descriptions.
 commands:
   me: Narrative command 'Me'.
@@ -134,6 +155,7 @@ commands:
   desc: Narrative command 'Desc'.
   custom-info: Sets your custom info.
   assist: Sends a assist request to the staff chat.
+  radio: Sends a radio message to other players holding radios.
 # Dictionary of results for try command.
 try_result:
   success: successfully
