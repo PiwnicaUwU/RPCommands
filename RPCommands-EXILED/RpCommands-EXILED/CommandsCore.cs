@@ -394,47 +394,6 @@ namespace RPCommands
                 return false;
             }
         }
-
-        private Vector3 GetRagdollPosition(RagdollData ragdollData)
-        {
-            var ragdoll = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
-            return ragdoll?.Position ?? Vector3.zero;
-        }
-
-    }
-    public class RagdollInfo
-    {
-        public Vector3 Position { get; set; }
-        public RoleTypeId RoleType { get; set; }
-        public Player Owner { get; set; }
-        public string OwnerNickname { get; set; }
-        public float CreationTime { get; set; }
-    }
-
-    public class RagdollTracker
-    {
-        private static readonly Dictionary<uint, RagdollInfo> ragdollInfos = [];
-
-        public static void OnSpawningRagdoll(SpawningRagdollEventArgs ev)
-        {
-            var info = new RagdollInfo
-            {
-                Position = ev.Position,
-                RoleType = ev.Player.Role.Type,
-                Owner = ev.Player,
-                OwnerNickname = ev.Player.Nickname,
-                CreationTime = Time.time
-            };
-
-            uint key = (uint)(ev.Position.GetHashCode());
-            ragdollInfos[key] = info;
-        }
-
-        public static RagdollInfo GetRagdollInfo(Vector3 position)
-        {
-            uint key = (uint)(position.GetHashCode());
-            return ragdollInfos.ContainsKey(key) ? ragdollInfos[key] : null;
-        }
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
@@ -445,7 +404,7 @@ namespace RPCommands
         public override string OriginalCommand => "punch";
         public override string Description => Main.Instance.Translation.Commands["punch"];
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool ExecuteAction(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             if (sender is not PlayerCommandSender playerSender)
             {
@@ -503,7 +462,7 @@ namespace RPCommands
         public override string OriginalCommand => "clean";
         public override string Description => Main.Instance.Translation.Commands["clean"];
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool ExecuteAction(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             PlayerCommandSender val = sender as PlayerCommandSender;
             if (val == null)
@@ -579,7 +538,7 @@ namespace RPCommands
         public override string OriginalCommand => "heal";
         public override string Description => Main.Instance.Translation.Commands["heal"];
 
-        public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
+        public bool ExecuteAction(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             PlayerCommandSender playerSender = sender as PlayerCommandSender;
             if (playerSender == null)
