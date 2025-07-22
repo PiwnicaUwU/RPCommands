@@ -143,9 +143,10 @@ try_result:
 ## 📦 Installation
 ```plaintext
 1. Download the `.dll` file from releases and place it in the `Plugins` folder.
-2. Start the server to generate the configuration file.
-3. Customize the `config` according to your preferences.
-4. Restart the server and enjoy the plugin.
+2. Make sure you installed HSM as well.
+3. Start the server to generate the configuration file.
+4. Customize the `config` according to your preferences.
+5. Restart the server and enjoy the plugin.
 ```
 
 ## 🐾 HintServiceMeow (HSM) Integration
