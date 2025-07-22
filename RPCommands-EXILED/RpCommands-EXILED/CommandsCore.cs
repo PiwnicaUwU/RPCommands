@@ -214,6 +214,7 @@ namespace RPCommands
         public override string Description => Main.Instance.Translation.Commands["desc"];
     }
 
+    [CommandHandler(typeof(ClientCommandHandler))]
     public class CustomInfoCommand : NarrativeCommand
     {
         public override string OriginalCommand => "custom-info";
