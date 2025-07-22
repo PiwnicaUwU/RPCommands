@@ -308,7 +308,7 @@ namespace RPCommands
     public class WearCommand : NarrativeCommand
     {
         public override string OriginalCommand => "wear";
-        public override string Description => "";
+        public override string Description => Main.Instance.Translation.Commands["wear"];
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
@@ -380,10 +380,7 @@ namespace RPCommands
                         player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
                         player.Position = ragdollPosition;
 
-                        if (ragdollToRemove != null)
-                        {
-                            ragdollToRemove.Destroy();
-                        }
+                        ragdollToRemove?.Destroy();
                     });
                     return true;
                 }
@@ -400,6 +397,7 @@ namespace RPCommands
             var ragdoll = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
             return ragdoll?.Position ?? Vector3.zero;
         }
+
     }
     public class RagdollInfo
     {
@@ -412,7 +410,7 @@ namespace RPCommands
 
     public class RagdollTracker
     {
-        private static Dictionary<uint, RagdollInfo> ragdollInfos = new Dictionary<uint, RagdollInfo>();
+        private static readonly Dictionary<uint, RagdollInfo> ragdollInfos = [];
 
         public static void OnSpawningRagdoll(SpawningRagdollEventArgs ev)
         {

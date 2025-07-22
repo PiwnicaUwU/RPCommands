@@ -58,7 +58,8 @@ namespace RPCommands
             { "desc", "desc" },
             { "custom-info", "custom-info" },
             { "assist", "assist" },
-            { "radio", "radio" }
+            { "radio", "radio" },
+            { "wear", "wear" },
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -72,7 +73,8 @@ namespace RPCommands
             { "desc", "Narrative command 'Desc'." },
             { "custom-info", "Sets your custom info." },
             { "assist", "Sends a assist request to the staff chat." },
-            { "radio", "Sends a radio message to other players holding radios." }
+            { "radio", "Sends a radio message to other players holding radios." },
+            { "wear", "xxx" },
         };
 
         [Description("Dictionary of results for try command.")]

@@ -42,6 +42,7 @@ namespace RPCommands
         public CommandSettings Assist { get; set; } = new(0f, 0f, 3f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
         public CommandSettings CustomInfo { get; set; } = new(0f, 0f, 0f, "");
         public CommandSettings Radio { get; set; } = new(0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Wear { get; set; } = new(0f, 5f, 3f, "");
 
 
         [Description("Maximum length of custom info")]
@@ -59,6 +60,7 @@ namespace RPCommands
             { "custom-info", true },
             { "assist", true },
             { "radio", true },
+            { "wear", true }
         };
 
 
@@ -81,6 +83,7 @@ namespace RPCommands
             "assist" => Assist,
             "custom-info" => CustomInfo,
             "radio" => Radio,
+            "wear" => Wear,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }
