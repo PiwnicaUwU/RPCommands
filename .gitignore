@@ -16,3 +16,4 @@ packages/
 *.log
 *.vsidx
 *.csproj
+*.sln
