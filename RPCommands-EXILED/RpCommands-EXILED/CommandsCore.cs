@@ -1,7 +1,7 @@
 ﻿using CommandSystem;
 using Exiled.API.Enums;
+using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using MEC;
@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace RPCommands
 {
-    public abstract class NarrativeCommand : ICommand
+    public abstract class RPCommand : ICommand
     {
         public abstract string OriginalCommand { get; }
         public virtual string[] Aliases
@@ -65,7 +65,7 @@ namespace RPCommands
                 return false;
             }
 
-            if (arguments.Count < 1)
+            if (arguments.Count < 1 && OriginalCommand != "wear")
             {
                 response = string.Format(Main.Instance.Translation.Usage, Command);
                 return false;
@@ -184,42 +184,42 @@ namespace RPCommands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class MeCommand : NarrativeCommand
+    public class MeCommand : RPCommand
     {
         public override string OriginalCommand => "me";
         public override string Description => Main.Instance.Translation.Commands["me"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class DoCommand : NarrativeCommand
+    public class DoCommand : RPCommand
     {
         public override string OriginalCommand => "do";
         public override string Description => Main.Instance.Translation.Commands["do"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class LookCommand : NarrativeCommand
+    public class LookCommand : RPCommand
     {
         public override string OriginalCommand => "look";
         public override string Description => Main.Instance.Translation.Commands["look"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class OocCommand : NarrativeCommand
+    public class OocCommand : RPCommand
     {
         public override string OriginalCommand => "ooc";
         public override string Description => Main.Instance.Translation.Commands["ooc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class DescCommand : NarrativeCommand
+    public class DescCommand : RPCommand
     {
         public override string OriginalCommand => "desc";
         public override string Description => Main.Instance.Translation.Commands["desc"];
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class CustomInfoCommand : NarrativeCommand
+    public class CustomInfoCommand : RPCommand
     {
         public override string OriginalCommand => "custom-info";
         public override string Description => Main.Instance.Translation.Commands["custom-info"];
@@ -241,7 +241,7 @@ namespace RPCommands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class HelpCommand : NarrativeCommand
+    public class HelpCommand : RPCommand
     {
         public override string OriginalCommand => "assist";
         public override string Description => Main.Instance.Translation.Commands["assist"];
@@ -259,7 +259,7 @@ namespace RPCommands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class TryCommand : NarrativeCommand
+    public class TryCommand : RPCommand
     {
         public override string OriginalCommand => "try";
         public override string Description => Main.Instance.Translation.Commands["try"];
@@ -275,7 +275,7 @@ namespace RPCommands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class RadioCommand : NarrativeCommand
+    public class RadioCommand : RPCommand
     {
         public override string OriginalCommand => "radio";
         public override string Description => Main.Instance.Translation.Commands["radio"];
@@ -305,7 +305,7 @@ namespace RPCommands
     }
 
     [CommandHandler(typeof(ClientCommandHandler))]
-    public class WearCommand : NarrativeCommand
+    public class WearCommand : RPCommand
     {
         public override string OriginalCommand => "wear";
         public override string Description => Main.Instance.Translation.Commands["wear"];
@@ -313,20 +313,27 @@ namespace RPCommands
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
             var nearestRagdoll = FindNearestRagdoll(player);
+
+            if (player.IsScp)
+            {
+                response = Main.Instance.Translation.ScpCantwear;
+                return false;
+            }
+
             if (!nearestRagdoll.HasValue)
             {
-                response = "No dead body found.";
+                response = Main.Instance.Translation.NoDeadBodyFound;
                 return false;
             }
 
             if (WearDeadPlayer(player, nearestRagdoll.Value))
             {
-                response = "You wore the ragdoll";
+                response = Main.Instance.Translation.Wore;
                 return true;
             }
             else
             {
-                response = "Can't wear ragdoll";
+                response = Main.Instance.Translation.WoreFailure;
                 return false;
             }
         }
@@ -345,6 +352,12 @@ namespace RPCommands
                 {
                     if (IsPlayerLookingAt(player, ragdoll.Position) || distance <= 1.5f)
                     {
+                        if (ragdoll.Role.IsScp())
+                        {
+                            player.SendConsoleMessage(Main.Instance.Translation.ScpClothesNotAllowed, "red");
+                            break;
+                        }
+
                         if (distance < nearestDistance)
                         {
                             nearestDistance = distance;
@@ -372,16 +385,60 @@ namespace RPCommands
                 {
                     var ragdollToRemove = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
                     var ragdollPosition = ragdollToRemove?.Position ?? player.Position;
+                    var originalRole = player.Role.Type;
+                    var originalNickname = player.Nickname;
 
-                    player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
-                    Timing.CallDelayed(0.5f, () =>
+                    switch (Main.Instance.Config.WearMode.ToLower())
                     {
-                        player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
-                        player.Position = ragdollPosition;
+                        case "rolechange":
+                            player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                            Timing.CallDelayed(0.1f, () =>
+                            {
+                                player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+                                player.Position = ragdollPosition;
+                                ragdollToRemove?.Destroy();
+                            });
+                            break;
 
-                        ragdollToRemove?.Destroy();
-                    });
+                        case "modelchange":
+                            player.ChangeAppearance(ragdollData.RoleType, true);
+                            player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+                            ragdollToRemove?.Destroy();
+                            break;
+
+                        default:
+                            Log.Warn($"Invalid WearMode '{Main.Instance.Config.WearMode}' in config. Please use 'rolechange' or 'modelchange'.");
+                            player.SendConsoleMessage("An error occurred while trying to wear the dead player. Contact server staff.", "red");
+                            return false;
+                    }
+                    float disguiseDuration = Main.Instance.Config.WearDuration;
+
+                    if (disguiseDuration >= 0f)
+                    {
+                        Timing.CallDelayed(disguiseDuration, () =>
+                        {
+                            if (player == null || !player.IsConnected)
+                                return;
+
+                            switch (Main.Instance.Config.WearMode.ToLower())
+                            {
+                                case "rolechange":
+                                    if (player.Role.Type == ragdollData.RoleType)
+                                    {
+                                        player.Role.Set(originalRole, RoleSpawnFlags.None);
+                                        player.DisplayNickname = originalNickname;
+                                    }
+                                    break;
+
+                                case "modelchange":
+                                    player.ChangeAppearance(originalRole, true);
+                                    player.DisplayNickname = originalNickname;
+                                    break;
+                            }
+
+                            player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
+                        });
+                    }
                     return true;
                 }
                 return false;
@@ -390,47 +447,6 @@ namespace RPCommands
             {
                 return false;
             }
-        }
-
-        private Vector3 GetRagdollPosition(RagdollData ragdollData)
-        {
-            var ragdoll = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
-            return ragdoll?.Position ?? Vector3.zero;
-        }
-
-    }
-    public class RagdollInfo
-    {
-        public Vector3 Position { get; set; }
-        public RoleTypeId RoleType { get; set; }
-        public Player Owner { get; set; }
-        public string OwnerNickname { get; set; }
-        public float CreationTime { get; set; }
-    }
-
-    public class RagdollTracker
-    {
-        private static readonly Dictionary<uint, RagdollInfo> ragdollInfos = [];
-
-        public static void OnSpawningRagdoll(SpawningRagdollEventArgs ev)
-        {
-            var info = new RagdollInfo
-            {
-                Position = ev.Position,
-                RoleType = ev.Player.Role.Type,
-                Owner = ev.Player,
-                OwnerNickname = ev.Player.Nickname,
-                CreationTime = Time.time
-            };
-
-            uint key = (uint)(ev.Position.GetHashCode());
-            ragdollInfos[key] = info;
-        }
-
-        public static RagdollInfo GetRagdollInfo(Vector3 position)
-        {
-            uint key = (uint)(position.GetHashCode());
-            return ragdollInfos.ContainsKey(key) ? ragdollInfos[key] : null;
         }
     }
 }

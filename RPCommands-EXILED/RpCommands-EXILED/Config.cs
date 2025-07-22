@@ -23,7 +23,13 @@ namespace RPCommands
             "<size>"
         ];
 
-        [Description("If false, SCPs will not be able to use narrative commands.")]
+        [Description("Determines how the .wear command functions. Available options: rolechange, modelchange")]
+        public string WearMode { get; set; } = "modelchange";
+
+        [Description("Duration of the disguise from the .wear command in seconds. Set to -1 for infinite duration.")]
+        public float WearDuration { get; set; } = 180f;
+
+        [Description("If false, SCPs will not be able to use RP Commands.")]
         public bool AllowScpToUseCommands { get; set; } = false;
 
         [Description("If true, sender will see a console message with the command they used if it's shown to others.")]

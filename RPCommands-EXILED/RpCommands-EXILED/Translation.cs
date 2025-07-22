@@ -46,6 +46,24 @@ namespace RPCommands
         [Description("Message shown when a assist request is sent.")]
         public string HelpRequestSent { get; set; } = "Your assist request has been sent to the staff.";
 
+        [Description("Message shown when the player tries to use the .wear command with no ragdolls in range.")]
+        public string NoDeadBodyFound { get; set; } = "No dead body found.";
+
+        [Description("Message shown when the player fails to put on the clothes for an unspecified reason.")]
+        public string WoreFailure { get; set; } = "You cannot put on these clothes.";
+
+        [Description("Success message displayed to the player after successfully using the .wear command.")]
+        public string Wore { get; set; } = "You put on the clothes of the deceased.";
+
+        [Description("Message shown when the player attempts to wear the ragdoll of an SCP.")]
+        public string ScpClothesNotAllowed { get; set; } = "You can't wear SCP ragdolls.";
+
+        [Description("Message displayed when an SCP player tries to use the .wear command.")]
+        public string ScpCantwear { get; set; } = "SCPs cannot wear clothes.";
+
+        [Description("Message shown to the player when their disguise from the .wear command expires.")]
+        public string DisguiseWornOff { get; set; } = "Your disguise has worn off.";
+
         [Description("Dictionary of command names used in the system.")]
 
         public Dictionary<string, string> CommandNames { get; set; } = new()
