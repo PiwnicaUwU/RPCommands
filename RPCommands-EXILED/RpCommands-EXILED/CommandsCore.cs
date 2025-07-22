@@ -1,8 +1,12 @@
 ﻿using CommandSystem;
+using Exiled.API.Enums;
 using Exiled.API.Features;
+using Exiled.Events.EventArgs.Player;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using MEC;
+using PlayerRoles;
+using PlayerRoles.Ragdolls;
 using RemoteAdmin;
 using RPCommands.API;
 using System;
@@ -297,6 +301,138 @@ namespace RPCommands
 
             response = Main.Instance.Translation.MessageSent;
             return true;
+        }
+    }
+
+    [CommandHandler(typeof(ClientCommandHandler))]
+    public class WearCommand : NarrativeCommand
+    {
+        public override string OriginalCommand => "wear";
+        public override string Description => "";
+
+        protected override bool ExecuteAction(Player player, string message, out string response)
+        {
+            var nearestRagdoll = FindNearestRagdoll(player);
+            if (!nearestRagdoll.HasValue)
+            {
+                response = "No dead body found.";
+                return false;
+            }
+
+            if (WearDeadPlayer(player, nearestRagdoll.Value))
+            {
+                response = "You wore the ragdoll";
+                return true;
+            }
+            else
+            {
+                response = "Can't wear ragdoll";
+                return false;
+            }
+        }
+
+        private RagdollData? FindNearestRagdoll(Player player)
+        {
+            Vector3 playerPosition = player.Position;
+            RagdollData? nearestRagdoll = null;
+            float nearestDistance = float.MaxValue;
+            const float maxDistance = 3f;
+
+            foreach (var ragdoll in Ragdoll.List)
+            {
+                float distance = Vector3.Distance(playerPosition, ragdoll.Position);
+                if (distance <= maxDistance)
+                {
+                    if (IsPlayerLookingAt(player, ragdoll.Position) || distance <= 1.5f)
+                    {
+                        if (distance < nearestDistance)
+                        {
+                            nearestDistance = distance;
+                            nearestRagdoll = ragdoll.NetworkInfo;
+                        }
+                    }
+                }
+            }
+            return nearestRagdoll;
+        }
+
+        private bool IsPlayerLookingAt(Player player, Vector3 targetPosition)
+        {
+            Vector3 playerForward = player.CameraTransform.forward;
+            Vector3 directionToTarget = (targetPosition - player.CameraTransform.position).normalized;
+            float angle = Vector3.Angle(playerForward, directionToTarget);
+            return angle <= 45f;
+        }
+
+        private bool WearDeadPlayer(Player player, RagdollData ragdollData)
+        {
+            try
+            {
+                if (ragdollData.OwnerHub != null)
+                {
+                    var ragdollToRemove = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
+                    var ragdollPosition = ragdollToRemove?.Position ?? player.Position;
+
+                    player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
+
+                    Timing.CallDelayed(0.5f, () =>
+                    {
+                        player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+                        player.Position = ragdollPosition;
+
+                        if (ragdollToRemove != null)
+                        {
+                            ragdollToRemove.Destroy();
+                        }
+                    });
+                    return true;
+                }
+                return false;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
+        }
+
+        private Vector3 GetRagdollPosition(RagdollData ragdollData)
+        {
+            var ragdoll = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
+            return ragdoll?.Position ?? Vector3.zero;
+        }
+    }
+    public class RagdollInfo
+    {
+        public Vector3 Position { get; set; }
+        public RoleTypeId RoleType { get; set; }
+        public Player Owner { get; set; }
+        public string OwnerNickname { get; set; }
+        public float CreationTime { get; set; }
+    }
+
+    public class RagdollTracker
+    {
+        private static Dictionary<uint, RagdollInfo> ragdollInfos = new Dictionary<uint, RagdollInfo>();
+
+        public static void OnSpawningRagdoll(SpawningRagdollEventArgs ev)
+        {
+            var info = new RagdollInfo
+            {
+                Position = ev.Position,
+                RoleType = ev.Player.Role.Type,
+                Owner = ev.Player,
+                OwnerNickname = ev.Player.Nickname,
+                CreationTime = Time.time
+            };
+
+            uint key = (uint)(ev.Position.GetHashCode());
+            ragdollInfos[key] = info;
+        }
+
+        public static RagdollInfo GetRagdollInfo(Vector3 position)
+        {
+            uint key = (uint)(position.GetHashCode());
+            return ragdollInfos.ContainsKey(key) ? ragdollInfos[key] : null;
         }
     }
 }
