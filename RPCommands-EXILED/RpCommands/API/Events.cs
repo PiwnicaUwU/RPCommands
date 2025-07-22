@@ -1,5 +1,5 @@
-﻿using System;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
+using System;
 
 namespace RPCommands.API
 {

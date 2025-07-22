@@ -29,6 +29,17 @@ namespace RPCommands
         [Description("Duration of the disguise from the .wear command in seconds. Set to -1 for infinite duration.")]
         public float WearDuration { get; set; } = 180f;
 
+        [Description("Damage dealt by the .punch command.")]
+        public float PunchDamage { get; set; } = 5f;
+
+        [Description("Push force multiplier for the .punch command.")]
+        public float PunchPushForce { get; set; } = 0.7f;
+
+        [Description("Amount of health restored by the .heal command.")]
+        public float HealAmount { get; set; } = 65f;
+        [Description("Item required to use the .heal command.")]
+        public ItemType HealItem { get; set; } = ItemType.Medkit;
+
         [Description("If false, SCPs will not be able to use RP Commands.")]
         public bool AllowScpToUseCommands { get; set; } = false;
 
@@ -49,6 +60,9 @@ namespace RPCommands
         public CommandSettings CustomInfo { get; set; } = new(0f, 0f, 0f, "");
         public CommandSettings Radio { get; set; } = new(0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Wear { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Punch { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Clean { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Heal { get; set; } = new(0f, 5f, 3f, "");
 
 
         [Description("Maximum length of custom info")]
@@ -66,7 +80,10 @@ namespace RPCommands
             { "custom-info", true },
             { "assist", true },
             { "radio", true },
-            { "wear", true }
+            { "wear", true },
+            { "punch", true },
+            { "clean", true },
+            { "heal", true },
         };
 
 
@@ -90,6 +107,9 @@ namespace RPCommands
             "custom-info" => CustomInfo,
             "radio" => Radio,
             "wear" => Wear,
+            "punch" => Punch,
+            "clean" => Clean,
+            "heal" => Heal,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }

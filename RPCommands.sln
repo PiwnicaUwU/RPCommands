@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPCommands-EXILED", "RPCommands-EXILED\RPCommands-EXILED.csproj", "{48C515EB-BCCA-45F7-B10D-5A8DBCCEB70E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPCommands", "RPCommands-EXILED\RPCommands.csproj", "{48C515EB-BCCA-45F7-B10D-5A8DBCCEB70E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

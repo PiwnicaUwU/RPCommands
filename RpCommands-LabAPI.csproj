@@ -7,7 +7,6 @@
     <ProjectGuid>{DDB7C18D-8E4D-4C0D-A736-9632C7699C29}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RpCommandsLabAPI</RootNamespace>
     <AssemblyName>RpCommands-LabAPI</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <LangVersion>12.0</LangVersion>

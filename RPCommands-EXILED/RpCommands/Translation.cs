@@ -64,6 +64,35 @@ namespace RPCommands
         [Description("Message shown to the player when their disguise from the .wear command expires.")]
         public string DisguiseWornOff { get; set; } = "Your disguise has worn off.";
 
+
+        [Description("Message shown when there is no target in range for a command.")]
+        public string NoTargetInRange { get; set; } = "No target in range.";
+
+        [Description("Message for punch command cooldown.")]
+        public string PunchCooldown { get; set; } = "You can use this command again in {0} seconds.";
+
+        [Description("Message for the player who successfully used the punch command.")]
+        public string PunchSuccess { get; set; } = "You successfully punched <color=green>{0}</color>!";
+
+        [Description("Hint message for the player who got punched.")]
+        public string PunchHintTarget { get; set; } = "<color=red>You were punched by {0}</color>!";
+
+        [Description("Message when no ragdoll is found nearby for the clean command.")]
+        public string NoRagdollNearby { get; set; } = "There is no body nearby to clean up.";
+
+        [Description("Message for successfully cleaning a ragdoll.")]
+        public string CleanSuccess { get; set; } = "The body has been cleaned up.";
+
+        [Description("Message when a player tries to use the heal command without holding the required item.")]
+        public string HealItemRequired { get; set; } = "You must be holding a Medkit to use this command.";
+
+        [Description("Message for the player who successfully used the heal command.")]
+        public string HealSuccess { get; set; } = "You have healed <color=green>{0}</color>.";
+
+        [Description("Hint message for the player who got healed.")]
+        public string HealHintTarget { get; set; } = "<color=green>You have been healed by {0}.</color>";
+
+
         [Description("Dictionary of command names used in the system.")]
 
         public Dictionary<string, string> CommandNames { get; set; } = new()
@@ -78,6 +107,9 @@ namespace RPCommands
             { "assist", "assist" },
             { "radio", "radio" },
             { "wear", "wear" },
+            { "punch", "punch" },
+            { "clean", "clean" },
+            { "heal", "heal" },
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -93,6 +125,9 @@ namespace RPCommands
             { "assist", "Sends a assist request to the staff chat." },
             { "radio", "Sends a radio message to other players holding radios." },
             { "wear", "xxx" },
+            { "punch", "Punches a player in front of you." },
+            { "clean", "Cleans up the nearest ragdoll." },
+            { "heal", "Uses a Medkit to heal another player." },
         };
 
         [Description("Dictionary of results for try command.")]
