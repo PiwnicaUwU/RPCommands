@@ -1,7 +1,6 @@
 # 🎭 RPCommands
 
 ![EXILED](https://img.shields.io/badge/EXILED-Supported-green?style=for-the-badge)
-![Static Badge](https://img.shields.io/badge/LabAPI-Supported-green?style=for-the-badge)
 [![Version](https://img.shields.io/github/v/release/PiwnicaUwU/RPCommands?style=for-the-badge)](https://github.com/PiwnicaUwU/RPCommands/releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/PiwnicaUwU/RPCommands/total?style=for-the-badge)](https://github.com/PiwnicaUwU/RPCommands/releases)
 
@@ -178,11 +177,10 @@ HSM allows for more polished hint display and improved functionality, providing 
 
 ## 🔗 Links
 - 📖 [EXILED](https://github.com/ExSLMod-Team/EXILED)
-- 💰 [LABAPI](https://github.com/northwood-studios/LabAPI)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
 
 
-## 👥 Author
+## 👥 Authors
 ```plaintext
 👤 .Piwnica  
 📧 Contact: Discord -> .piwnica2137
