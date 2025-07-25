@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Interfaces;
+using RpCommands.Commands;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,6 +8,34 @@ namespace RPCommands
 {
     public class Translation : ITranslation
     {
+        [Description("Message shown when player/scp is cuffed")]
+
+        public string AlreadyCuffed = "{0} is already cuffed!";
+
+        [Description("Message shown if you cannot cuff scp")]
+
+        public string CannotCuffScp = "you cannot cuff this scp!";
+
+        [Description("Hint shown if you get cuffed")]
+
+        public string CuffHintTarget = "you got cuffed {0}";
+
+        [Description("Message shown when you cuff someone")]
+
+        public string CuffSuccess = "you cuffed {0}";
+
+        [Description("Message shown when target is not cuffed")]
+
+        public string NotCuffed = "{0} is not cuffed";
+
+        [Description("Message shown when target is uncuffed")]
+
+        public string DecuffHintTarget = "{0} uncuffed you";
+
+        [Description("Message shown when player uncuff target")]
+
+        public string DecuffSuccess = "you uncuffed {0}";
+
         [Description("Message shown when the round has not started.")]
         public string RoundNotStarted { get; set; } = "You cannot use this command because the round has not started yet.";
 
@@ -64,7 +93,6 @@ namespace RPCommands
         [Description("Message shown to the player when their disguise from the .wear command expires.")]
         public string DisguiseWornOff { get; set; } = "Your disguise has worn off.";
 
-
         [Description("Message shown when there is no target in range for a command.")]
         public string NoTargetInRange { get; set; } = "No target in range.";
 
@@ -110,6 +138,8 @@ namespace RPCommands
             { "punch", "punch" },
             { "clean", "clean" },
             { "heal", "heal" },
+            { "cuff", "cuff" },
+            { "uncuff", "uncuff" },
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -128,6 +158,8 @@ namespace RPCommands
             { "punch", "Punches a player in front of you." },
             { "clean", "Cleans up the nearest ragdoll." },
             { "heal", "Uses a Medkit to heal another player." },
+            { "cuff", "let's cuff another player." },
+            { "uncuff", "let's uncuff another player."}
         };
 
         [Description("Dictionary of results for try command.")]

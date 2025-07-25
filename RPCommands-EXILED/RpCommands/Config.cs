@@ -1,12 +1,26 @@
 ﻿using Exiled.API.Interfaces;
+using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace RPCommands
 {
     public class Config : IConfig
     {
+        [Description("Enable to cuff all scp's")]
+        public bool AllowAllScpsToBeCuffed { get; set; } = false;
+
+        [Description("Message shown when player want to cuff player but don't have wepaon.")]
+        public string MustHoldWeapon = "Musisz trzymać broń aby użyć tej komendy!";
+
+        [Description("Lista SCP które można zakuć w kajdanki")]
+        public List<RoleTypeId> CuffableScps { get; set; } = new List<RoleTypeId>()
+    {
+        RoleTypeId.Scp049,
+    };
+
         [Description("true = Plugin enabled, false = plugin disabled")]
         public bool IsEnabled { get; set; } = true;
 
@@ -63,7 +77,8 @@ namespace RPCommands
         public CommandSettings Punch { get; set; } = new(0f, 5f, 3f, "");
         public CommandSettings Clean { get; set; } = new(0f, 5f, 3f, "");
         public CommandSettings Heal { get; set; } = new(0f, 5f, 3f, "");
-
+        public CommandSettings Cuff { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings UnCuff { get; set; } = new(0f, 5f, 3f, "");
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
@@ -84,6 +99,8 @@ namespace RPCommands
             { "punch", true },
             { "clean", true },
             { "heal", true },
+            { "cuff", true },
+            { "uncuff", true }
         };
 
 
@@ -110,6 +127,8 @@ namespace RPCommands
             "punch" => Punch,
             "clean" => Clean,
             "heal" => Heal,
+            "cuff" => Cuff,
+            "uncuff" => UnCuff,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }
