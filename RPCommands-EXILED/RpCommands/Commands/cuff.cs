@@ -1,14 +1,8 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
 using PlayerRoles;
-using RemoteAdmin;
 using RPCommands;
-using System;
 using UnityEngine;
-using InventorySystem.Items.Firearms;
-using InventorySystem.Items.MicroHID;
-using InventorySystem.Items.Jailbird;
-using Exiled.API.Enums;
 
 namespace RpCommands.Commands
 {
@@ -27,13 +21,9 @@ namespace RpCommands.Commands
                 return false;
             }
 
-            if (player.CurrentItem == null ||
-                !player.CurrentItem.IsWeapon ||
-                player.CurrentItem.Type == ItemType.MicroHID ||
-                player.CurrentItem.Type == ItemType.Jailbird ||
-                player.CurrentItem.Type != ItemType.ParticleDisruptor)
+            if (player.CurrentItem == null || !Main.Instance.Config.UncuffingItems.Contains(player.CurrentItem.Type))
             {
-                response = "You need to hold fierarm";
+                response = Main.Instance.Translation.WeaponRequiredMessage;
                 return false;
             }
 
@@ -47,7 +37,7 @@ namespace RpCommands.Commands
                         return false;
                     }
 
-                    if (target.Role.Team == Team.SCPs && !Main.Instance.Config.AllowAllScpsToBeCuffed && !Main.Instance.Config.CuffableScps.Contains(target.Role))
+                    if (target.Role.Team == Team.SCPs && !Main.Instance.Config.CanCuffAllScps && !Main.Instance.Config.CuffableScps.Contains(target.Role))
                     {
                         response = Main.Instance.Translation.CannotCuffScp;
                         return false;

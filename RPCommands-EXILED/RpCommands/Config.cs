@@ -3,24 +3,11 @@ using PlayerRoles;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace RPCommands
 {
     public class Config : IConfig
     {
-        [Description("Enable to cuff all scp's")]
-        public bool AllowAllScpsToBeCuffed { get; set; } = false;
-
-        [Description("Message shown when player want to cuff player but don't have wepaon.")]
-        public string MustHoldWeapon = "Musisz trzymać broń aby użyć tej komendy!";
-
-        [Description("Lista SCP które można zakuć w kajdanki")]
-        public List<RoleTypeId> CuffableScps { get; set; } = new List<RoleTypeId>()
-    {
-        RoleTypeId.Scp049,
-    };
-
         [Description("true = Plugin enabled, false = plugin disabled")]
         public bool IsEnabled { get; set; } = true;
 
@@ -36,23 +23,6 @@ namespace RPCommands
             "size",
             "<size>"
         ];
-
-        [Description("Determines how the .wear command functions. Available options: rolechange, modelchange")]
-        public string WearMode { get; set; } = "modelchange";
-
-        [Description("Duration of the disguise from the .wear command in seconds. Set to -1 for infinite duration.")]
-        public float WearDuration { get; set; } = 180f;
-
-        [Description("Damage dealt by the .punch command.")]
-        public float PunchDamage { get; set; } = 5f;
-
-        [Description("Push force multiplier for the .punch command.")]
-        public float PunchPushForce { get; set; } = 0.7f;
-
-        [Description("Amount of health restored by the .heal command.")]
-        public float HealAmount { get; set; } = 65f;
-        [Description("Item required to use the .heal command.")]
-        public ItemType HealItem { get; set; } = ItemType.Medkit;
 
         [Description("If false, SCPs will not be able to use RP Commands.")]
         public bool AllowScpToUseCommands { get; set; } = false;
@@ -72,16 +42,49 @@ namespace RPCommands
         public CommandSettings Desc { get; set; } = new(15f, 5f, 3f, "<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Assist { get; set; } = new(0f, 0f, 3f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
         public CommandSettings CustomInfo { get; set; } = new(0f, 0f, 0f, "");
-        public CommandSettings Radio { get; set; } = new(0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Wear { get; set; } = new(0f, 5f, 3f, "");
-        public CommandSettings Punch { get; set; } = new(0f, 5f, 3f, "");
-        public CommandSettings Clean { get; set; } = new(0f, 5f, 3f, "");
-        public CommandSettings Heal { get; set; } = new(0f, 5f, 3f, "");
-        public CommandSettings Cuff { get; set; } = new(0f, 5f, 3f, "");
-        public CommandSettings UnCuff { get; set; } = new(0f, 5f, 3f, "");
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
+        public CommandSettings Radio { get; set; } = new(0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Wear { get; set; } = new(0f, 5f, 3f, "");
+
+        [Description("Determines how the .wear command functions. Available options: rolechange, modelchange")]
+        public string WearMode { get; set; } = "modelchange";
+
+        [Description("Duration of the disguise from the .wear command in seconds. Set to -1 for infinite duration.")]
+        public float WearDuration { get; set; } = 180f;
+        public CommandSettings Punch { get; set; } = new(0f, 5f, 3f, "");
+
+        [Description("Damage dealt by the .punch command.")]
+        public float PunchDamage { get; set; } = 5f;
+
+        [Description("Push force multiplier for the .punch command.")]
+        public float PunchPushForce { get; set; } = 0.7f;
+        public CommandSettings Clean { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Heal { get; set; } = new(0f, 5f, 3f, "");
+
+        [Description("Amount of health restored by the .heal command.")]
+        public float HealAmount { get; set; } = 65f;
+        [Description("Item required to use the .heal command.")]
+        public ItemType HealItem { get; set; } = ItemType.Medkit;
+        public CommandSettings Cuff { get; set; } = new(0f, 5f, 3f, "");
+
+        [Description("Determines whether all SCPs can be cuffed.")]
+        public bool CanCuffAllScps { get; set; } = false;
+        [Description("A list of SCPs that are cuffable by default.")]
+        public List<RoleTypeId> CuffableScps { get; set; } =
+[
+    RoleTypeId.Scp049,
+        ];
+
+        [Description("A list of items that can be used to uncuff players.")]
+        public List<ItemType> UncuffingItems { get; set; } =
+    [
+        ItemType.GunE11SR,
+        ItemType.GunLogicer,
+    ];
+
+        public CommandSettings UnCuff { get; set; } = new(0f, 5f, 3f, "");
 
         [Description("Enable or disable specific commands")]
         public Dictionary<string, bool> EnabledCommands { get; set; } = new()

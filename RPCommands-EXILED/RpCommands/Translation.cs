@@ -1,5 +1,4 @@
 ﻿using Exiled.API.Interfaces;
-using RpCommands.Commands;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,6 +7,8 @@ namespace RPCommands
 {
     public class Translation : ITranslation
     {
+        [Description("Message shown when you try to cuff player without holding a weapon.")]
+        public string WeaponRequiredMessage { get; set; } = "You must be holding a weapon to use this command!";
         [Description("Message shown when player/scp is cuffed")]
 
         public string AlreadyCuffed = "{0} is already cuffed!";
@@ -154,12 +155,12 @@ namespace RPCommands
             { "custom-info", "Sets your custom info." },
             { "assist", "Sends a assist request to the staff chat." },
             { "radio", "Sends a radio message to other players holding radios." },
-            { "wear", "xxx" },
-            { "punch", "Punches a player in front of you." },
+            { "wear", "allows to wear a dead body." },
+            { "punch", "Punches a player" },
             { "clean", "Cleans up the nearest ragdoll." },
-            { "heal", "Uses a Medkit to heal another player." },
-            { "cuff", "let's cuff another player." },
-            { "uncuff", "let's uncuff another player."}
+            { "heal", "Use a Medkit to heal player." },
+            { "cuff", "cuffs player." },
+            { "uncuff", "uncuffs player."}
         };
 
         [Description("Dictionary of results for try command.")]

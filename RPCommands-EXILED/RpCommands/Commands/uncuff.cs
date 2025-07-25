@@ -1,22 +1,16 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
 using PlayerRoles;
-using RemoteAdmin;
 using RPCommands;
-using System;
 using UnityEngine;
-using InventorySystem.Items.Firearms;
-using InventorySystem.Items.MicroHID;
-using InventorySystem.Items.Jailbird;
-using Exiled.API.Enums;
 
 namespace RpCommands.Commands
 {
     [CommandHandler(typeof(ClientCommandHandler))]
     public class DecuffCommand : RPCommand
     {
-        public override string OriginalCommand => "decuff";
-        public override string Description => Main.Instance.Translation.Commands["decuff"];
+        public override string OriginalCommand => "uncuff";
+        public override string Description => Main.Instance.Translation.Commands["uncuff"];
         public override bool AllowNoArguments => true;
 
         protected override bool ExecuteAction(Player player, string message, out string response)
@@ -27,13 +21,9 @@ namespace RpCommands.Commands
                 return false;
             }
 
-            if (player.CurrentItem == null ||
-                !player.CurrentItem.IsWeapon ||
-                player.CurrentItem.Type == ItemType.MicroHID ||
-                player.CurrentItem.Type == ItemType.Jailbird ||
-                player.CurrentItem.Type != ItemType.ParticleDisruptor)
+            if (player.CurrentItem == null || !Main.Instance.Config.UncuffingItems.Contains(player.CurrentItem.Type))
             {
-                response = "you need to hold weapon";
+                response = Main.Instance.Translation.WeaponRequiredMessage;
                 return false;
             }
 
@@ -48,6 +38,7 @@ namespace RpCommands.Commands
                     }
 
                     target.Cuffer = null;
+                    target.RemoveHandcuffs();
                     target.ShowHint(string.Format(Main.Instance.Translation.DecuffHintTarget, player.Nickname), 5f);
                     response = string.Format(Main.Instance.Translation.DecuffSuccess, target.Nickname);
                     return true;
