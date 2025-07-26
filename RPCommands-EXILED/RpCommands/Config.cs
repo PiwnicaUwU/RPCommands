@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Interfaces;
 using PlayerRoles;
+using RpCommands.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,8 +49,8 @@ namespace RPCommands
         public CommandSettings Radio { get; set; } = new(0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Wear { get; set; } = new(0f, 5f, 3f, "");
 
-        [Description("Determines how the .wear command functions. Available options: rolechange, modelchange")]
-        public string WearMode { get; set; } = "modelchange";
+        [Description("Determines how the .wear command functions. Available options: RoleChange, ModelChange")]
+        public WearMode wearMode { get; set; } = WearMode.RoleChange;
 
         [Description("Duration of the disguise from the .wear command in seconds. Set to -1 for infinite duration.")]
         public float WearDuration { get; set; } = 180f;
@@ -69,6 +70,9 @@ namespace RPCommands
         public ItemType HealItem { get; set; } = ItemType.Medkit;
         public CommandSettings Cuff { get; set; } = new(0f, 5f, 3f, "");
 
+        [Description("Choose how cuffing affects a player's inventory. Options: SaveAndRestore, DropOnGround")]
+        public CuffMode CuffBehavior { get; set; } = CuffMode.SaveAndRestore;
+
         [Description("Determines whether all SCPs can be cuffed.")]
         public bool CanCuffAllScps { get; set; } = false;
         [Description("A list of SCPs that are cuffable by default.")]
@@ -77,8 +81,8 @@ namespace RPCommands
     RoleTypeId.Scp049,
         ];
 
-        [Description("A list of items that can be used to uncuff players.")]
-        public List<ItemType> UncuffingItems { get; set; } =
+        [Description("A list of items that can be used to cuff players.")]
+        public List<ItemType> CuffingItems { get; set; } =
     [
         ItemType.GunE11SR,
         ItemType.GunLogicer,

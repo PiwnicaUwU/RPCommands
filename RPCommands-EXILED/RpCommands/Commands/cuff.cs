@@ -1,7 +1,11 @@
 ﻿using CommandSystem;
 using Exiled.API.Features;
+using Exiled.API.Features.Items;
 using PlayerRoles;
+using RpCommands.Enum;
 using RPCommands;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace RpCommands.Commands
@@ -13,6 +17,7 @@ namespace RpCommands.Commands
         public override string Description => Main.Instance.Translation.Commands["cuff"];
         public override bool AllowNoArguments => true;
 
+        public static readonly Dictionary<int, List<Item>> SavedInventories = new Dictionary<int, List<Item>>();
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
             if (player.Role.Team == Team.SCPs && !Main.Instance.Config.AllowScpToUseCommands)
@@ -21,7 +26,7 @@ namespace RpCommands.Commands
                 return false;
             }
 
-            if (player.CurrentItem == null || !Main.Instance.Config.UncuffingItems.Contains(player.CurrentItem.Type))
+            if (player.CurrentItem == null || !Main.Instance.Config.CuffingItems.Contains(player.CurrentItem.Type))
             {
                 response = Main.Instance.Translation.WeaponRequiredMessage;
                 return false;
@@ -42,6 +47,22 @@ namespace RpCommands.Commands
                         response = Main.Instance.Translation.CannotCuffScp;
                         return false;
                     }
+
+                    switch (Main.Instance.Config.CuffBehavior)
+                    {
+                        case CuffMode.SaveAndRestore:
+                            if (target.Items.Any())
+                            {
+                                SavedInventories[target.Id] = [.. target.Items];
+                                target.ClearItems();
+                            }
+                            break;
+
+                        case CuffMode.DropOnGround:
+                            target.DropItems();
+                            break;
+                    }
+
 
                     target.Cuffer = player;
                     target.ShowHint(string.Format(Main.Instance.Translation.CuffHintTarget, player.Nickname), 5f);

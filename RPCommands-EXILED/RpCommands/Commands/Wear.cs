@@ -95,26 +95,28 @@ namespace RpCommands.Commands
                     var originalRole = player.Role.Type;
                     var originalNickname = player.Nickname;
 
-                    switch (Main.Instance.Config.WearMode.ToLower())
+                    switch (Main.Instance.Config.wearMode)
                     {
-                        case "rolechange":
-                            player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                        case Enum.WearMode.RoleChange:
                             Timing.CallDelayed(0.1f, () =>
                             {
+                                player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
                                 player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
-                                player.Position = ragdollPosition;
                                 ragdollToRemove?.Destroy();
                             });
                             break;
 
-                        case "modelchange":
-                            player.ChangeAppearance(ragdollData.RoleType, true);
-                            player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
-                            ragdollToRemove?.Destroy();
+                        case Enum.WearMode.ModelChange:
+                            Timing.CallDelayed(0.1f, () =>
+                            {
+                                player.ChangeAppearance(ragdollData.RoleType, true);
+                                player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+                                ragdollToRemove?.Destroy();
+                            });
                             break;
 
                         default:
-                            Log.Warn($"Invalid WearMode '{Main.Instance.Config.WearMode}' in config. Please use 'rolechange' or 'modelchange'.");
+                            Log.Warn($"Invalid WearMode {Main.Instance.Config.wearMode} in config. Please use rolechange or modelchange.");
                             player.SendConsoleMessage("An error occurred while trying to wear the dead player. Contact server staff.", "red");
                             return false;
                     }
@@ -127,19 +129,26 @@ namespace RpCommands.Commands
                             if (player == null || !player.IsConnected)
                                 return;
 
-                            switch (Main.Instance.Config.WearMode.ToLower())
+                            switch (Main.Instance.Config.wearMode)
                             {
-                                case "rolechange":
-                                    if (player.Role.Type == ragdollData.RoleType)
+                                case Enum.WearMode.RoleChange:
+
+                                    Timing.CallDelayed(0.1f, () =>
                                     {
-                                        player.Role.Set(originalRole, RoleSpawnFlags.None);
-                                        player.DisplayNickname = originalNickname;
-                                    }
+                                        if (player.Role.Type == ragdollData.RoleType)
+                                        {
+                                            player.Role.Set(originalRole, RoleSpawnFlags.None);
+                                            player.DisplayNickname = originalNickname;
+                                        }
+                                    });
                                     break;
 
-                                case "modelchange":
-                                    player.ChangeAppearance(originalRole, true);
-                                    player.DisplayNickname = originalNickname;
+                                case Enum.WearMode.ModelChange:
+                                    Timing.CallDelayed(0.1f, () =>
+                                    {
+                                        player.ChangeAppearance(originalRole, true);
+                                        player.DisplayNickname = originalNickname;
+                                    });
                                     break;
                             }
 
