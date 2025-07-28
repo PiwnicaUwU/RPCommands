@@ -1,5 +1,4 @@
-﻿using CommandSystem;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Mirror;
 using PlayerRoles;
 using RPCommands;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class Clean : RPCommand
     {
         public override string OriginalCommand => "clean";

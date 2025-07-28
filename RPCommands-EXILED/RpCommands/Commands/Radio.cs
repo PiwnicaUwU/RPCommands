@@ -1,10 +1,9 @@
-﻿using CommandSystem;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using RPCommands;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class RadioCommand : RPCommand
     {
         public override string OriginalCommand => "radio";

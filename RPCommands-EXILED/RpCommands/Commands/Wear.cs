@@ -1,5 +1,4 @@
-﻿using CommandSystem;
-using Exiled.API.Enums;
+﻿using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using MEC;
@@ -11,7 +10,7 @@ using UnityEngine;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class WearCommand : RPCommand
     {
         public override string OriginalCommand => "wear";
@@ -95,7 +94,7 @@ namespace RpCommands.Commands
                     var originalRole = player.Role.Type;
                     var originalNickname = player.Nickname;
 
-                    switch (Main.Instance.Config.wearMode)
+                    switch (Main.Instance.Config.WearMode)
                     {
                         case Enum.WearMode.RoleChange:
                             Timing.CallDelayed(0.1f, () =>
@@ -116,7 +115,7 @@ namespace RpCommands.Commands
                             break;
 
                         default:
-                            Log.Warn($"Invalid WearMode {Main.Instance.Config.wearMode} in config. Please use rolechange or modelchange.");
+                            Log.Warn($"Invalid WearMode {Main.Instance.Config.WearMode} in config. Please use rolechange or modelchange.");
                             player.SendConsoleMessage("An error occurred while trying to wear the dead player. Contact server staff.", "red");
                             return false;
                     }
@@ -129,7 +128,7 @@ namespace RpCommands.Commands
                             if (player == null || !player.IsConnected)
                                 return;
 
-                            switch (Main.Instance.Config.wearMode)
+                            switch (Main.Instance.Config.WearMode)
                             {
                                 case Enum.WearMode.RoleChange:
 

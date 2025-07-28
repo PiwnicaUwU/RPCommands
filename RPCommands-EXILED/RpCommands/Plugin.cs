@@ -22,6 +22,7 @@ namespace RPCommands
             Instance = this;
             _eventHandlers = new EventHandlers();
             _eventHandlers.LoadEvents();
+            _eventHandlers.RegisterCommands();
             creditTag = new CreditTag();
             creditTag.Load();
             base.OnEnabled();

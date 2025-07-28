@@ -1,9 +1,8 @@
-﻿using CommandSystem;
-using RPCommands;
+﻿using RPCommands;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class MeCommand : RPCommand
     {
         public override string OriginalCommand => "me";

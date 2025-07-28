@@ -1,5 +1,4 @@
-﻿using CommandSystem;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using Exiled.API.Features.Items;
 using PlayerRoles;
 using RpCommands.Enum;
@@ -10,7 +9,7 @@ using UnityEngine;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class CuffCommand : RPCommand
     {
         public override string OriginalCommand => "cuff";

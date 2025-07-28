@@ -1,11 +1,10 @@
-﻿using CommandSystem;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using RPCommands;
 using System.Linq;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class AssistCommand : RPCommand
     {
         public override string OriginalCommand => "assist";

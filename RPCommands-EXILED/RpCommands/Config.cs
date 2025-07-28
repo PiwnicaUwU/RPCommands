@@ -12,7 +12,7 @@ namespace RPCommands
         [Description("true = Plugin enabled, false = plugin disabled")]
         public bool IsEnabled { get; set; } = true;
 
-        [Description("Enable debug logs - don't work")]
+        [Description("Enable debug logs")]
         public bool Debug { get; set; } = false;
 
         [Description("Enables or disables the in-game credit tag for the plugin's author.")]
@@ -34,41 +34,41 @@ namespace RPCommands
         [Description("If true, spectators of players who are within range of the command will also see the hint.")]
         public bool ShowHintsToSpectatorsOfReceivers { get; set; } = true;
 
-        [Description("Command settings, do not remove {0}, {1}, or {2}")]
-        public CommandSettings Me { get; set; } = new(15f, 5f, 3f, "<color=green>「Me」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Do { get; set; } = new(15f, 5f, 3f, "<color=green>「Do」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Look { get; set; } = new(15f, 5f, 3f, "<color=green>「Look」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Ooc { get; set; } = new(15f, 5f, 3f, "<color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Try { get; set; } = new(15f, 5f, 3f, "<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
-        public CommandSettings Desc { get; set; } = new(15f, 5f, 3f, "<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Assist { get; set; } = new(0f, 0f, 3f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
-        public CommandSettings CustomInfo { get; set; } = new(0f, 0f, 0f, "");
+        [Description("Command settings, do not remove {0}, {1}, or {2}. For handler use: 'Client' for Player's Console, 'RemoteAdmin' for RA Text-Based.")]
+        public CommandSettings Me { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Me」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Do { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Do」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Look { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Look」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Ooc { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Try { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
+        public CommandSettings Desc { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Assist { get; set; } = new(CommandHandlerType.Client, 0f, 0f, 3f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
+        public CommandSettings CustomInfo { get; set; } = new(CommandHandlerType.Client, 0f, 0f, 0f, "");
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
-        public CommandSettings Radio { get; set; } = new(0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
-        public CommandSettings Wear { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Radio { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
+        public CommandSettings Wear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
         [Description("Determines how the .wear command functions. Available options: RoleChange, ModelChange")]
-        public WearMode wearMode { get; set; } = WearMode.RoleChange;
+        public WearMode WearMode { get; set; } = WearMode.RoleChange;
 
         [Description("Duration of the disguise from the .wear command in seconds. Set to -1 for infinite duration.")]
         public float WearDuration { get; set; } = 180f;
-        public CommandSettings Punch { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Punch { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
         [Description("Damage dealt by the .punch command.")]
         public float PunchDamage { get; set; } = 5f;
 
         [Description("Push force multiplier for the .punch command.")]
         public float PunchPushForce { get; set; } = 0.7f;
-        public CommandSettings Clean { get; set; } = new(0f, 5f, 3f, "");
-        public CommandSettings Heal { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Clean { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
+        public CommandSettings Heal { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
         [Description("Amount of health restored by the .heal command.")]
         public float HealAmount { get; set; } = 65f;
         [Description("Item required to use the .heal command.")]
         public ItemType HealItem { get; set; } = ItemType.Medkit;
-        public CommandSettings Cuff { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings Cuff { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
         [Description("Choose how cuffing affects a player's inventory. Options: SaveAndRestore, DropOnGround")]
         public CuffMode CuffBehavior { get; set; } = CuffMode.SaveAndRestore;
@@ -88,7 +88,7 @@ namespace RPCommands
         ItemType.GunLogicer,
     ];
 
-        public CommandSettings UnCuff { get; set; } = new(0f, 5f, 3f, "");
+        public CommandSettings UnCuff { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
         [Description("Enable or disable specific commands")]
         public Dictionary<string, bool> EnabledCommands { get; set; } = new()
@@ -119,7 +119,7 @@ namespace RPCommands
 
         public string FormatMessage(string command, params object[] args) => string.Format(GetSettings(command).Format, args);
 
-        private CommandSettings GetSettings(string command) => command switch
+        public CommandSettings GetSettings(string command) => command switch
         {
             "me" => Me,
             "do" => Do,
@@ -146,10 +146,12 @@ namespace RPCommands
         public float Duration { get; set; }
         public float Cooldown { get; set; }
         public string Format { get; set; }
+        public CommandHandlerType Handler { get; set; }
 
         public CommandSettings() { }
-        public CommandSettings(float range, float duration, float cooldown, string format)
+        public CommandSettings(CommandHandlerType handler, float range, float duration, float cooldown, string format)
         {
+            Handler = handler;
             Range = range;
             Duration = duration;
             Cooldown = cooldown;

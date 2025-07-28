@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class PunchCommand : RPCommand
     {
         public override string OriginalCommand => "punch";

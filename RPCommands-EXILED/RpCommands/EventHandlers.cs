@@ -1,7 +1,13 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using PlayerRoles;
+using RemoteAdmin;
+using RpCommands.Enum;
+using RPCommands;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace RpCommands
@@ -16,6 +22,54 @@ namespace RpCommands
         public void UnloadEvents()
         {
             Exiled.Events.Handlers.Player.Dying -= OnPlayerDeath;
+        }
+
+        public void RegisterCommands()
+        {
+            Log.Debug("Starting RPCommands command registration...");
+
+            var clientHandler = QueryProcessor.DotCommandHandler;
+            var raHandler = CommandProcessor.RemoteAdminCommandHandler;
+            var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(RPCommand)) && !t.IsAbstract);
+
+            foreach (var type in commandTypes)
+            {
+                try
+                {
+                    if (Activator.CreateInstance(type) is not RPCommand command)
+                        continue;
+
+                    if (!Main.Instance.Config.IsCommandEnabled(command.OriginalCommand))
+                    {
+                        Log.Debug($"Command '{command.OriginalCommand}' is disabled in the config. Skipping.");
+                        continue;
+                    }
+
+                    var handlerType = Main.Instance.Config.GetSettings(command.OriginalCommand).Handler;
+
+                    switch (handlerType)
+                    {
+                        case CommandHandlerType.Client:
+                            clientHandler.RegisterCommand(command);
+                            Log.Debug($"Registered command '{command.Command}' to the ClientCommandHandler.");
+                            break;
+                        case CommandHandlerType.RemoteAdmin:
+                            raHandler.RegisterCommand(command);
+                            Log.Debug($"Registered command '{command.Command}' to the RemoteAdminCommandHandler.");
+                            break;
+                    }
+                }
+                catch (ArgumentException ex)
+                {
+                    Log.Warn($"No config settings found for command type '{type.Name}'. The command will not be registered. Error: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Log.Error($"Failed to register command type '{type.Name}': {ex}");
+                }
+            }
+            Log.Info("RPCommands command registration finished.");
         }
 
         public void OnPlayerDeath(DyingEventArgs e)

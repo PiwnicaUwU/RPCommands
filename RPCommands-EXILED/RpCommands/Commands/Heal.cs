@@ -1,5 +1,4 @@
-﻿using CommandSystem;
-using Exiled.API.Features;
+﻿using Exiled.API.Features;
 using PlayerRoles;
 using RPCommands;
 using System;
@@ -7,7 +6,7 @@ using UnityEngine;
 
 namespace RpCommands.Commands
 {
-    [CommandHandler(typeof(ClientCommandHandler))]
+
     public class HealCommand : RPCommand
     {
         public override string OriginalCommand => "heal";
