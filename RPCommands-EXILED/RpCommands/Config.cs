@@ -89,6 +89,9 @@ namespace RPCommands
     ];
 
         public CommandSettings UnCuff { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
+        public CommandSettings Name { get; set; } = new(CommandHandlerType.Client, 0f, 0f, 0f, "");
+        [Description("If you want to increase size of the zone, set Range to higher value.")]
+        public CommandSettings Zone { get; set; } = new(CommandHandlerType.Client, 5f, 30f, 10f, "<color=green>「Zone」</color><color=#FFFF00>{0}</color> : {1}");
 
         [Description("Enable or disable specific commands")]
         public Dictionary<string, bool> EnabledCommands { get; set; } = new()
@@ -107,7 +110,9 @@ namespace RPCommands
             { "clean", true },
             { "heal", true },
             { "cuff", true },
-            { "uncuff", true }
+            { "uncuff", true },
+            { "name", true },
+            { "zone", true }
         };
 
 
@@ -136,6 +141,8 @@ namespace RPCommands
             "heal" => Heal,
             "cuff" => Cuff,
             "uncuff" => UnCuff,
+            "name" => Name,
+            "zone" => Zone,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }

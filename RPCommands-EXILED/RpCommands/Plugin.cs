@@ -1,6 +1,8 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using MEC;
 using RpCommands;
+using RpCommands.Commands;
 using System;
 
 namespace RPCommands
@@ -16,6 +18,7 @@ namespace RPCommands
         public override PluginPriority Priority => PluginPriority.Last;
         private EventHandlers _eventHandlers;
         private CreditTag creditTag;
+        private CoroutineHandle zoneCoroutine;
 
         public override void OnEnabled()
         {
@@ -25,6 +28,7 @@ namespace RPCommands
             _eventHandlers.RegisterCommands();
             creditTag = new CreditTag();
             creditTag.Load();
+            zoneCoroutine = Timing.RunCoroutine(ZoneCommand.ZoneCoroutine());
             base.OnEnabled();
         }
 
@@ -34,6 +38,7 @@ namespace RPCommands
             _eventHandlers.UnloadEvents();
             _eventHandlers = null;
             creditTag = null;
+            Timing.KillCoroutines(zoneCoroutine);
             base.OnDisabled();
         }
     }

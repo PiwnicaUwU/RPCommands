@@ -7,6 +7,12 @@ namespace RPCommands
 {
     public class Translation : ITranslation
     {
+        [Description("Message shown when .name command is used.")]
+        public string NameResponse { get; set; } = "Your name is {0} and your custom info is {1}";
+
+        [Description("Message shown to the player after successfully creating a zone.")]
+        public string ZoneSuccess { get; set; } = "Zone successfully created. It will disappear in {0} seconds.";
+
         [Description("Message shown when you try to cuff player without holding a weapon.")]
         public string WeaponRequiredMessage { get; set; } = "You must be holding a weapon to use this command!";
         [Description("Message shown when player/scp is cuffed")]
@@ -19,7 +25,7 @@ namespace RPCommands
 
         [Description("Hint shown if you get cuffed")]
 
-        public string CuffHintTarget = "you got cuffed {0}";
+        public string CuffHintTarget = "you got cuffed by {0}";
 
         [Description("Message shown when you cuff someone")]
 
@@ -141,6 +147,8 @@ namespace RPCommands
             { "heal", "heal" },
             { "cuff", "cuff" },
             { "uncuff", "uncuff" },
+            { "name", "name" },
+            { "zone", "zone" }
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -160,7 +168,9 @@ namespace RPCommands
             { "clean", "Cleans up the nearest ragdoll." },
             { "heal", "Use a Medkit to heal player." },
             { "cuff", "cuffs player." },
-            { "uncuff", "uncuffs player."}
+            { "uncuff", "uncuffs player."},
+            { "name", "shows your name and custom info."},
+            { "zone", "Creates a zone." }
         };
 
         [Description("Dictionary of results for try command.")]
