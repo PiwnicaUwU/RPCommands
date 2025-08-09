@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Roles;
 using PlayerRoles;
 using PlayerStatsSystem;
 using RPCommands;
@@ -27,7 +28,10 @@ namespace RpCommands.Commands
                     target.Hurt(new UniversalDamageHandler(Main.Instance.Config.PunchDamage, DeathTranslations.Unknown));
 
                     Vector3 pushDirection = (target.Position - player.Position).normalized + Vector3.up * 0.5f;
-                    target.Position += pushDirection * Main.Instance.Config.PunchPushForce;
+                    if (target.Role is FpcRole fpcRole)
+                    {
+                        fpcRole.FirstPersonController.FpcModule.CharController.Move(pushDirection * Main.Instance.Config.PunchPushForce * Time.deltaTime);
+                    }
                     target.ShowHint(string.Format(Main.Instance.Translation.PunchHintTarget, player.Nickname), 5f);
                     response = string.Format(Main.Instance.Translation.PunchSuccess, target.Nickname);
                     return true;

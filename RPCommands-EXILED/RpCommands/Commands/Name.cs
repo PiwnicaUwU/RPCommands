@@ -7,6 +7,7 @@ namespace RpCommands.Commands
     {
         public override string OriginalCommand => "name";
         public override string Description => Main.Instance.Translation.Commands["name"];
+        public override bool AllowNoArguments => true;
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {

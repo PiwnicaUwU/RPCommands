@@ -21,6 +21,7 @@ namespace RpCommands.Commands
     {
         public override string OriginalCommand => "zone";
         public override string Description => Main.Instance.Translation.Commands["zone"];
+        public override bool AllowNoArguments => true;
         public static List<ActiveZone> ActiveZones { get; } = [];
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
