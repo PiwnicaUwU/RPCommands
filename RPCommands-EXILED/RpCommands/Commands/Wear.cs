@@ -94,13 +94,15 @@ namespace RpCommands.Commands
                     var originalRole = player.Role.Type;
                     var originalNickname = player.Nickname;
 
+                    // Zapisz oryginalne dane gracza
+                    UnwearCommand.SaveOriginalPlayerData(player, originalRole, originalNickname);
+
                     switch (Main.Instance.Config.WearMode)
                     {
                         case Enum.WearMode.RoleChange:
                             Timing.CallDelayed(0.1f, () =>
                             {
                                 player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
 
                                 Timing.CallDelayed(0.1f, () =>
                                 {
@@ -134,9 +136,13 @@ namespace RpCommands.Commands
                         Timing.CallDelayed(disguiseDuration, () =>
                         {
                             if (player == null || !player.IsConnected)
+                            {
+                                UnwearCommand.ClearPlayerData(player);
                                 return;
+                            }
 
-                            var revertPosition = player.Position; 
+                            // Automatyczne unwear - usuń zapisane dane
+                            var revertPosition = player.Position;
 
                             switch (Main.Instance.Config.WearMode)
                             {
@@ -165,6 +171,8 @@ namespace RpCommands.Commands
                                     break;
                             }
 
+                            // Wyczyść dane gracza po automatycznym unwear
+                            UnwearCommand.ClearPlayerData(player);
                             player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
                         });
                     }
@@ -174,6 +182,7 @@ namespace RpCommands.Commands
             }
             catch (System.Exception)
             {
+                UnwearCommand.ClearPlayerData(player);
                 return false;
             }
         }
