@@ -33,7 +33,7 @@ If you encounter any problems, check your server logs or console and ensure the 
 ✅ **.punch**
 ✅ **.heal**
 ✅ **.clean**
-✅ **.Zone**
+✅ **.zone**
 ✅ **.cuff**
 ✅ **.uncuff**
 
