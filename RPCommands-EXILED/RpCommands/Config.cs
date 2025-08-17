@@ -46,6 +46,7 @@ namespace RPCommands
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
+        public CommandSettings Unwear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
         public CommandSettings Radio { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Wear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
@@ -66,6 +67,7 @@ namespace RPCommands
 
         [Description("Amount of health restored by the .heal command.")]
         public float HealAmount { get; set; } = 65f;
+
         [Description("Item required to use the .heal command.")]
         public ItemType HealItem { get; set; } = ItemType.Medkit;
         public CommandSettings Cuff { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
@@ -112,7 +114,8 @@ namespace RPCommands
             { "cuff", true },
             { "uncuff", true },
             { "name", true },
-            { "zone", true }
+            { "zone", true },
+            { "unwear", true }
         };
 
 
@@ -143,6 +146,7 @@ namespace RPCommands
             "uncuff" => UnCuff,
             "name" => Name,
             "zone" => Zone,
+            "unwear" => Unwear,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }

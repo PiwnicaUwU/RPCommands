@@ -127,6 +127,21 @@ namespace RPCommands
         [Description("Hint message for the player who got healed.")]
         public string HealHintTarget { get; set; } = "<color=green>You have been healed by {0}.</color>";
 
+        [Description("Message shown when player is scp and try use unwear command.")]
+        public string ScpCantUnwear { get; set; } = "You can't use this command as Scp.";
+
+        [Description("Message shown when you are not disguised.")]
+        public string NotDisguised { get; set; } = "You are not disguised.";
+
+        [Description("Message shown in result when player use unwear command.")]
+        public string Unwore { get; set; } = "Disguise was worn off.";
+
+        [Description("Message shown in result of command usage failure.")]
+        public string UnworeFailure { get; set; } = "Discguise cannot be worn off.";
+
+        [Description("Hint message shown in result of command usage sucess.")]
+        public string DisguiseRemoved { get; set; } = "Disguise was sucessfully worn off.";
+
 
         [Description("Dictionary of command names used in the system.")]
 
@@ -148,7 +163,8 @@ namespace RPCommands
             { "cuff", "cuff" },
             { "uncuff", "uncuff" },
             { "name", "name" },
-            { "zone", "zone" }
+            { "zone", "zone" },
+            { "unwear", "unwear" }
         };
 
         [Description("Dictionary of command descriptions.")]
@@ -168,9 +184,10 @@ namespace RPCommands
             { "clean", "Cleans up the nearest ragdoll." },
             { "heal", "Use a Medkit to heal player." },
             { "cuff", "cuffs player." },
-            { "uncuff", "uncuffs player."},
-            { "name", "shows your name and custom info."},
-            { "zone", "Creates a zone." }
+            { "uncuff", "uncuffs player." },
+            { "name", "shows your name and custom info." },
+            { "zone", "Creates a zone." },
+            { "unwear", "allows player to wear off disguise" }
         };
 
         [Description("Dictionary of results for try command.")]
