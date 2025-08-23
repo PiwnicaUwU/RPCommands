@@ -10,169 +10,141 @@ using UnityEngine;
 
 namespace RpCommands.Commands
 {
-
     public class WearCommand : RPCommand
     {
         public override string OriginalCommand => "wear";
         public override string Description => Main.Instance.Translation.Commands["wear"];
         public override bool AllowNoArguments => true;
+
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
-            var nearestRagdoll = FindNearestRagdoll(player);
-
             if (player.IsScp)
             {
                 response = Main.Instance.Translation.ScpCantwear;
                 return false;
             }
 
-            if (!nearestRagdoll.HasValue)
+            Ragdoll nearestRagdoll = FindNearestRagdoll(player, out string failReason);
+            if (nearestRagdoll == null)
             {
-                response = Main.Instance.Translation.NoDeadBodyFound;
+                response = failReason;
                 return false;
             }
 
-            if (WearDeadPlayer(player, nearestRagdoll.Value))
+            if (WearDeadPlayer(player, nearestRagdoll))
             {
                 response = Main.Instance.Translation.Wore;
                 return true;
             }
-            else
-            {
-                response = Main.Instance.Translation.WoreFailure;
-                return false;
-            }
+
+            response = Main.Instance.Translation.WoreFailure;
+            return false;
         }
 
-        private RagdollData? FindNearestRagdoll(Player player)
+        private Ragdoll FindNearestRagdoll(Player player, out string reason)
         {
-            Vector3 playerPosition = player.Position;
-            RagdollData? nearestRagdoll = null;
-            float nearestDistance = float.MaxValue;
-            const float maxDistance = 3f;
+            reason = Main.Instance.Translation.NoDeadBodyFound;
+            Ragdoll foundRagdoll = null;
+            float closestDistance = float.MaxValue;
 
             foreach (var ragdoll in Ragdoll.List)
             {
-                float distance = Vector3.Distance(playerPosition, ragdoll.Position);
-                if (distance <= maxDistance)
-                {
-                    if (IsPlayerLookingAt(player, ragdoll.Position) || distance <= 1.5f)
-                    {
-                        if (ragdoll.Role.IsScp())
-                        {
-                            player.SendConsoleMessage(Main.Instance.Translation.ScpClothesNotAllowed, "red");
-                            break;
-                        }
+                float distance = Vector3.Distance(player.Position, ragdoll.Position);
 
-                        if (distance < nearestDistance)
-                        {
-                            nearestDistance = distance;
-                            nearestRagdoll = ragdoll.NetworkInfo;
-                        }
+                if (distance < 3f && (distance < 1.5f || IsPlayerLookingAt(player, ragdoll.Position)))
+                {
+                    if (ragdoll.Role.IsScp())
+                    {
+                        reason = Main.Instance.Translation.ScpClothesNotAllowed;
+                        continue;
+                    }
+
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        foundRagdoll = ragdoll;
                     }
                 }
             }
-            return nearestRagdoll;
+            return foundRagdoll;
         }
 
         private bool IsPlayerLookingAt(Player player, Vector3 targetPosition)
         {
-            Vector3 playerForward = player.CameraTransform.forward;
             Vector3 directionToTarget = (targetPosition - player.CameraTransform.position).normalized;
-            float angle = Vector3.Angle(playerForward, directionToTarget);
-            return angle <= 45f;
+            return Vector3.Angle(player.CameraTransform.forward, directionToTarget) <= 45f;
         }
 
-        private bool WearDeadPlayer(Player player, RagdollData ragdollData)
+        private bool WearDeadPlayer(Player player, Ragdoll ragdollToWear)
         {
             try
             {
-                if (ragdollData.OwnerHub != null)
+                var ragdollData = ragdollToWear.NetworkInfo;
+                if (ragdollData.OwnerHub == null) return false;
+
+                var originalPosition = player.Position;
+                var originalRole = player.Role.Type;
+                var originalNickname = player.Nickname;
+
+                UnwearCommand.SaveOriginalPlayerData(player, originalRole, originalNickname);
+
+                switch (Main.Instance.Config.WearMode)
                 {
-                    var ragdollToRemove = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
-                    var currentPosition = player.Position;
-                    var originalRole = player.Role.Type;
-                    var originalNickname = player.Nickname;
-
-                    UnwearCommand.SaveOriginalPlayerData(player, originalRole, originalNickname);
-
-                    switch (Main.Instance.Config.WearMode)
-                    {
-                        case Enum.WearMode.RoleChange:
-                            Timing.CallDelayed(0.1f, () =>
-                            {
-                                player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
-
-                                Timing.CallDelayed(0.1f, () =>
-                                {
-                                    player.Teleport(currentPosition);
-                                    player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
-                                });
-
-                                ragdollToRemove?.Destroy();
-                            });
-                            break;
-
-                        case Enum.WearMode.ModelChange:
-                            Timing.CallDelayed(0.1f, () =>
-                            {
-                                player.ChangeAppearance(ragdollData.RoleType, true);
-                                player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
-                                ragdollToRemove?.Destroy();
-                            });
-                            break;
-
-                        default:
-                            Log.Warn($"Invalid WearMode {Main.Instance.Config.WearMode} in config. Please use rolechange or modelchange.");
-                            player.SendConsoleMessage("An error occurred while trying to wear the dead player. Contact server staff.", "red");
-                            return false;
-                    }
-
-                    float disguiseDuration = Main.Instance.Config.WearDuration;
-
-                    if (disguiseDuration >= 0f)
-                    {
-                        Timing.CallDelayed(disguiseDuration, () =>
+                    case Enum.WearMode.RoleChange:
+                        player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
+                        Timing.CallDelayed(0.2f, () =>
                         {
-                            if (player == null || !player.IsConnected)
-                            {
-                                UnwearCommand.ClearPlayerData(player);
-                                return;
-
-                                switch (Main.Instance.Config.WearMode)
-                                {
-                                    case Enum.WearMode.RoleChange:
-                                        Timing.CallDelayed(0.1f, () =>
-                                        {
-                                            if (player.Role.Type == ragdollData.RoleType)
-                                            {
-                                                player.Role.Set(originalRole, RoleSpawnFlags.None);
-
-                                                Timing.CallDelayed(0.1f, () =>
-                                                {
-                                                    player.Teleport(revertPosition);
-                                                    player.DisplayNickname = originalNickname;
-                                                });
-                                            }
-                                        });
-                                        break;
-
-                                    case Enum.WearMode.ModelChange:
-                                        Timing.CallDelayed(0.1f, () =>
-                                        {
-                                            player.ChangeAppearance(originalRole, true);
-                                            player.DisplayNickname = originalNickname;
-                                        });
-                                        break;
-                                }
-
-                                player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
-                            }
+                            player.Teleport(originalPosition);
+                            player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
                         });
-                    }
-                    return true;
+                        break;
+
+                    case Enum.WearMode.ModelChange:
+                        player.ChangeAppearance(ragdollData.RoleType, true);
+                        player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+                        break;
                 }
-                return false;
+
+                ragdollToWear.Destroy();
+
+                float disguiseDuration = Main.Instance.Config.WearDuration;
+                if (disguiseDuration >= 0f)
+                {
+                    Timing.CallDelayed(disguiseDuration, () =>
+                    {
+                        if (player == null || !player.IsConnected)
+                        {
+                            UnwearCommand.ClearPlayerData(player);
+                            return;
+                        }
+
+                        var revertPosition = player.Position;
+
+                        switch (Main.Instance.Config.WearMode)
+                        {
+                            case Enum.WearMode.RoleChange:
+                                if (player.Role.Type == ragdollData.RoleType)
+                                {
+                                    player.Role.Set(originalRole, RoleSpawnFlags.None);
+                                    Timing.CallDelayed(0.2f, () =>
+                                    {
+                                        player.Teleport(revertPosition);
+                                        player.DisplayNickname = originalNickname;
+                                    });
+                                }
+                                break;
+
+                            case Enum.WearMode.ModelChange:
+                                player.ChangeAppearance(originalRole, true);
+                                player.DisplayNickname = originalNickname;
+                                break;
+                        }
+
+                        UnwearCommand.ClearPlayerData(player);
+                        player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
+                    });
+                }
+                return true;
             }
             catch (System.Exception)
             {

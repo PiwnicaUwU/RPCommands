@@ -33,7 +33,6 @@ namespace RpCommands.Commands
                     target.ShowHint(string.Format(Main.Instance.Translation.PunchHintTarget, player.Nickname), 5f);
                     response = string.Format(Main.Instance.Translation.PunchSuccess, target.Nickname);
                     return true;
-                }
             }
 
             response = Main.Instance.Translation.NoTargetInRange;
