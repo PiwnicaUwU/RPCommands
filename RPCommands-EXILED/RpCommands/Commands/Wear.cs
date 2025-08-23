@@ -138,39 +138,36 @@ namespace RpCommands.Commands
                             {
                                 UnwearCommand.ClearPlayerData(player);
                                 return;
-                            }
 
-                            var revertPosition = player.Position;
-
-                            switch (Main.Instance.Config.WearMode)
-                            {
-                                case Enum.WearMode.RoleChange:
-                                    Timing.CallDelayed(0.1f, () =>
-                                    {
-                                        if (player.Role.Type == ragdollData.RoleType)
+                                switch (Main.Instance.Config.WearMode)
+                                {
+                                    case Enum.WearMode.RoleChange:
+                                        Timing.CallDelayed(0.1f, () =>
                                         {
-                                            player.Role.Set(originalRole, RoleSpawnFlags.None);
-
-                                            Timing.CallDelayed(0.1f, () =>
+                                            if (player.Role.Type == ragdollData.RoleType)
                                             {
-                                                player.Teleport(revertPosition);
-                                                player.DisplayNickname = originalNickname;
-                                            });
-                                        }
-                                    });
-                                    break;
+                                                player.Role.Set(originalRole, RoleSpawnFlags.None);
 
-                                case Enum.WearMode.ModelChange:
-                                    Timing.CallDelayed(0.1f, () =>
-                                    {
-                                        player.ChangeAppearance(originalRole, true);
-                                        player.DisplayNickname = originalNickname;
-                                    });
-                                    break;
+                                                Timing.CallDelayed(0.1f, () =>
+                                                {
+                                                    player.Teleport(revertPosition);
+                                                    player.DisplayNickname = originalNickname;
+                                                });
+                                            }
+                                        });
+                                        break;
+
+                                    case Enum.WearMode.ModelChange:
+                                        Timing.CallDelayed(0.1f, () =>
+                                        {
+                                            player.ChangeAppearance(originalRole, true);
+                                            player.DisplayNickname = originalNickname;
+                                        });
+                                        break;
+                                }
+
+                                player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
                             }
-
-                            UnwearCommand.ClearPlayerData(player);
-                            player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
                         });
                     }
                     return true;

@@ -14,7 +14,7 @@ namespace RPCommands
         public override string Name => "RPCommands";
         public override string Author => ".piwnica2137 & .Adamczyli";
         public override string Prefix => "RPCommands";
-        public override Version Version => new(2, 0, 0);
+        public override Version Version => new(2, 1, 0);
         public override PluginPriority Priority => PluginPriority.Last;
         private EventHandlers _eventHandlers;
         private CreditTag creditTag;
