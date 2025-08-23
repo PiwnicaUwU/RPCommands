@@ -1,8 +1,8 @@
 ﻿using Exiled.API.Features;
 using PlayerRoles;
 using RpCommands.Enum;
+using RpCommands.Extensions;
 using RPCommands;
-using UnityEngine;
 
 namespace RpCommands.Commands
 {
@@ -27,41 +27,40 @@ namespace RpCommands.Commands
                 return false;
             }
 
-            if (Physics.Raycast(player.CameraTransform.position, player.CameraTransform.forward, out RaycastHit hit, 5f))
+            Player target = player.GetRaycastPlayer(5f);
+
+            if (target != null && target != player)
             {
-                if (Player.Get(hit.collider.GetComponentInParent<ReferenceHub>()) is Player target && target != player)
+                if (target.Cuffer == null)
                 {
-                    if (target.Cuffer == null)
-                    {
-                        response = string.Format(Main.Instance.Translation.NotCuffed, target.Nickname);
-                        return false;
-                    }
-
-                    target.Cuffer = null;
-                    target.RemoveHandcuffs();
-
-                    switch (Main.Instance.Config.CuffBehavior)
-                    {
-                        case CuffMode.SaveAndRestore:
-                            if (CuffCommand.SavedInventories.TryGetValue(target.Id, out var savedItems))
-                            {
-                                foreach (var item in savedItems)
-                                {
-                                    target.AddItem(item.Type);
-                                }
-                                CuffCommand.SavedInventories.Remove(target.Id);
-                            }
-                            break;
-
-                        case CuffMode.DropOnGround:
-                        default:
-                            break;
-                    }
-
-                    target.ShowHint(string.Format(Main.Instance.Translation.DecuffHintTarget, player.Nickname), 5f);
-                    response = string.Format(Main.Instance.Translation.DecuffSuccess, target.Nickname);
-                    return true;
+                    response = string.Format(Main.Instance.Translation.NotCuffed, target.Nickname);
+                    return false;
                 }
+
+                target.Cuffer = null;
+                target.RemoveHandcuffs();
+
+                switch (Main.Instance.Config.CuffBehavior)
+                {
+                    case CuffMode.SaveAndRestore:
+                        if (CuffCommand.SavedInventories.TryGetValue(target.Id, out var savedItems))
+                        {
+                            foreach (var item in savedItems)
+                            {
+                                target.AddItem(item.Type);
+                            }
+                            CuffCommand.SavedInventories.Remove(target.Id);
+                        }
+                        break;
+
+                    case CuffMode.DropOnGround:
+                    default:
+                        break;
+                }
+
+                target.ShowHint(string.Format(Main.Instance.Translation.DecuffHintTarget, player.Nickname), 5f);
+                response = string.Format(Main.Instance.Translation.DecuffSuccess, target.Nickname);
+                return true;
             }
 
             response = Main.Instance.Translation.NoTargetInRange;

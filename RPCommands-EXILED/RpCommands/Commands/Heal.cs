@@ -1,8 +1,8 @@
 ﻿using Exiled.API.Features;
 using PlayerRoles;
+using RpCommands.Extensions;
 using RPCommands;
 using System;
-using UnityEngine;
 
 namespace RpCommands.Commands
 {
@@ -27,16 +27,15 @@ namespace RpCommands.Commands
                 return false;
             }
 
-            if (Physics.Raycast(player.CameraTransform.position, player.CameraTransform.forward, out RaycastHit hit, 5f))
+            Player target = player.GetRaycastPlayer(5f);
+
+            if (target != null && target != player)
             {
-                if (Player.Get(hit.collider.GetComponentInParent<ReferenceHub>()) is Player target && target != player)
-                {
-                    target.Health = Math.Min(target.MaxHealth, target.Health + Main.Instance.Config.HealAmount);
-                    player.RemoveItem(player.CurrentItem, true);
-                    target.ShowHint(string.Format(Main.Instance.Translation.HealHintTarget, player.Nickname), 5f);
-                    response = string.Format(Main.Instance.Translation.HealSuccess, target.Nickname);
-                    return true;
-                }
+                target.Health = Math.Min(target.MaxHealth, target.Health + Main.Instance.Config.HealAmount);
+                player.RemoveItem(player.CurrentItem, true);
+                target.ShowHint(string.Format(Main.Instance.Translation.HealHintTarget, player.Nickname), 5f);
+                response = string.Format(Main.Instance.Translation.HealSuccess, target.Nickname);
+                return true;
             }
 
             response = Main.Instance.Translation.NoTargetInRange;

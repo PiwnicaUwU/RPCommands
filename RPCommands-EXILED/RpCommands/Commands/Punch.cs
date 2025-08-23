@@ -2,6 +2,7 @@
 using Exiled.API.Features.Roles;
 using PlayerRoles;
 using PlayerStatsSystem;
+using RpCommands.Extensions;
 using RPCommands;
 using UnityEngine;
 
@@ -21,21 +22,21 @@ namespace RpCommands.Commands
                 return false;
             }
 
-            if (Physics.Raycast(player.CameraTransform.position, player.CameraTransform.forward, out RaycastHit hit, 5f))
-            {
-                if (Player.Get(hit.collider.GetComponentInParent<ReferenceHub>()) is Player target && target != player)
-                {
-                    target.Hurt(new UniversalDamageHandler(Main.Instance.Config.PunchDamage, DeathTranslations.Unknown));
 
-                    Vector3 pushDirection = (target.Position - player.Position).normalized + Vector3.up * 0.5f;
-                    if (target.Role is FpcRole fpcRole)
-                    {
-                        fpcRole.FirstPersonController.FpcModule.CharController.Move(pushDirection * Main.Instance.Config.PunchPushForce * Time.deltaTime);
-                    }
-                    target.ShowHint(string.Format(Main.Instance.Translation.PunchHintTarget, player.Nickname), 5f);
-                    response = string.Format(Main.Instance.Translation.PunchSuccess, target.Nickname);
-                    return true;
+            Player target = player.GetRaycastPlayer(5f);
+            if (target != null && target != player)
+            {
+                target.Hurt(new UniversalDamageHandler(Main.Instance.Config.PunchDamage, DeathTranslations.Unknown));
+
+                Vector3 pushDirection = (target.Position - player.Position).normalized + Vector3.up * 0.5f;
+                if (target.Role is FpcRole fpcRole)
+                {
+                    fpcRole.FirstPersonController.FpcModule.CharController.Move(pushDirection * Main.Instance.Config.PunchPushForce * Time.deltaTime);
                 }
+
+                target.ShowHint(string.Format(Main.Instance.Translation.PunchHintTarget, player.Nickname), 5f);
+                response = string.Format(Main.Instance.Translation.PunchSuccess, target.Nickname);
+                return true;
             }
 
             response = Main.Instance.Translation.NoTargetInRange;
