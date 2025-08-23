@@ -42,10 +42,16 @@ namespace RPCommands
         public CommandSettings Try { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
         public CommandSettings Desc { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Assist { get; set; } = new(CommandHandlerType.Client, 0f, 0f, 3f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
+        [Description("Enable or disable sending notifications to a Discord webhook when the .assist command is used.")]
+        public bool EnableAssistWebhook { get; set; } = false;
+
+        [Description("The Discord webhook URL to send notifications to.")]
+        public string AssistWebhookUrl { get; set; } = "https://discord.com/api/webhooks/your_webhook_url_here";
         public CommandSettings CustomInfo { get; set; } = new(CommandHandlerType.Client, 0f, 0f, 0f, "");
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
+        public CommandSettings Unwear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
         public CommandSettings Radio { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Wear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
@@ -60,12 +66,13 @@ namespace RPCommands
         public float PunchDamage { get; set; } = 5f;
 
         [Description("Push force multiplier for the .punch command.")]
-        public float PunchPushForce { get; set; } = 0.7f;
+        public float PunchPushForce { get; set; } = 50f;
         public CommandSettings Clean { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
         public CommandSettings Heal { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
 
         [Description("Amount of health restored by the .heal command.")]
         public float HealAmount { get; set; } = 65f;
+
         [Description("Item required to use the .heal command.")]
         public ItemType HealItem { get; set; } = ItemType.Medkit;
         public CommandSettings Cuff { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
@@ -112,7 +119,8 @@ namespace RPCommands
             { "cuff", true },
             { "uncuff", true },
             { "name", true },
-            { "zone", true }
+            { "zone", true },
+            { "unwear", true }
         };
 
 
@@ -143,6 +151,7 @@ namespace RPCommands
             "uncuff" => UnCuff,
             "name" => Name,
             "zone" => Zone,
+            "unwear" => Unwear,
             _ => throw new ArgumentException("Invalid command", nameof(command))
         };
     }
