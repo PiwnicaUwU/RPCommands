@@ -21,7 +21,6 @@ namespace RpCommands.Commands
     {
         public override string OriginalCommand => "zone";
         public override string Description => Main.Instance.Translation.Commands["zone"];
-        public override bool AllowNoArguments => true;
         public static List<ActiveZone> ActiveZones { get; } = [];
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
@@ -60,7 +59,7 @@ namespace RpCommands.Commands
                         if (Vector3.Distance(p.Position, zone.Position) <= zone.Radius)
                         {
                             string formattedHint = string.Format(hintFormat, zone.CreatorName, zone.HintMessage);
-                            p.ShowHint(formattedHint, 1);
+                            p.ShowHint("<size=25>" + "<align=left>" + formattedHint + "</align>" + "</size>", 1); // too lazy to do with HSM
                             break;
                         }
                     }
