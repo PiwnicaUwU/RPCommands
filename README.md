@@ -46,6 +46,12 @@ The `config.yml` file allows you to customize the plugin, such as the message vi
 is_enabled: true
 # Enable debug logs
 debug: false
+# Specifies how RP messages are displayed. Options: Hints, TextToys, Both
+display_mode: Hints
+# The height at which the TextToy should appear above the player's head.
+text_toy_height_offset: 1.10000002
+# The font size for the TextToy.
+text_toy_size: 3
 # Enables or disables the in-game credit tag for the plugin's author.
 is_credit_tag_enabled: true
 # List of banned words. Messages containing any of these words will be blocked. It is recommended to not delete 'size'
@@ -101,6 +107,10 @@ assist:
   cooldown: 3
   format: '<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}'
   handler: Client
+# Enable or disable sending notifications to a Discord webhook when the .assist command is used.
+enable_assist_webhook: false
+# The Discord webhook URL to send notifications to.
+assist_webhook_url: 'https://discord.com/api/webhooks/your_webhook_url_here'
 custom_info:
   range: 0
   duration: 0
@@ -140,7 +150,7 @@ punch:
 # Damage dealt by the .punch command.
 punch_damage: 5
 # Push force multiplier for the .punch command.
-punch_push_force: 0.699999988
+punch_push_force: 50
 clean:
   range: 0
   duration: 5
@@ -250,6 +260,8 @@ command_disabled: 'This command is disabled.'
 radio_required: 'You must be holding a radio to use this command.'
 # Message shown when a assist request is sent.
 help_request_sent: 'Your assist request has been sent to the staff.'
+# The format of the message sent to the webhook for the .assist command. {0} = Player Nickname, {1} = Player UserId, {2} = Message
+assist_webhook_message_format: "\U0001F6A8 **Assist Request** \U0001F6A8\\n\\n**Player:** {0} ({1})\\n**Message:**\\n```\\n{2}\\n```"
 # Message shown when the player tries to use the .wear command with no ragdolls in range.
 no_dead_body_found: 'No dead body found.'
 # Message shown when the player fails to put on the clothes for an unspecified reason.
@@ -288,7 +300,7 @@ not_disguised: 'You are not disguised.'
 unwore: 'Disguise was worn off.'
 # Message shown in result of command usage failure.
 unwore_failure: 'Discguise cannot be worn off.'
-# Message shown in result of command usage sucess.
+# Hint message shown in result of command usage sucess.
 disguise_removed: 'Disguise was sucessfully worn off.'
 # Dictionary of command names used in the system.
 command_names:
