@@ -15,6 +15,15 @@ namespace RPCommands
         [Description("Enable debug logs")]
         public bool Debug { get; set; } = false;
 
+        [Description("Specifies how RP messages are displayed. Options: Hints, TextToys, Both")]
+        public RPCommandsMode DisplayMode { get; set; } = RPCommandsMode.Both;
+
+        [Description("The height at which the TextToy should appear above the player's head.")]
+        public float TextToyHeightOffset { get; set; } = 1.1f;
+
+        [Description("The font size for the TextToy.")]
+        public float TextToySize { get; set; } = 3f;
+
         [Description("Enables or disables the in-game credit tag for the plugin's author.")]
         public bool IsCreditTagEnabled { get; set; } = true;
 

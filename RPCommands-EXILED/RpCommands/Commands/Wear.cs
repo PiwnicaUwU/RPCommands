@@ -90,9 +90,11 @@ namespace RpCommands.Commands
                 if (ragdollData.OwnerHub != null)
                 {
                     var ragdollToRemove = Ragdoll.List.FirstOrDefault(r => r.NetworkInfo.Equals(ragdollData));
-                    var ragdollPosition = ragdollToRemove?.Position ?? player.Position;
+                    var currentPosition = player.Position;
                     var originalRole = player.Role.Type;
                     var originalNickname = player.Nickname;
+
+                    UnwearCommand.SaveOriginalPlayerData(player, originalRole, originalNickname);
 
                     switch (Main.Instance.Config.WearMode)
                     {
@@ -100,7 +102,13 @@ namespace RpCommands.Commands
                             Timing.CallDelayed(0.1f, () =>
                             {
                                 player.Role.Set(ragdollData.RoleType, SpawnReason.ForceClass, RoleSpawnFlags.None);
-                                player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+
+                                Timing.CallDelayed(0.1f, () =>
+                                {
+                                    player.Teleport(currentPosition);
+                                    player.DisplayNickname = ragdollData.OwnerHub.nicknameSync.MyNick;
+                                });
+
                                 ragdollToRemove?.Destroy();
                             });
                             break;
@@ -119,6 +127,7 @@ namespace RpCommands.Commands
                             player.SendConsoleMessage("An error occurred while trying to wear the dead player. Contact server staff.", "red");
                             return false;
                     }
+
                     float disguiseDuration = Main.Instance.Config.WearDuration;
 
                     if (disguiseDuration >= 0f)
@@ -126,18 +135,27 @@ namespace RpCommands.Commands
                         Timing.CallDelayed(disguiseDuration, () =>
                         {
                             if (player == null || !player.IsConnected)
+                            {
+                                UnwearCommand.ClearPlayerData(player);
                                 return;
+                            }
+
+                            var revertPosition = player.Position;
 
                             switch (Main.Instance.Config.WearMode)
                             {
                                 case Enum.WearMode.RoleChange:
-
                                     Timing.CallDelayed(0.1f, () =>
                                     {
                                         if (player.Role.Type == ragdollData.RoleType)
                                         {
                                             player.Role.Set(originalRole, RoleSpawnFlags.None);
-                                            player.DisplayNickname = originalNickname;
+
+                                            Timing.CallDelayed(0.1f, () =>
+                                            {
+                                                player.Teleport(revertPosition);
+                                                player.DisplayNickname = originalNickname;
+                                            });
                                         }
                                     });
                                     break;
@@ -151,6 +169,7 @@ namespace RpCommands.Commands
                                     break;
                             }
 
+                            UnwearCommand.ClearPlayerData(player);
                             player.ShowHint(Main.Instance.Translation.DisguiseWornOff, 7f);
                         });
                     }
@@ -160,6 +179,7 @@ namespace RpCommands.Commands
             }
             catch (System.Exception)
             {
+                UnwearCommand.ClearPlayerData(player);
                 return false;
             }
         }

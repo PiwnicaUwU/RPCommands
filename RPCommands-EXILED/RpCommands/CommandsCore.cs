@@ -3,7 +3,10 @@ using Exiled.API.Features;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
 using MEC;
+using Mirror;
 using RemoteAdmin;
+using RpCommands.Components;
+using RpCommands.Enum;
 using RPCommands.API;
 using System;
 using System.Collections.Generic;
@@ -56,7 +59,7 @@ namespace RPCommands
                 return false;
             }
 
-            if (!player.IsAlive && OriginalCommand != "assist") // assist ALL always MUST work
+            if (!player.IsAlive && OriginalCommand != "assist") 
             {
                 response = Main.Instance.Translation.OnlyAlive;
                 return false;
@@ -100,9 +103,76 @@ namespace RPCommands
             float duration = Main.Instance.Config.GetDuration(OriginalCommand);
             string formattedMessage = FormatMessage(player, message);
 
-            HintToNearbyPlayers(player, formattedMessage, range, duration);
+            DisplayMessage(player, formattedMessage, range, duration);
+
             response = Main.Instance.Translation.MessageSent;
             return true;
+        }
+
+        private void DisplayMessage(Player sender, string message, float range, float duration)
+        {
+            switch (Main.Instance.Config.DisplayMode)
+            {
+                case RPCommandsMode.Hints:
+                    HintToNearbyPlayers(sender, message, range, duration);
+                    break;
+
+                case RPCommandsMode.TextToys:
+                    SpawnTextToyForSender(sender, message, duration, true);
+
+                    if (Main.Instance.Config.ShowHintsToSpectatorsOfReceivers)
+                    {
+                        SendHintToSpectatorsOfNearbyPlayers(sender, message, range, duration);
+                    }
+                    break;
+
+                case RPCommandsMode.Both:
+                    HintToNearbyPlayers(sender, message, range, duration);
+                    SpawnTextToyForSender(sender, message, duration, false);
+                    break;
+            }
+        }
+
+        private void SpawnTextToyForSender(Player sender, string message, float duration, bool showInConsole)
+        {
+            try
+            {
+                if (showInConsole && Main.Instance.Config.ShowCommandInSenderConsole)
+                {
+                    foreach (Player player in Player.List.Where(p => Vector3.Distance(p.Position, sender.Position) <= Main.Instance.Config.GetRange(OriginalCommand)))
+                    {
+                        player.SendConsoleMessage($"{message}", "yellow");
+                    }
+                }
+                AdminToys.TextToy prefab = Exiled.API.Features.Toys.Text.Prefab;
+                if (prefab == null)
+                {
+                    Log.Error("TextToy prefab is null. Cannot spawn TextToy.");
+                    return;
+                }
+
+                AdminToys.TextToy textToy = UnityEngine.Object.Instantiate(prefab);
+
+                textToy.transform.position = sender.Position + (Vector3.up * Main.Instance.Config.TextToyHeightOffset);
+                textToy.transform.rotation = sender.Transform.rotation;
+                textToy.transform.localScale = Vector3.one;
+
+                NetworkServer.Spawn(textToy.gameObject);
+
+                textToy.TextFormat = $"<size={Main.Instance.Config.TextToySize}>{message}</size>";
+
+                TextToy controller = textToy.gameObject.AddComponent<TextToy>();
+                controller.Initialize(sender, textToy, Main.Instance.Config.TextToyHeightOffset);
+                sender.Connection.Send(new ObjectDestroyMessage { netId = textToy.netId });
+                Timing.CallDelayed(duration, () =>
+                {
+                    controller?.DestroyToy();
+                });
+            }
+            catch (Exception e)
+            {
+                Log.Error($"Failed to spawn TextToy: {e}");
+            }
         }
 
         protected virtual string FormatMessage(Player player, string message)
@@ -151,12 +221,43 @@ namespace RPCommands
             }
         }
 
+        private void SendHintToSpectatorsOfNearbyPlayers(Player sender, string message, float range, float duration)
+        {
+            HashSet<Player> spectatorsToSend = [];
+
+            foreach (Player playerInRange in Player.List.Where(p => Vector3.Distance(p.Position, sender.Position) <= range))
+            {
+                foreach (Player spectator in playerInRange.CurrentSpectatingPlayers)
+                {
+                    if (spectator.IsConnected)
+                    {
+                        spectatorsToSend.Add(spectator);
+                    }
+                }
+            }
+
+            foreach (Player spectator in spectatorsToSend)
+            {
+                DynamicHint hint = new()
+                {
+                    Text = message,
+                    TargetY = 800,
+                    TargetX = -950,
+                    FontSize = 25,
+                };
+
+                PlayerDisplay observerDisplay = PlayerDisplay.Get(spectator);
+                observerDisplay?.AddHint(hint);
+                Timing.CallDelayed(duration, () => observerDisplay?.RemoveHint(hint));
+            }
+        }
+
         public void SendHint(Player player, string message, float duration)
         {
             DynamicHint hint = new()
             {
                 Text = message,
-                TargetY = 800,
+                TargetY = 760,
                 TargetX = -950,
                 FontSize = 25,
             };
