@@ -11,11 +11,8 @@ With this plugin, you can create immersive descriptions of actions, thoughts, an
 
 ## ⚠️ Warning: Common Issue with Incorrect Usage  
 
-Some users download the Plugin but do not install or use it correctly on their server. If you downloaded the **Plugin** but do not have **HintServiceMeow** installed, the plugin WILL NOT work properly.  
-
-To avoid issues:  
-✅ If you want to use the **Plugin**, make sure you have **HintServiceMeow installed in Your plugins folder**.  
-
+Some users download the Plugin but do not install or use it correctly on their server. If you downloaded the **Plugin** but do not have **HintServiceMeow** and **LabApiExtensions** installed, the plugin WILL NOT work properly. To avoid issues: 
+✅ If you want to use the **Plugin**, make sure you have both **HintServiceMeow** and **LabApiExtensions** installed in Your LabAPI plugins folder.
 If you encounter any problems, check your server logs or console and ensure the plugin is configured correctly.
 
 ## 🛠️ Features
@@ -352,7 +349,7 @@ translation:
 ## 📦 Installation
 ```plaintext
 1. Download the `.dll` file from releases and place it in the `LabAPI/Plugins/{port} or global` folder.
-2. Make sure you installed HSM as well.
+2. Make sure you installed HSM and LabApiExtensions as well.
 3. Start the server to generate the configuration file.
 4. Customize the `config` according to your preferences.
 5. Restart the server and enjoy the plugin.
@@ -366,6 +363,7 @@ HSM allows for more polished hint display and improved functionality, providing 
 ## 🔗 Links
 - 📖 [LabAPI](https://github.com/northwood-studios/LabAPI/)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
+- 🐈 [LabApiExtensions(https://github.com/KadavasKingdom/LabApiExtensions)]
 
 
 ## 👥 Author
