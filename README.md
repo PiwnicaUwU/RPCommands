@@ -363,7 +363,7 @@ HSM allows for more polished hint display and improved functionality, providing 
 ## 🔗 Links
 - 📖 [LabAPI](https://github.com/northwood-studios/LabAPI/)
 - 🐾 [HintServiceMeow](https://github.com/MeowServer/HintServiceMeow)
-- 🐈 [LabApiExtensions(https://github.com/KadavasKingdom/LabApiExtensions)]
+- 🐈 [LabApiExtensions](https://github.com/KadavasKingdom/LabApiExtensions)
 
 
 ## 👥 Author
