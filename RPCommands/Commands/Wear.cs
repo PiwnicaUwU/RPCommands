@@ -2,8 +2,6 @@
 using LabApi.Features.Wrappers;
 using LabApiExtensions.Managers;
 using MEC;
-using PlayerRoles;
-using PlayerRoles.Spectating;
 using UnityEngine;
 
 namespace RPCommands.Commands
