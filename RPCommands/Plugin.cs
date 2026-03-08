@@ -36,7 +36,7 @@ namespace RPCommands
         public override string Description => "RPCommands is a plugin for SCP: Secret Laboratory that adds narrative text commands, allowing players to enhance their roleplay experience. Perfect for creating a more engaging RP experience on your server.";
         public override Version RequiredApiVersion => new(LabApiProperties.CompiledVersion);
         public override string ConfigFileName => "RPCommands";
-        public override Version Version => new(2, 2, 0);
+        public override Version Version => new(3, 0, 0);
         public override LoadPriority Priority => LoadPriority.Lowest;
         private EventHandlers _eventHandlers;
         private CreditTag creditTag;
