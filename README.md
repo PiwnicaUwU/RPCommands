@@ -12,7 +12,7 @@ With this plugin, you can create immersive descriptions of actions, thoughts, an
 ## ⚠️ Warning: Common Issue with Incorrect Usage  
 
 Some users download the Plugin but do not install or use it correctly on their server. If you downloaded the **Plugin** but do not have **HintServiceMeow** and **LabApiExtensions** installed, the plugin WILL NOT work properly. To avoid issues: 
-✅ If you want to use the **Plugin**, make sure you have both **HintServiceMeow** and **LabApiExtensions** installed in Your LabAPI plugins folder.
+If you want to use the **Plugin**, make sure you have both **HintServiceMeow** and **LabApiExtensions** installed in Your LabAPI plugins folder.
 If you encounter any problems, check your server logs or console and ensure the plugin is configured correctly.
 
 More info here: [click me](https://github.com/PiwnicaUwU/RPCommands?tab=readme-ov-file#support-and-bug-reporting-disclaimer)
