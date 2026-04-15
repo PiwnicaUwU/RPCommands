@@ -15,7 +15,7 @@ Some users download the Plugin but do not install or use it correctly on their s
 ✅ If you want to use the **Plugin**, make sure you have both **HintServiceMeow** and **LabApiExtensions** installed in Your LabAPI plugins folder.
 If you encounter any problems, check your server logs or console and ensure the plugin is configured correctly.
 
-More info here: [click me](https://github.com/PiwnicaUwU/RPCommands/edit/master/README.md#support-and-bug-reporting-disclaimer)
+More info here: [click me](https://github.com/PiwnicaUwU/RPCommands?tab=readme-ov-file#support-and-bug-reporting-disclaimer)
 
 ## 🛠️ Features
 ✅ **.me**
