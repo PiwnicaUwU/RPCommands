@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace RPCommands
+namespace RPCommands.Handlers
 {
     internal class EventHandlers
     {
@@ -33,13 +33,13 @@ namespace RPCommands
             var raHandler = CommandProcessor.RemoteAdminCommandHandler;
 
             var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(RPCommand)) && !t.IsAbstract);
+                .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
 
             foreach (var type in commandTypes)
             {
                 try
                 {
-                    if (Activator.CreateInstance(type) is not RPCommand command)
+                    if (Activator.CreateInstance(type) is not InternalRPCommand command)
                         continue;
 
                     if (!command.IsCommandEnabled)
@@ -64,13 +64,13 @@ namespace RPCommands
             var clientHandler = QueryProcessor.DotCommandHandler;
 
             var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(RPCommand)) && !t.IsAbstract);
+                .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
 
             foreach (var type in commandTypes)
             {
                 try
                 {
-                    if (Activator.CreateInstance(type) is RPCommand command)
+                    if (Activator.CreateInstance(type) is InternalRPCommand command)
                     {
                         clientHandler.UnregisterCommand(command);
                     }

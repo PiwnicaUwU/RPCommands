@@ -1,8 +1,9 @@
 ﻿using LabApi.Features.Wrappers;
+using RPCommands.Handlers;
 
 namespace RPCommands.Commands
 {
-    public class RadioCommand : RPCommand
+    internal class RadioCommand : InternalRPCommand
     {
         public override string OriginalCommand => "radio";
         public override string Description => Main.Instance.Config.Translation.Commands["radio"];
@@ -23,7 +24,7 @@ namespace RPCommands.Commands
                 if (!receiver.IsAlive || !HasRadio(receiver))
                     continue;
 
-                SendHint(receiver, formattedMessage, duration);
+                DisplayHandler.SendHint(receiver, formattedMessage, duration);
                 receiver.SendConsoleMessage(formattedMessage, "yellow");
             }
             player.SendConsoleMessage(formattedMessage, "yellow");

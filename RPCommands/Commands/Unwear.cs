@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace RPCommands.Commands
 {
-    public class UnwearCommand : RPCommand
+    internal class UnwearCommand : InternalRPCommand
     {
         public static readonly Dictionary<Player, OriginalPlayerData> originalPlayerData = [];
 

@@ -7,8 +7,7 @@ using UnityEngine;
 
 namespace RPCommands.Commands
 {
-
-    public class PunchCommand : RPCommand
+    internal class PunchCommand : InternalRPCommand
     {
         public override string OriginalCommand => "punch";
         public override string Description => Main.Instance.Config.Translation.Commands["punch"];

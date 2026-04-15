@@ -2,6 +2,7 @@
 {
     public enum RPCommandsMode
     {
+        None,
         Hints,
         TextToys,
         Both

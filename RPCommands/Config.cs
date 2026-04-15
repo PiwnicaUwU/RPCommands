@@ -43,10 +43,14 @@ namespace RPCommands
         public CommandSettings Look { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Look」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Ooc { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Ooc」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Try { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Try」</color><color=#FFFF00>{0}</color> : tried to {1} and {2} did it!");
+        [Description("The percentage chance (0-100) for the 'try' command to result in a success.")]
+        public int TryCommandSuccessChance { get; set; } = 50;
         public CommandSettings Desc { get; set; } = new(CommandHandlerType.Client, 15f, 5f, 3f, "<color=green>「Desc」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Assist { get; set; } = new(CommandHandlerType.Client, 0f, 0f, 3f, "<color=red>[ASSIST]</color> <color=#ffcc00>{0}</color>: {1}");
         [Description("Enable or disable sending notifications to a Discord webhook when the .assist command is used.")]
         public bool EnableAssistWebhook { get; set; } = false;
+        [Description("If true, the SteamID will be hidden in the assist message for players with DNT enabled.")]
+        public bool HideUserIdForDnt { get; set; } = true;
 
         [Description("The Discord webhook URL to send notifications to.")]
         public string AssistWebhookUrl { get; set; } = "https://discord.com/api/webhooks/your_webhook_url_here";

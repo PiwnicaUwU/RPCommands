@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace RPCommands.Commands
 {
-
-    public class UncuffCommand : RPCommand
+    internal class UncuffCommand : InternalRPCommand
     {
         public override string OriginalCommand => "uncuff";
         public override string Description => Main.Instance.Config.Translation.Commands["uncuff"];

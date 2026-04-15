@@ -22,7 +22,7 @@ namespace RPCommands.Commands
         public TextToy ZoneToy { get; set; }
     }
 
-    public class ZoneCommand : RPCommand
+    internal class ZoneCommand : InternalRPCommand
     {
         public override string OriginalCommand => "zone";
         public override string Description => Main.Instance.Config.Translation.Commands["zone"];

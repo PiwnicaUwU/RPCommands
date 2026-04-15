@@ -15,5 +15,10 @@ namespace RPCommands.Extensions
 
             return Player.Get(raycastHit.collider.gameObject);
         }
+
+        public static bool SendStaffMessage(this Player player, string message, EncryptedChannelManager.EncryptedChannel channel = EncryptedChannelManager.EncryptedChannel.AdminChat)
+        {
+            return player.ReferenceHub.encryptedChannelManager.TrySendMessageToClient(player.NetworkId + "!" + message, channel);
+        }
     }
 }

@@ -3,6 +3,7 @@ using LabApi.Loader.Features.Plugins;
 using LabApi.Loader.Features.Plugins.Enums;
 using MEC;
 using RPCommands.Commands;
+using RPCommands.Handlers;
 using System;
 
 namespace RPCommands
@@ -37,7 +38,7 @@ namespace RPCommands
         public override Version RequiredApiVersion => new(LabApiProperties.CompiledVersion);
         public override string ConfigFileName => "RPCommands";
         public override Version Version => new(3, 0, 0);
-        public override LoadPriority Priority => LoadPriority.Lowest;
+        public override LoadPriority Priority => LoadPriority.High;
         private EventHandlers _eventHandlers;
         private CreditTag creditTag;
         private CoroutineHandle zoneCoroutine;

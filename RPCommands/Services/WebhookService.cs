@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 
 namespace RPCommands.Services
 {
@@ -18,7 +19,7 @@ namespace RPCommands.Services
 
             try
             {
-                string jsonPayload = $"{{\"content\": \"{message.Replace("\"", "\\\"")}\"}}";
+                string jsonPayload = JsonSerializer.Serialize(new { content = message });
                 var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
                 HttpResponseMessage response = await HttpClient.PostAsync(url, content);
 

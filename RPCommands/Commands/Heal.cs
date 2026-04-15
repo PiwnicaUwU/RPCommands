@@ -4,7 +4,7 @@ using RPCommands.Extensions;
 
 namespace RPCommands.Commands
 {
-    public class HealCommand : RPCommand
+    internal class HealCommand : InternalRPCommand
     {
         public override string OriginalCommand => "heal";
         public override string Description => Main.Instance.Config.Translation.Commands["heal"];

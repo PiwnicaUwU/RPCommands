@@ -2,7 +2,7 @@
 
 namespace RPCommands.Commands
 {
-    public class NameCommand : RPCommand
+    internal class NameCommand : InternalRPCommand
     {
         public override string OriginalCommand => "name";
         public override string Description => Main.Instance.Config.Translation.Commands["name"];

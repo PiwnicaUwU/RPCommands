@@ -8,8 +8,7 @@ using UnityEngine;
 
 namespace RPCommands.Commands
 {
-
-    public class CuffCommand : RPCommand
+    internal class CuffCommand : InternalRPCommand
     {
         public override string OriginalCommand => "cuff";
         public override string Description => Main.Instance.Config.Translation.Commands["cuff"];

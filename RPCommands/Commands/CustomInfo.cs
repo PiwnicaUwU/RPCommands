@@ -2,8 +2,7 @@
 
 namespace RPCommands.Commands
 {
-
-    public class CustomInfoCommand : RPCommand
+    internal class CustomInfoCommand : InternalRPCommand
     {
         public override string OriginalCommand => "custom-info";
         public override string Description => Main.Instance.Config.Translation.Commands["custom-info"];

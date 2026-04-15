@@ -6,7 +6,7 @@ using UnityEngine;
 namespace RPCommands.Commands
 {
 
-    public class Clean : RPCommand
+    internal class Clean : InternalRPCommand
     {
         public override string OriginalCommand => "clean";
         public override string Description => Main.Instance.Config.Translation.Commands["clean"];

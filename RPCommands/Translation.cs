@@ -81,8 +81,8 @@ namespace RPCommands
 
         [Description("Message shown when a assist request is sent.")]
         public string HelpRequestSent { get; set; } = "Your assist request has been sent to the staff.";
-        [Description("The format of the message sent to the webhook for the .assist command. {0} = Player Nickname, {1} = Player UserId, {2} = Message")]
-        public string AssistWebhookMessageFormat { get; set; } = "🚨 **Assist Request** 🚨\\n\\n**Player:** {0} ({1})\\n**Message:**\\n```\\n{2}\\n```";
+        [Description("The format of the message sent to the webhook for the .assist command. {0} = Player Nickname, {1} = Player UserId, {2} = Player ID, {3} = Message")]
+        public string AssistWebhookMessageFormat { get; set; } = "🚨 **Assist Request** 🚨\n\n**Player:** {0} ({1}) [ID: {2}]\n**Message:**\n```\n{3}\n```";
 
         [Description("Message shown when the player tries to use the .wear command with no ragdolls in range.")]
         public string NoDeadBodyFound { get; set; } = "No dead body found.";

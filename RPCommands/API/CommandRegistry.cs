@@ -7,19 +7,26 @@ namespace RPCommands.API
 {
     public static class CommandRegistry
     {
-        private static readonly List<RPCommand> RegisteredExternalCommands = [];
+        private static readonly List<BaseRPCommand> RegisteredExternalCommands = [];
 
         /// <summary>
-        /// Allows external plugins to register their own RPCommands.
+        /// Allows external plugins to register their own custom RPCommands.
         /// </summary>
         /// <param name="command">The instance of the new command.</param>
-        /// <param name="handlerType">Where the command should be registered.</param>
-        public static void RegisterExternalCommand(RPCommand command, CommandHandlerType handlerType)
+        /// <param name="handlerType">Where the command should be registered (Client or RemoteAdmin).</param>
+        /// <returns>True if the command was successfully registered, false otherwise.</returns>
+        public static bool RegisterExternalCommand(BaseRPCommand command, CommandHandlerType handlerType)
         {
             if (command == null)
             {
-                Logger.Error("External command cannot be null!");
-                return;
+                Logger.Error("External API Error: Failed to register command because the provided instance is null.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(command.Command))
+            {
+                Logger.Error("External API Error: Command name is empty or null. Check the 'Command' property in your class.");
+                return false;
             }
 
             try
@@ -28,19 +35,24 @@ namespace RPCommands.API
                 {
                     case CommandHandlerType.Client:
                         QueryProcessor.DotCommandHandler.RegisterCommand(command);
-                        Logger.Info($"External API: Registered client command '{command.OriginalCommand}'.");
+                        Logger.Info($"External API: Registered client command '.{command.Command}'.");
                         break;
                     case CommandHandlerType.RemoteAdmin:
                         CommandProcessor.RemoteAdminCommandHandler.RegisterCommand(command);
-                        Logger.Info($"External API: Registered RA command '{command.OriginalCommand}'.");
+                        Logger.Info($"External API: Registered RA command '{command.Command}'.");
                         break;
+                    default:
+                        Logger.Warn($"External API: Unknown CommandHandlerType for command '{command.Command}'.");
+                        return false;
                 }
 
                 RegisteredExternalCommands.Add(command);
+                return true;
             }
             catch (Exception ex)
             {
-                Logger.Error($"Error while registering external command '{command.OriginalCommand}': {ex}");
+                Logger.Error($"External API Error: Exception while registering '{command.Command}': {ex.Message}\n{ex.StackTrace}");
+                return false;
             }
         }
 

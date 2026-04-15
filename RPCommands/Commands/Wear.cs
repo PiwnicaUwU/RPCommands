@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace RPCommands.Commands
 {
-    public class WearCommand : RPCommand
+    internal class WearCommand : InternalRPCommand
     {
         public override string OriginalCommand => "wear";
         public override string Description => Main.Instance.Config.Translation.Commands["wear"];
