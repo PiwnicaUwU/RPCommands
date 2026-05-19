@@ -374,11 +374,6 @@ HSM allows for more polished hint display and improved functionality, providing 
 👤 .Piwnica  
 📧 Contact: Discord -> .piwnica2137
 ```
-## 👥 Contributor
-```plaintext
-👤 02319478_334
-📧 Contact: Discord -> .czyliadi_
-```
 ---
 
 ## Support and Bug Reporting (Disclaimer)
