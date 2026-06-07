@@ -63,6 +63,7 @@ namespace RPCommands.Handlers
         {
             Logger.Info("Unregistering RPCommands internal commands...");
             var clientHandler = QueryProcessor.DotCommandHandler;
+            var raHandler = CommandProcessor.RemoteAdminCommandHandler;
 
             var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
@@ -74,6 +75,7 @@ namespace RPCommands.Handlers
                     if (Activator.CreateInstance(type) is InternalRPCommand command)
                     {
                         clientHandler.UnregisterCommand(command);
+                        raHandler.UnregisterCommand(command);
                     }
                 }
                 catch (Exception ex)
