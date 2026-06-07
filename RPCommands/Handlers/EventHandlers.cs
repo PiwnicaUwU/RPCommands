@@ -49,6 +49,7 @@ namespace RPCommands.Handlers
                     }
 
                     clientHandler.RegisterCommand(command);
+                    raHandler.RegisterCommand(command);
                     Logger.Debug($"Registered internal command: {command.OriginalCommand}");
                 }
                 catch (Exception ex)
