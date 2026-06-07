@@ -25,7 +25,7 @@ namespace RPCommands.Components
 
             foreach (Player observer in Player.List)
             {
-                if (observer == null || !observer.IsDestroyed)
+                if (observer == null || observer.IsDestroyed)
                     continue;
 
                 if (Vector3.Distance(_transform.position, observer.Position) > 60f)
