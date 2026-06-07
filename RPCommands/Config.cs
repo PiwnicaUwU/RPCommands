@@ -58,6 +58,13 @@ namespace RPCommands
 
         [Description("Maximum length of custom info")]
         public int MaxCustomInfoLength { get; set; } = 250;
+        [Description("A list of strings that will be preserved in Custom Info. Include your own separators like \\n or ' | ' at the end of the string if needed.")]
+        public List<string> PreservedCustomInfoLines { get; set; } =
+        [
+            "Test |",
+            "Test2\n"
+        ];
+
         public CommandSettings Unwear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
         public CommandSettings Radio { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "<color=green>「Radio」</color><color=#FFFF00>{0}</color> : {1}");
         public CommandSettings Wear { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
