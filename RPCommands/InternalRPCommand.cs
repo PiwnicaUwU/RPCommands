@@ -11,6 +11,7 @@ namespace RPCommands
     {
         public abstract string OriginalCommand { get; }
 
+        public virtual CommandHandlerType HandlerType => Main.Instance.Config.GetSettings(OriginalCommand).Handler;
         public override string Command => Main.Instance.Config.Translation.CommandNames.TryGetValue(OriginalCommand, out string translatedName) ? translatedName : OriginalCommand;
         public override bool IsCommandEnabled => Main.Instance.Config.IsCommandEnabled(OriginalCommand);
         public override bool AllowScp => Main.Instance.Config.AllowScpToUseCommands;

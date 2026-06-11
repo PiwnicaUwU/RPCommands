@@ -3,6 +3,7 @@ using LabApi.Features.Wrappers;
 using LabApiExtensions.Managers;
 using PlayerRoles;
 using RemoteAdmin;
+using RPCommands.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,9 +49,20 @@ namespace RPCommands.Handlers
                         continue;
                     }
 
-                    clientHandler.RegisterCommand(command);
-                    raHandler.RegisterCommand(command);
-                    Logger.Debug($"Registered internal command: {command.OriginalCommand}");
+                    switch (command.HandlerType)
+                    {
+                        case CommandHandlerType.Client:
+                            clientHandler.RegisterCommand(command);
+                            Logger.Debug($"Registered internal command: {command.OriginalCommand} ({command.HandlerType})");
+                            break;
+                        case CommandHandlerType.RemoteAdmin:
+                            raHandler.RegisterCommand(command);
+                            Logger.Debug($"Registered internal command: {command.OriginalCommand} ({command.HandlerType})");
+                            break;
+                        default:
+                            Logger.Warn($"Unknown HandlerType for internal command: {command.OriginalCommand}");
+                            break;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -74,8 +86,10 @@ namespace RPCommands.Handlers
                 {
                     if (Activator.CreateInstance(type) is InternalRPCommand command)
                     {
-                        clientHandler.UnregisterCommand(command);
-                        raHandler.UnregisterCommand(command);
+                        if (command.HandlerType == CommandHandlerType.Client)
+                            clientHandler.UnregisterCommand(command);
+                        else if (command.HandlerType == CommandHandlerType.RemoteAdmin)
+                            raHandler.UnregisterCommand(command);
                     }
                 }
                 catch (Exception ex)
