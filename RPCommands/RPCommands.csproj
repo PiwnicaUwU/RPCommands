@@ -133,7 +133,7 @@
     <Compile Include="Commands\Unwear.cs" />
     <Compile Include="Commands\Wear.cs" />
     <Compile Include="Commands\Zone.cs" />
-    <Compile Include="Components\StaticTextToy.cs" />
+    <Compile Include="Components\ActiveZone.cs" />
     <Compile Include="Components\TextToy.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="CreditTag.cs" />
@@ -147,7 +147,7 @@
     <Compile Include="Extensions\PlayerExtensions.cs" />
     <Compile Include="GlobalUsings.cs" />
     <Compile Include="Handlers\DisplayHandler.cs" />
-    <Compile Include="Plugin.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="InternalRPCommand.cs" />
     <Compile Include="Services\WebhookService.cs" />

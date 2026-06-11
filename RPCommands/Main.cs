@@ -5,6 +5,7 @@ using MEC;
 using RPCommands.Commands;
 using RPCommands.Handlers;
 using System;
+using System.Linq;
 
 namespace RPCommands
 {
@@ -19,7 +20,6 @@ namespace RPCommands
             _eventHandlers.RegisterCommands();
             creditTag = new CreditTag();
             creditTag.Load();
-            zoneCoroutine = Timing.RunCoroutine(ZoneCommand.ZoneCoroutine());
         }
 
         public override void Disable()
@@ -29,7 +29,11 @@ namespace RPCommands
             _eventHandlers.UnloadEvents();
             _eventHandlers = null;
             creditTag = null;
-            Timing.KillCoroutines(zoneCoroutine);
+
+            foreach (var zone in ZoneCommand.ActiveZones.ToList())
+            {
+                zone.DestroyZone();
+            }
         }
 
         public override string Name => "RPCommands";
@@ -41,7 +45,6 @@ namespace RPCommands
         public override LoadPriority Priority => LoadPriority.High;
         private EventHandlers _eventHandlers;
         private CreditTag creditTag;
-        private CoroutineHandle zoneCoroutine;
         public static Main Instance { get; private set; }
     }
 }
