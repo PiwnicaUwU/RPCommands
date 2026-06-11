@@ -1,6 +1,8 @@
 ﻿using LabApi.Features.Wrappers;
+using MEC;
 using Mirror;
 using RPCommands.Extensions;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RPCommands.Components
@@ -11,6 +13,12 @@ namespace RPCommands.Components
         private AdminToys.TextToy _toy;
         private Transform _transform;
         private float _heightOffset;
+        private CoroutineHandle _updateCoroutine;
+        private bool _isStatic;
+        private readonly float TickRate = Main.Instance.Config.TextToyTickRate;
+
+        private readonly Dictionary<Player, Quaternion> _lastRotations = [];
+        private readonly Dictionary<Player, Vector3> _lastScales = [];
 
         public void Initialize(Player owner, AdminToys.TextToy toy, float heightOffset)
         {
@@ -18,42 +26,88 @@ namespace RPCommands.Components
             _toy = toy;
             _transform = toy.transform;
             _heightOffset = heightOffset;
+            _isStatic = false;
+
+            _updateCoroutine = Timing.RunCoroutine(UpdateToyCoroutine());
+        }
+        public void InitializeStatic(AdminToys.TextToy toy, Vector3 position)
+        {
+            _toy = toy;
+            _transform = toy.transform;
+            _transform.position = position;
+            _isStatic = true;
+
+            _updateCoroutine = Timing.RunCoroutine(UpdateToyCoroutine());
         }
 
-        public void FixedUpdate()
+        private void OnDestroy()
         {
-            if (_toy == null || _owner == null || _owner.IsDestroyed || !_owner.IsAlive)
+            Timing.KillCoroutines(_updateCoroutine);
+        }
+
+        private IEnumerator<float> UpdateToyCoroutine()
+        {
+            float renderDistanceSqr = 60f * 60f;
+
+            while (true)
             {
-                DestroyToy();
-                return;
-            }
-
-            _transform.position = _owner.Position + (Vector3.up * _heightOffset);
-
-            foreach (Player observer in Player.List)
-            {
-                if (observer == null || observer.IsDestroyed || observer == _owner)
-                    continue;
-
-                if (Vector3.Distance(_transform.position, observer.Position) > 60f)
+                if (!_isStatic && (_owner == null || _owner.IsDestroyed || !_owner.IsAlive))
                 {
-                    observer.SendFakeSyncVar(_toy, 4, Vector3.zero);
-                    continue;
+                    DestroyToy();
+                    yield break;
                 }
 
-                observer.SendFakeSyncVar(_toy, 4, Vector3.one);
+                if (_toy == null) yield break;
 
-                Vector3 direction = observer.Position - _transform.position;
-                direction.y = 0;
-                Quaternion rotation = Quaternion.LookRotation(-direction);
+                if (!_isStatic)
+                {
+                    _transform.position = _owner.Position + (Vector3.up * _heightOffset);
+                }
 
-                observer.SendFakeSyncVar(_toy, 2, rotation);
+                foreach (Player observer in Player.List)
+                {
+                    if (observer == null || observer.IsDestroyed || (!_isStatic && observer == _owner))
+                        continue;
+
+                    float sqrDistance = (_transform.position - observer.Position).sqrMagnitude;
+
+                    if (sqrDistance > renderDistanceSqr)
+                    {
+                        if (!_lastScales.TryGetValue(observer, out Vector3 lastScale) || lastScale != Vector3.zero)
+                        {
+                            observer.SendFakeSyncVar(_toy, 4, Vector3.zero);
+                            _lastScales[observer] = Vector3.zero;
+                        }
+                        continue;
+                    }
+
+                    if (!_lastScales.TryGetValue(observer, out Vector3 currentScale) || currentScale != Vector3.one)
+                    {
+                        observer.SendFakeSyncVar(_toy, 4, Vector3.one);
+                        _lastScales[observer] = Vector3.one;
+                    }
+
+                    Vector3 direction = observer.Position - _transform.position;
+                    direction.y = 0;
+
+                    Quaternion newRotation = direction != Vector3.zero
+                        ? Quaternion.LookRotation(-direction)
+                        : Quaternion.identity;
+
+                    if (!_lastRotations.TryGetValue(observer, out Quaternion lastRot) || Quaternion.Angle(lastRot, newRotation) > 3f)
+                    {
+                        observer.SendFakeSyncVar(_toy, 2, newRotation);
+                        _lastRotations[observer] = newRotation;
+                    }
+                }
+
+                yield return Timing.WaitForSeconds(TickRate);
             }
         }
 
         public void DestroyToy()
         {
-            if (_toy != null)
+            if (_toy != null && _toy.gameObject != null)
             {
                 NetworkServer.Destroy(_toy.gameObject);
             }
