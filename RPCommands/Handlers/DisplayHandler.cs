@@ -188,5 +188,28 @@ namespace RPCommands.Handlers
                 }
             }
         }
+
+        public static DynamicHint AddPersistentHint(this Player player, string message)
+        {
+            DynamicHint hint = new()
+            {
+                Text = message,
+                TargetY = 760,
+                TargetX = -950,
+                FontSize = 25,
+            };
+
+            PlayerDisplay playerDisplay = PlayerDisplay.Get(player);
+            playerDisplay?.AddHint(hint);
+
+            return hint;
+        }
+
+        public static void RemovePersistentHint(this Player player, DynamicHint hint)
+        {
+            if (player == null || player.IsDestroyed || hint == null) return;
+
+            PlayerDisplay.Get(player)?.RemoveHint(hint);
+        }
     }
 }
