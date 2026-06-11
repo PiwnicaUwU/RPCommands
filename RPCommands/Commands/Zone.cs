@@ -1,8 +1,10 @@
-﻿using LabApi.Features.Extensions;
+﻿using HintServiceMeow.Core.Models.Hints;
 using LabApi.Features.Wrappers;
 using MEC;
 using Mirror;
+using RPCommands.Components;
 using RPCommands.Enum;
+using RPCommands.Handlers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,120 +13,153 @@ using TextToy = AdminToys.TextToy;
 
 namespace RPCommands.Commands
 {
-    public class ActiveZone
+    public class Zone
     {
-        public Vector3 Position { get; set; }
-        public float Radius { get; set; }
-        public float Duration { get; set; }
-        public string CreatorName { get; set; }
-        public string Message { get; set; }
-        public DateTime CreationTime { get; set; }
-        public TextToy ZoneToy { get; set; }
+        private CoroutineHandle _zoneTicker;
+        private readonly Dictionary<Player, DynamicHint> _activeHints = [];
+        public ActiveZone activeZone;
+
+        public void StartZone(ActiveZone zoneData)
+        {
+            activeZone = zoneData;
+            ZoneCommand.ActiveZones.Add(this);
+            _zoneTicker = Timing.RunCoroutine(ZoneTickCoroutine());
+        }
+
+        private IEnumerator<float> ZoneTickCoroutine()
+        {
+            float elapsedTime = 0f;
+            float tickRate = Main.Instance.Config.ZoneHintTickRate;
+
+            bool isHintMode = Main.Instance.Config.ZoneActivationMode == ZoneActivationMode.Hint;
+
+            float sqrRadius = activeZone.Radius * activeZone.Radius;
+
+            while (elapsedTime < activeZone.Duration)
+            {
+                if (isHintMode)
+                {
+                    foreach (Player observer in Player.List)
+                    {
+                        if (observer == null || observer.IsDestroyed) continue;
+
+                        float sqrDistance = (activeZone.Position - observer.Position).sqrMagnitude;
+                        bool inRange = sqrDistance <= sqrRadius && observer.IsAlive;
+
+                        if (inRange)
+                        {
+                            if (!_activeHints.ContainsKey(observer))
+                            {
+                                DynamicHint zoneHint = observer.AddPersistentHint(activeZone.Message);
+                                if (zoneHint != null)
+                                {
+                                    _activeHints[observer] = zoneHint;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (_activeHints.TryGetValue(observer, out DynamicHint activeHint))
+                            {
+                                observer.RemovePersistentHint(activeHint);
+                                _activeHints.Remove(observer);
+                            }
+                        }
+                    }
+                }
+
+                elapsedTime += tickRate;
+                yield return Timing.WaitForSeconds(tickRate);
+            }
+
+            DestroyZone();
+        }
+
+        public void DestroyZone()
+        {
+            if (activeZone.ZoneToy != null && activeZone.ZoneToy.gameObject != null)
+            {
+                NetworkServer.Destroy(activeZone.ZoneToy.gameObject);
+            }
+
+            foreach (var kvp in _activeHints)
+            {
+                DisplayHandler.RemovePersistentHint(kvp.Key, kvp.Value);
+            }
+            _activeHints.Clear();
+
+            ZoneCommand.ActiveZones.Remove(this);
+        }
     }
 
     internal class ZoneCommand : InternalRPCommand
     {
         public override string OriginalCommand => "zone";
         public override string Description => Main.Instance.Config.Translation.Commands["zone"];
-        public static List<ActiveZone> ActiveZones { get; } = [];
+        public static List<Zone> ActiveZones { get; } = [];
 
         protected override bool ExecuteAction(Player player, string message, out string response)
         {
-            var newZone = new ActiveZone
+            string formattedMessage = Main.Instance.Config.FormatMessage("zone", player.Nickname, message);
+
+            var newZoneData = new ActiveZone
             {
                 Position = player.Position,
                 Radius = Main.Instance.Config.GetRange("zone"),
                 Duration = Main.Instance.Config.GetDuration("zone"),
                 CreatorName = player.Nickname,
-                Message = message,
-                CreationTime = DateTime.Now
+                Message = formattedMessage
             };
 
             if (Main.Instance.Config.ZoneActivationMode == ZoneActivationMode.TextToy)
             {
                 try
                 {
-                    AdminToys.TextToy prefab = NetworkClient.prefabs.Values
-                        .Select(p => p.GetComponent<AdminToys.TextToy>())
+                    TextToy prefab = NetworkClient.prefabs.Values
+                        .Select(p => p.GetComponent<TextToy>())
                         .FirstOrDefault(t => t != null);
 
+                    if (prefab == null)
+                    {
+                        response = "Something went wrong.";
+                        Logger.Error("TextToy prefab not found");
+                        return false;
+                    }
+
                     TextToy textToy = UnityEngine.Object.Instantiate(prefab);
-
-                    textToy.transform.position = newZone.Position + (Vector3.up * 0.5f);
+                    textToy.transform.position = newZoneData.Position + (Vector3.up * 0.5f);
                     textToy.transform.rotation = Quaternion.identity;
-
-                    string consoleMessage = Main.Instance.Config.FormatMessage("zone", newZone.CreatorName, newZone.Message);
-
-                    textToy.TextFormat = $"<size={Main.Instance.Config.ZoneTextToySize}>{consoleMessage}</size>";
+                    textToy.TextFormat = $"<size={Main.Instance.Config.ZoneTextToySize}>{newZoneData.Message}</size>";
 
                     NetworkServer.Spawn(textToy.gameObject);
 
+                    var controller = textToy.gameObject.AddComponent<Components.TextToy>();
+                    controller.InitializeStatic(textToy, textToy.transform.position);
+
+                    float sqrRadius = newZoneData.Radius * newZoneData.Radius;
                     foreach (Player p in Player.List.Where(p => p != null && !p.IsDestroyed))
                     {
-                        if (Vector3.Distance(p.Position, newZone.Position) <= newZone.Radius)
+                        if ((p.Position - newZoneData.Position).sqrMagnitude <= sqrRadius)
                         {
-                            p.SendConsoleMessage(consoleMessage, "yellow");
+                            p.SendConsoleMessage(newZoneData.Message, "yellow");
                         }
                     }
 
-                    textToy.gameObject.AddComponent<Components.StaticTextToy>();
-
-                    newZone.ZoneToy = textToy;
+                    newZoneData.ZoneToy = textToy;
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"Failed to spawn Zone TextToy: {e}");
-                    response = "Error spawning TextToy for zone.";
+                    response = "Something went wrong.";
                     return false;
                 }
             }
 
-            ActiveZones.Add(newZone);
+            var zoneController = new Zone();
+            zoneController.StartZone(newZoneData);
 
-            response = string.Format(Main.Instance.Config.Translation.ZoneSuccess, Mathf.RoundToInt(newZone.Duration));
+            response = string.Format(Main.Instance.Config.Translation.ZoneSuccess, Mathf.RoundToInt(newZoneData.Duration));
             return true;
-        }
-
-        public static IEnumerator<float> ZoneCoroutine()
-        {
-            while (true)
-            {
-                yield return Timing.WaitForSeconds(0.5f);
-
-                for (int i = ActiveZones.Count - 1; i >= 0; i--)
-                {
-                    var zone = ActiveZones[i];
-                    if ((DateTime.Now - zone.CreationTime).TotalSeconds >= zone.Duration)
-                    {
-                        if (zone.ZoneToy != null)
-                        {
-                            NetworkServer.Destroy(zone.ZoneToy.gameObject);
-                        }
-                        ActiveZones.RemoveAt(i);
-                    }
-                }
-
-                if (Main.Instance.Config.ZoneActivationMode == ZoneActivationMode.Hint)
-                {
-                    string hintFormat = Main.Instance.Config.GetSettings("zone").Format;
-
-                    foreach (Player p in Player.List)
-                    {
-                        if (p.IsDestroyed || p.Role.IsDead())
-                            continue;
-
-                        foreach (ActiveZone zone in ActiveZones)
-                        {
-                            if (Vector3.Distance(p.Position, zone.Position) <= zone.Radius)
-                            {
-                                string formattedHint = string.Format(hintFormat, zone.CreatorName, zone.Message);
-                                p.SendHint("<size=25>" + "<align=left>" + formattedHint + "</align>" + "</size>", 1); // too lazy to do with HSM
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

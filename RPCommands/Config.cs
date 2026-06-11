@@ -14,6 +14,8 @@ namespace RPCommands
 
         [Description("The height at which the TextToy should appear above the player's head.")]
         public float TextToyHeightOffset { get; set; } = 1.1f;
+        [Description("TextToy rotation smoothness. Lower value = greater smoothness at the cost of higher server load.")]
+        public float TextToyTickRate { get; set; } = 0.067f;
 
         [Description("The font size for the TextToy.")]
         public float TextToySize { get; set; } = 3f;
@@ -117,6 +119,7 @@ namespace RPCommands
         public ZoneActivationMode ZoneActivationMode { get; set; } = ZoneActivationMode.TextToy;
         [Description("The font size for the .Zone TextToy.")]
         public float ZoneTextToySize { get; set; } = 5f;
+        public float ZoneHintTickRate { get; set; } = 0.25f;
 
         [Description("Enable or disable specific commands")]
         public Dictionary<string, bool> EnabledCommands { get; set; } = new()
