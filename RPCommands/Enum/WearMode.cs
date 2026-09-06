@@ -1,8 +1,7 @@
-﻿namespace RPCommands.Enum
+﻿namespace RPCommands.Enum;
+
+public enum WearMode
 {
-    public enum WearMode
-    {
-        RoleChange,
-        ModelChange
-    }
+    RoleChange,
+    ModelChange
 }

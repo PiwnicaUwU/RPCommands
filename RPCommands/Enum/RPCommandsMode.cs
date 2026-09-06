@@ -1,10 +1,9 @@
-﻿namespace RPCommands.Enum
+﻿namespace RPCommands.Enum;
+
+public enum RPCommandsMode
 {
-    public enum RPCommandsMode
-    {
-        None,
-        Hints,
-        TextToys,
-        Both
-    }
+    None,
+    Hints,
+    TextToys,
+    Both
 }

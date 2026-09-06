@@ -2,64 +2,77 @@
 using PlayerRoles;
 using RPCommands.Extensions;
 
-namespace RPCommands.Commands
+namespace RPCommands.Commands;
+
+internal sealed class HealCommand : InternalRPCommand
 {
-    internal class HealCommand : InternalRPCommand
+    public override string OriginalCommand => "heal";
+    public override string Description => Main.Instance.Config.Translation.Commands["heal"];
+    public override bool AllowNoArguments => true;
+
+    protected override bool ExecuteAction(Player player, string message, out string response)
     {
-        public override string OriginalCommand => "heal";
-        public override string Description => Main.Instance.Config.Translation.Commands["heal"];
-        public override bool AllowNoArguments => true;
-
-        protected override bool ExecuteAction(Player player, string message, out string response)
+        if (player.Role.GetTeam() == Team.SCPs && !Main.Instance.Config.AllowScpToUseCommands)
         {
-            if (player.Role.GetTeam() == Team.SCPs && !Main.Instance.Config.AllowScpToUseCommands)
-            {
-                response = Main.Instance.Config.Translation.OnlyHumans;
-                return false;
-            }
+            response = Main.Instance.Config.Translation.OnlyHumans;
+            return false;
+        }
 
-            if (player.CurrentItem == null)
-            {
-                response = Main.Instance.Config.Translation.HealItemRequired;
-                return false;
-            }
-            Player target = player.GetRaycastPlayer(5f);
+        Item currentItem = player.CurrentItem;
 
-            if (target == null || target == player)
-            {
-                response = Main.Instance.Config.Translation.NoTargetInRange;
-                return false;
-            }
+        if (currentItem == null)
+        {
+            response = Main.Instance.Config.Translation.HealItemRequired;
+            return false;
+        }
 
-            ItemType itemType = player.CurrentItem.Type;
-            switch (itemType)
-            {
-                case ItemType.Medkit:
-                    UsableItem medkit = player.CurrentItem as UsableItem;
+        Player target = player.GetRaycastPlayer(5f);
+
+        if (target == null || target == player)
+        {
+            response = Main.Instance.Config.Translation.NoTargetInRange;
+            return false;
+        }
+
+        ItemType itemType = currentItem.Type;
+
+        switch (itemType)
+        {
+            case ItemType.Medkit:
+                if (currentItem is UsableItem medkit)
+                {
                     medkit.Use();
-                    player.RemoveItem(player.CurrentItem);
+                    player.RemoveItem(currentItem);
                     target.SendHint(string.Format(Main.Instance.Config.Translation.HealHintTarget, player.Nickname), 5f);
                     response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
                     return true;
+                }
+                break;
 
-                case ItemType.Adrenaline:
-                    UsableItem adrenaline = player.CurrentItem as UsableItem;
+            case ItemType.Adrenaline:
+                if (currentItem is UsableItem adrenaline)
+                {
                     adrenaline.Use();
+                    player.RemoveItem(currentItem);
                     target.SendHint(Main.Instance.Config.Translation.AdrenalineHeal, 5f);
                     response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
                     return true;
+                }
+                break;
 
-                case ItemType.Painkillers:
-                    UsableItem painkillers = player.CurrentItem as UsableItem;
+            case ItemType.Painkillers:
+                if (currentItem is UsableItem painkillers)
+                {
                     painkillers.Use();
+                    player.RemoveItem(currentItem);
                     target.SendHint(Main.Instance.Config.Translation.PainkillersHeal, 5f);
                     response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
                     return true;
-
-                default:
-                    response = Main.Instance.Config.Translation.HealItemRequired;
-                    return false;
-            }
+                }
+                break;
         }
+
+        response = Main.Instance.Config.Translation.HealItemRequired;
+        return false;
     }
 }

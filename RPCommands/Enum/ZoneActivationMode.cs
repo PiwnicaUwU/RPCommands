@@ -1,8 +1,7 @@
-﻿namespace RPCommands.Enum
+﻿namespace RPCommands.Enum;
+
+public enum ZoneActivationMode
 {
-    public enum ZoneActivationMode
-    {
-        TextToy,
-        Hint
-    }
+    TextToy,
+    Hint
 }

@@ -1,8 +1,7 @@
-﻿namespace RPCommands.Enum
+﻿namespace RPCommands.Enum;
+
+public enum CommandHandlerType
 {
-    public enum CommandHandlerType
-    {
-        Client,
-        RemoteAdmin
-    }
+    Client,
+    RemoteAdmin
 }

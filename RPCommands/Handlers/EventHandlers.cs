@@ -10,155 +10,154 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace RPCommands.Handlers
+namespace RPCommands.Handlers;
+
+internal class EventHandlers
 {
-    internal class EventHandlers
+    public void LoadEvents()
     {
-        public void LoadEvents()
+        LabApi.Events.Handlers.PlayerEvents.Death += OnPlayerDeath;
+        LabApi.Events.Handlers.PlayerEvents.Joined += OnPlayerVerified;
+    }
+
+    public void UnloadEvents()
+    {
+        LabApi.Events.Handlers.PlayerEvents.Death -= OnPlayerDeath;
+        LabApi.Events.Handlers.PlayerEvents.Joined -= OnPlayerVerified;
+    }
+
+    public void RegisterCommands()
+    {
+        Logger.Info("Starting RPCommands internal command registration...");
+
+        var clientHandler = QueryProcessor.DotCommandHandler;
+        var raHandler = CommandProcessor.RemoteAdminCommandHandler;
+
+        var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
+
+        foreach (var type in commandTypes)
         {
-            LabApi.Events.Handlers.PlayerEvents.Death += OnPlayerDeath;
-            LabApi.Events.Handlers.PlayerEvents.Joined += OnPlayerVerified;
-        }
-
-        public void UnloadEvents()
-        {
-            LabApi.Events.Handlers.PlayerEvents.Death -= OnPlayerDeath;
-            LabApi.Events.Handlers.PlayerEvents.Joined -= OnPlayerVerified;
-        }
-
-        public void RegisterCommands()
-        {
-            Logger.Info("Starting RPCommands internal command registration...");
-
-            var clientHandler = QueryProcessor.DotCommandHandler;
-            var raHandler = CommandProcessor.RemoteAdminCommandHandler;
-
-            var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
-
-            foreach (var type in commandTypes)
+            try
             {
-                try
+                if (Activator.CreateInstance(type) is not InternalRPCommand command)
+                    continue;
+
+                if (!command.IsCommandEnabled)
                 {
-                    if (Activator.CreateInstance(type) is not InternalRPCommand command)
-                        continue;
-
-                    if (!command.IsCommandEnabled)
-                    {
-                        Logger.Debug($"Command {command.OriginalCommand} is disabled, skipping.");
-                        continue;
-                    }
-
-                    switch (command.HandlerType)
-                    {
-                        case CommandHandlerType.Client:
-                            clientHandler.RegisterCommand(command);
-                            Logger.Debug($"Registered internal command: {command.OriginalCommand} ({command.HandlerType})");
-                            break;
-                        case CommandHandlerType.RemoteAdmin:
-                            raHandler.RegisterCommand(command);
-                            Logger.Debug($"Registered internal command: {command.OriginalCommand} ({command.HandlerType})");
-                            break;
-                        default:
-                            Logger.Warn($"Unknown HandlerType for internal command: {command.OriginalCommand}");
-                            break;
-                    }
+                    Logger.Debug($"Command {command.OriginalCommand} is disabled, skipping.");
+                    continue;
                 }
-                catch (Exception ex)
+
+                switch (command.HandlerType)
                 {
-                    Logger.Error($"Failed to register internal command {type.Name}: {ex}");
+                    case CommandHandlerType.Client:
+                        clientHandler.RegisterCommand(command);
+                        Logger.Debug($"Registered internal command: {command.OriginalCommand} ({command.HandlerType})");
+                        break;
+                    case CommandHandlerType.RemoteAdmin:
+                        raHandler.RegisterCommand(command);
+                        Logger.Debug($"Registered internal command: {command.OriginalCommand} ({command.HandlerType})");
+                        break;
+                    default:
+                        Logger.Warn($"Unknown HandlerType for internal command: {command.OriginalCommand}");
+                        break;
                 }
             }
-        }
-
-        public void UnregisterCommands()
-        {
-            Logger.Info("Unregistering RPCommands internal commands...");
-            var clientHandler = QueryProcessor.DotCommandHandler;
-            var raHandler = CommandProcessor.RemoteAdminCommandHandler;
-
-            var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
-
-            foreach (var type in commandTypes)
+            catch (Exception ex)
             {
-                try
-                {
-                    if (Activator.CreateInstance(type) is InternalRPCommand command)
-                    {
-                        if (command.HandlerType == CommandHandlerType.Client)
-                            clientHandler.UnregisterCommand(command);
-                        else if (command.HandlerType == CommandHandlerType.RemoteAdmin)
-                            raHandler.UnregisterCommand(command);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error($"Failed to unregister internal command {type.Name}: {ex}");
-                }
+                Logger.Error($"Failed to register internal command {type.Name}: {ex}");
             }
-
-            API.CommandRegistry.UnregisterAllExternalCommands();
         }
+    }
 
-        public void OnPlayerDeath(PlayerDeathEventArgs e)
+    public void UnregisterCommands()
+    {
+        Logger.Info("Unregistering RPCommands internal commands...");
+        var clientHandler = QueryProcessor.DotCommandHandler;
+        var raHandler = CommandProcessor.RemoteAdminCommandHandler;
+
+        var commandTypes = Assembly.GetExecutingAssembly().GetTypes()
+            .Where(t => t.IsSubclassOf(typeof(InternalRPCommand)) && !t.IsAbstract);
+
+        foreach (var type in commandTypes)
         {
-            if (e.Player == null || !e.Player.IsDestroyed)
+            try
             {
-                return;
-            }
-            else
-            {
-                if (e.Player.CustomInfo != null)
+                if (Activator.CreateInstance(type) is InternalRPCommand command)
                 {
-                    e.Player.CustomInfo = null;
+                    if (command.HandlerType == CommandHandlerType.Client)
+                        clientHandler.UnregisterCommand(command);
+                    else if (command.HandlerType == CommandHandlerType.RemoteAdmin)
+                        raHandler.UnregisterCommand(command);
                 }
             }
-        }
-
-        public void OnPlayerVerified(PlayerJoinedEventArgs e)
-        {
-            foreach (var entry in Commands.UnwearCommand.originalPlayerData)
+            catch (Exception ex)
             {
-                Player disguisedPlayer = entry.Key;
-                RoleTypeId disguiseRole = entry.Value.DisguiseRole;
-                disguisedPlayer.AddFakeRole(disguiseRole); // appearance won't change resync when player joins
+                Logger.Error($"Failed to unregister internal command {type.Name}: {ex}");
             }
         }
 
-        public class RagdollInfo
+        API.CommandRegistry.UnregisterAllExternalCommands();
+    }
+
+    public void OnPlayerDeath(PlayerDeathEventArgs e)
+    {
+        if (e.Player == null || !e.Player.IsDestroyed)
         {
-            public Vector3 Position { get; set; }
-            public RoleTypeId RoleType { get; set; }
-            public Player Owner { get; set; }
-            public string OwnerNickname { get; set; }
-            public float CreationTime { get; set; }
+            return;
+        }
+        else
+        {
+            if (e.Player.CustomInfo != null)
+            {
+                e.Player.CustomInfo = null;
+            }
+        }
+    }
+
+    public void OnPlayerVerified(PlayerJoinedEventArgs e)
+    {
+        foreach (var entry in Commands.UnwearCommand.originalPlayerData)
+        {
+            Player disguisedPlayer = entry.Key;
+            RoleTypeId disguiseRole = entry.Value.DisguiseRole;
+            disguisedPlayer.AddFakeRole(disguiseRole); // appearance won't change resync when player joins
+        }
+    }
+
+    public class RagdollInfo
+    {
+        public Vector3 Position { get; set; }
+        public RoleTypeId RoleType { get; set; }
+        public Player Owner { get; set; }
+        public string OwnerNickname { get; set; }
+        public float CreationTime { get; set; }
+    }
+
+    public class RagdollTracker
+    {
+        private static readonly Dictionary<uint, RagdollInfo> ragdollInfos = [];
+
+        public static void OnSpawningRagdoll(PlayerSpawnedRagdollEventArgs ev)
+        {
+            var info = new RagdollInfo
+            {
+                Position = ev.Ragdoll.Position,
+                RoleType = ev.Player.Role,
+                Owner = ev.Player,
+                OwnerNickname = ev.Player.Nickname,
+                CreationTime = Time.time
+            };
+
+            uint key = (uint)(ev.Ragdoll.Position.GetHashCode());
+            ragdollInfos[key] = info;
         }
 
-        public class RagdollTracker
+        public static RagdollInfo GetRagdollInfo(Vector3 position)
         {
-            private static readonly Dictionary<uint, RagdollInfo> ragdollInfos = [];
-
-            public static void OnSpawningRagdoll(PlayerSpawnedRagdollEventArgs ev)
-            {
-                var info = new RagdollInfo
-                {
-                    Position = ev.Ragdoll.Position,
-                    RoleType = ev.Player.Role,
-                    Owner = ev.Player,
-                    OwnerNickname = ev.Player.Nickname,
-                    CreationTime = Time.time
-                };
-
-                uint key = (uint)(ev.Ragdoll.Position.GetHashCode());
-                ragdollInfos[key] = info;
-            }
-
-            public static RagdollInfo GetRagdollInfo(Vector3 position)
-            {
-                uint key = (uint)(position.GetHashCode());
-                return ragdollInfos.ContainsKey(key) ? ragdollInfos[key] : null;
-            }
+            uint key = (uint)(position.GetHashCode());
+            return ragdollInfos.ContainsKey(key) ? ragdollInfos[key] : null;
         }
     }
 }

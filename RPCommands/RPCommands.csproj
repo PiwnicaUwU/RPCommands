@@ -128,6 +128,7 @@
     <Compile Include="Commands\Ooc.cs" />
     <Compile Include="Commands\Punch.cs" />
     <Compile Include="Commands\Radio.cs" />
+    <Compile Include="Commands\Suicide.cs" />
     <Compile Include="Commands\Try.cs" />
     <Compile Include="Commands\Uncuff.cs" />
     <Compile Include="Commands\Unwear.cs" />

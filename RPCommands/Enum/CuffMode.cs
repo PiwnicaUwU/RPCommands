@@ -1,8 +1,7 @@
-﻿namespace RPCommands.Enum
+﻿namespace RPCommands.Enum;
+
+public enum CuffMode
 {
-    public enum CuffMode
-    {
-        SaveAndRestore,
-        DropOnGround
-    }
+    SaveAndRestore,
+    DropOnGround
 }
