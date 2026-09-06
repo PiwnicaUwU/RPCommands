@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace RPCommands.Commands;
 
-
 internal sealed class Clean : InternalRPCommand
 {
     public override string OriginalCommand => "clean";

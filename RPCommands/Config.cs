@@ -86,7 +86,7 @@ public class Config
 
     [Description("Push force multiplier for the .punch command.")]
     public float PunchPushForce { get; set; } = 5f;
-    [Description("Higher value - more resource usage, but somother")]
+    [Description("Higher value - more resource usage, but smoother")]
     public int Iterations { get; set; } = 16;
     public CommandSettings Clean { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");
     public CommandSettings Heal { get; set; } = new(CommandHandlerType.Client, 0f, 5f, 3f, "");

@@ -18,14 +18,11 @@ internal sealed class HealCommand : InternalRPCommand
             return false;
         }
 
-        Item currentItem = player.CurrentItem;
-
-        if (currentItem == null)
+        if (player.CurrentItem == null)
         {
             response = Main.Instance.Config.Translation.HealItemRequired;
             return false;
         }
-
         Player target = player.GetRaycastPlayer(5f);
 
         if (target == null || target == player)
@@ -34,45 +31,34 @@ internal sealed class HealCommand : InternalRPCommand
             return false;
         }
 
-        ItemType itemType = currentItem.Type;
-
+        ItemType itemType = player.CurrentItem.Type;
         switch (itemType)
         {
             case ItemType.Medkit:
-                if (currentItem is UsableItem medkit)
-                {
-                    medkit.Use();
-                    player.RemoveItem(currentItem);
-                    target.SendHint(string.Format(Main.Instance.Config.Translation.HealHintTarget, player.Nickname), 5f);
-                    response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
-                    return true;
-                }
-                break;
+                UsableItem medkit = player.CurrentItem as UsableItem;
+                medkit.Use();
+                player.RemoveItem(player.CurrentItem);
+                target.SendHint(string.Format(Main.Instance.Config.Translation.HealHintTarget, player.Nickname), 5f);
+                response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
+                return true;
 
             case ItemType.Adrenaline:
-                if (currentItem is UsableItem adrenaline)
-                {
-                    adrenaline.Use();
-                    player.RemoveItem(currentItem);
-                    target.SendHint(Main.Instance.Config.Translation.AdrenalineHeal, 5f);
-                    response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
-                    return true;
-                }
-                break;
+                UsableItem adrenaline = player.CurrentItem as UsableItem;
+                adrenaline.Use();
+                target.SendHint(Main.Instance.Config.Translation.AdrenalineHeal, 5f);
+                response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
+                return true;
 
             case ItemType.Painkillers:
-                if (currentItem is UsableItem painkillers)
-                {
-                    painkillers.Use();
-                    player.RemoveItem(currentItem);
-                    target.SendHint(Main.Instance.Config.Translation.PainkillersHeal, 5f);
-                    response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
-                    return true;
-                }
-                break;
-        }
+                UsableItem painkillers = player.CurrentItem as UsableItem;
+                painkillers.Use();
+                target.SendHint(Main.Instance.Config.Translation.PainkillersHeal, 5f);
+                response = string.Format(Main.Instance.Config.Translation.HealSuccess, target.Nickname);
+                return true;
 
-        response = Main.Instance.Config.Translation.HealItemRequired;
-        return false;
+            default:
+                response = Main.Instance.Config.Translation.HealItemRequired;
+                return false;
+        }
     }
 }

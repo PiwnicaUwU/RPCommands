@@ -14,33 +14,27 @@ public class Translation
 
     [Description("Message shown when you try to cuff player without holding a weapon.")]
     public string WeaponRequiredMessage { get; set; } = "You must be holding a weapon to use this command!";
-    [Description("Message shown when player/scp is cuffed")]
 
+    [Description("Message shown when player/scp is cuffed")]
     public string AlreadyCuffed { get; set; } = "{0} is already cuffed!";
 
     [Description("Message shown if you cannot cuff scp")]
-
     public string CannotCuffScp { get; set; } = "you cannot cuff this scp!";
 
     [Description("Hint shown if you get cuffed")]
-
     public string CuffHintTarget { get; set; } = "you got cuffed by {0}";
 
     [Description("Message shown when you cuff someone")]
-
     public string CuffSuccess { get; set; } = "you cuffed {0}";
 
     [Description("Message shown when target is not cuffed")]
-
     public string NotCuffed { get; set; } = "{0} is not cuffed";
     public string MustBeBehind { get; set; } = "You must be behind the target to do this!";
 
     [Description("Message shown when target is uncuffed")]
-
     public string DecuffHintTarget { get; set; } = "{0} uncuffed you";
 
     [Description("Message shown when player uncuff target")]
-
     public string DecuffSuccess { get; set; } = "you uncuffed {0}";
 
     [Description("Message shown when the round has not started.")]

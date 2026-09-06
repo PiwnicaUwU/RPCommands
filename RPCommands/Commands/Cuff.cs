@@ -72,7 +72,7 @@ internal sealed class CuffCommand : InternalRPCommand
                     break;
             }
 
-            if (target.Role.GetFaction() == player.Role.GetFaction()) // Game doesn't allow handcuffing same side players, so we force it
+            if (target.Role.GetTeam() == player.Role.GetTeam()) // Game doesn't allow handcuffing same side players, so we force it
             {
                 target.IsDisarmed = true;
             }
