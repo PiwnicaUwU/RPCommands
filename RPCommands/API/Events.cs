@@ -1,6 +1,5 @@
 ﻿using LabApi.Events;
 using RPCommands.API.PlayerEvents;
-using System;
 
 namespace RPCommands.API;
 
