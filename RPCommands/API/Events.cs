@@ -1,22 +1,22 @@
-﻿using RPCommands.API.PlayerEvents;
+﻿using LabApi.Events;
+using RPCommands.API.PlayerEvents;
 using System;
 
-namespace RPCommands.API
+namespace RPCommands.API;
+
+public static class Events
 {
-    public static class Events
+    public static event LabEventHandler<PlayerSendingRpCommandEventArgs> SendingRpCommand;
+
+    public static event LabEventHandler<PlayerReceivingRpCommandEventArgs> ReceivingRpCommand;
+
+    internal static void OnSendingRpCommand(PlayerSendingRpCommandEventArgs ev)
     {
-        public static event EventHandler<PlayerSendingRpCommandEventArgs> SendingRpCommand;
+        SendingRpCommand?.Invoke(ev);
+    }
 
-        public static event EventHandler<PlayerReceivingRpCommandEventArgs> ReceivingRpCommand;
-
-        internal static void OnSendingRpCommand(PlayerSendingRpCommandEventArgs ev)
-        {
-            SendingRpCommand?.Invoke(null, ev);
-        }
-
-        internal static void OnReceivingRpCommand(PlayerReceivingRpCommandEventArgs ev)
-        {
-            ReceivingRpCommand?.Invoke(null, ev);
-        }
+    internal static void OnReceivingRpCommand(PlayerReceivingRpCommandEventArgs ev)
+    {
+        ReceivingRpCommand?.Invoke(ev);
     }
 }

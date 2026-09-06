@@ -1,68 +1,65 @@
 ﻿using LabApi.Features.Wrappers;
 using System.Collections.Generic;
 
-namespace RPCommands.API
+namespace RPCommands.API;
+
+public static class Request
 {
-    public static class Request
+    private static readonly Dictionary<Player, Dictionary<string, string>> _lastMessages = [];
+
+    /// <summary>
+    /// Saves the last message sent by a player for a specific command.
+    /// </summary>
+    /// <param name="player">The player who sent the message.</param>
+    /// <param name="command">The command used.</param>
+    /// <param name="message">The message content.</param>
+    public static void SetLastMessage(this Player player, BaseRPCommand command, string message)
     {
-        private static readonly Dictionary<string, Dictionary<string, string>> _lastMessages = new();
+        if (!_lastMessages.ContainsKey(player))
+            _lastMessages[player] = [];
 
-        /// <summary>
-        /// Saves the last message sent by a player for a specific command.
-        /// </summary>
-        /// <param name="player">The player who sent the message.</param>
-        /// <param name="command">The command used.</param>
-        /// <param name="message">The message content.</param>
-        public static void SetLastMessage(this Player player, string command, string message)
-        {
-            string userId = player.UserId;
+        _lastMessages[player][command.Command] = message;
+    }
 
-            if (!_lastMessages.ContainsKey(userId))
-                _lastMessages[userId] = [];
+    /// <summary>
+    /// Retrieves the last message sent by a player for a specific command.
+    /// </summary>
+    /// <param name="player">The player to get the message from.</param>
+    /// <param name="command">The command to check.</param>
+    /// <returns>The last message if available, otherwise null.</returns>
+    public static string GetLastMessage(this Player player, BaseRPCommand command)
+    {
+        return _lastMessages.TryGetValue(player, out var messages) && messages.TryGetValue(command.Command, out var msg)
+            ? msg
+            : null;
+    }
 
-            _lastMessages[userId][command] = message;
-        }
+    /// <summary>
+    /// Retrieves all last messages sent by a player across all RPCommands.
+    /// </summary>
+    /// <param name="player">The player to get messages from.</param>
+    /// <returns>A dictionary of command = message.</returns>
+    public static Dictionary<string, string> GetAllMessages(Player player)
+    {
+        return _lastMessages.TryGetValue(player, out var messages)
+            ? new Dictionary<string, string>(messages)
+            : [];
+    }
 
-        /// <summary>
-        /// Retrieves the last message sent by a player for a specific command.
-        /// </summary>
-        /// <param name="player">The player to get the message from.</param>
-        /// <param name="command">The command to check.</param>
-        /// <returns>The last message if available, otherwise null.</returns>
-        public static string GetLastMessage(this Player player, string command)
-        {
-            return _lastMessages.TryGetValue(player.UserId, out var messages) && messages.TryGetValue(command, out var msg)
-                ? msg
-                : null;
-        }
+    /// <summary>
+    /// Clears all messages associated with a specific player.
+    /// </summary>
+    /// <param name="player">The player whose messages should be cleared.</param>
+    public static void ClearMessages(Player player)
+    {
+        _lastMessages.Remove(player);
+    }
 
-        /// <summary>
-        /// Retrieves all last messages sent by a player across all RPCommands.
-        /// </summary>
-        /// <param name="player">The player to get messages from.</param>
-        /// <returns>A dictionary of command = message.</returns>
-        public static Dictionary<string, string> GetAllMessages(Player player)
-        {
-            return _lastMessages.TryGetValue(player.UserId, out var messages)
-                ? new Dictionary<string, string>(messages)
-                : [];
-        }
-
-        /// <summary>
-        /// Clears all messages associated with a specific player.
-        /// </summary>
-        /// <param name="player">The player whose messages should be cleared.</param>
-        public static void ClearMessages(Player player)
-        {
-            _lastMessages.Remove(player.UserId);
-        }
-
-        /// <summary>
-        /// Clears all stored messages.
-        /// </summary>
-        public static void ClearAllMessages()
-        {
-            _lastMessages.Clear();
-        }
+    /// <summary>
+    /// Clears all stored messages.
+    /// </summary>
+    public static void ClearAllMessages()
+    {
+        _lastMessages.Clear();
     }
 }
